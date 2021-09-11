@@ -1,10 +1,10 @@
-FROM php:8.0.10-fpm-alpine as backend-stage
+FROM php:8.0-fpm-bullseye as backend-stage
 
-LABEL maintainer="travel"
+LABEL maintainer="Travel"
 
 # Install services
-RUN apt-get update \
-        && apt-get install -y \
+RUN apt update \
+        && apt install -y \
             g++ \
             git \
             curl \
@@ -32,15 +32,10 @@ RUN docker-php-ext-install \
             gd
 
 # Clear cache
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+RUN apt clean && rm -rf /var/lib/apt/lists/*
 
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-
-# Install debuger
-RUN apk add --no-cache $PHPIZE_DEPS \
-    && pecl install xdebug-3.0.4 \
-    && docker-php-ext-enable xdebug
 
 WORKDIR /var/www/html/backend
 
