@@ -48,3 +48,4 @@ RUN composer update
 RUN composer dump-autoload
 
 RUN chmod 777 -R storage
+RUN chown -R www-data:www-data /var/www
