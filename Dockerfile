@@ -16,7 +16,8 @@ RUN apt update \
             libxml2-dev \
             zip \
             zlib1g-dev \
-            unzip 
+            unzip \
+            sudo
 
 # Install php extensions
 RUN docker-php-ext-install \
@@ -42,10 +43,19 @@ WORKDIR /var/www/html/backend
 # Copy project files in work directory
 COPY . .
 
+RUN addgroup --system travel --gid 1000 --shell /bin/bash
+RUN adduser --system travel --uid 1000 --shell /bin/bash
+
+RUN echo "travel ALL=(ALL) NOPASSWD:ALL" | tee /etc/sudoers.d/travel
+
+RUN chmod 777 -R storage
+RUN chown -R travel:travel /var/www/html/backend
+
+USER travel
+
 # Update project
 RUN composer install
 RUN composer update
 RUN composer dump-autoload
 
-RUN chmod 777 -R storage
-RUN chown -R www-data:www-data /var/www
+RUN sudo chown -R travel:travel /var/www/html/backend/vendor
