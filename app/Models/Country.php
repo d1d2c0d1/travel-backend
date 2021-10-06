@@ -92,7 +92,7 @@ class Country extends Model
 
     const RuleList = [
 
-        'name' => ['min:3', 'required', 'string', 'regex:/^[A-Za-z]+$/', 'max:128'],
+        'name' => ['min:3', 'required', 'string', 'max:128'],
         'language_id' => ['numeric', 'required'],
 
     ];
