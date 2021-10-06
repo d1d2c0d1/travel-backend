@@ -16,7 +16,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon $created_at
  * @property Carbon $updated_at
  */
-class Countries extends Model
+class Country extends Model
 {
 
     /**
@@ -105,7 +105,7 @@ class Countries extends Model
      */
     public function language():HasOne
     {
-        return $this->hasOne(Languages::class);
+        return $this->hasOne(Language::class);
     }
 
 }
