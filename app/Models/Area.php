@@ -125,7 +125,7 @@ class Area extends Model
      **/
     public function country(): HasOne
     {
-        return $this->hasOne(Country::class);
+        return $this->hasOne(Country::class, 'id', 'country_id');
     }
 
     /**
@@ -135,7 +135,7 @@ class Area extends Model
      **/
     public function region(): HasOne
     {
-        return $this->hasOne(Region::class);
+        return $this->hasOne(Region::class, 'id', 'region_id');
     }
 
     /**
@@ -145,7 +145,7 @@ class Area extends Model
      **/
     public function city(): HasOne
     {
-        return $this->hasOne(City::class);
+        return $this->hasOne(City::class, 'id', 'city_id');
     }
 
 }
