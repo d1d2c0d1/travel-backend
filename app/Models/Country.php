@@ -105,7 +105,7 @@ class Country extends Model
      */
     public function language():HasOne
     {
-        return $this->hasOne(Language::class);
+        return $this->hasOne(Language::class, 'id', 'country_id');
     }
 
 }
