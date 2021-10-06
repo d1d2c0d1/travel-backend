@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * Class Languages
@@ -87,5 +88,14 @@ class Language extends Model
 
     ];
 
+    /**
+     * Relationship to Country model
+     *
+     * @return HasMany
+     */
+    public function countries(): HasMany
+    {
+        return $this->hasMany(Country::class, 'language_id', 'id');
+    }
 
 }
