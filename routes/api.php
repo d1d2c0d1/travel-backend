@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthorizationController;
+use App\Http\Controllers\ItemsController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -33,19 +34,25 @@ Route::get('/test', function(Request $request) {
 });
 
 /**
+ * Getting data
+ */
+Route::prefix('filter')->group(function() {
+
+    Route::post('', [ItemsController::class, 'filter']);
+    Route::get('single/{id}', [ItemsController::class, 'single']);
+
+});
+
+/**
  * Auth routes
  */
 Route::middleware('api.static.auth')->prefix('auth')->group(function() {
-
     Route::post('', [AuthorizationController::class, 'create']);
-
 });
 
 /**
  * User routes
  */
 Route::middleware('api.static.auth')->middleware('api.user.auth')->prefix('user')->group(function () {
-
     Route::get('', [UserController::class, 'index']);
-
 });
