@@ -13,32 +13,47 @@ class ItemsController extends Controller
 
     /**
      * @param Request $request
-     * @return array
+     * @return Application|Response|ResponseFactory
      */
-    public function filter(Request $request): array
+    public function filter(Request $request): Application|ResponseFactory|Response
     {
+
+        if( !$request->isJson() ) {
+            return response([
+                'status' => false,
+                'error' => 'JSON-Body is required'
+            ], 404);
+        }
+
+        $perPage = ((int) $request->json('perPage')) <= 0 ? 10 : ((int) $request->json('perPage'));
+        $nowPage = ((int) $request->json('page')) <= 0 ? 1 : ((int) $request->json('page'));
+
         $result = [
             'status' => true,
-            'data' => [],
-            'paginations' => [
-                'endPage' => 15,
-                'nowPage' => 1,
-                'itemsPerPage' => 10,
-                'countItems' => 150
-            ]
         ];
 
         $data = [];
 
         $nowItem = 0;
-        while($nowItem <= 10) {
+        while($nowItem <= $perPage) {
             $data[] = $this->generateItem();
             ++$nowItem;
         }
 
-        $result['data'] = $data;
+        // Counting pagination
+        $countItems = 150;
+        $endPage = round($countItems / $perPage);
 
-        return $result;
+        // Set result
+        $result['data'] = $data;
+        $result['pagination'] = [
+            'endPage' => $endPage,
+            'nowPage' => $nowPage,
+            'itemsPerPage' => $perPage,
+            'countItems' => $countItems
+        ];
+
+        return response($result);
     }
 
     /**
@@ -74,7 +89,7 @@ class ItemsController extends Controller
             'price' => rand(1, 15000),
             'priceType' => rand(1, 15),
             'isFavorite' => false,
-            'rating' => rand(0, 5),
+            'rating' => 4.8,
             'images' => [
                 "/uploads/img/1.jpg",
                 "/uploads/img/2.jpg",
@@ -101,21 +116,21 @@ class ItemsController extends Controller
                 [
                     "id" => rand(10, 100),
                     "author" => "Артемий Лебедев",
-                    "rating" => rand(0,5) . '.' . rand(0,9),
+                    "rating" => 4.9,
                     "text" => "Текст отзыва",
                     "avatar" => "/uploads/img/artemii-250x250.jpg"
                 ],
                 [
                     "id" => rand(10, 100),
                     "author" => "Илья Варламов",
-                    "rating" => rand(0,5) . '.' . rand(0,9),
+                    "rating" => 3.2,
                     "text" => "Текст отзыва",
                     "avatar" => "/uploads/img/ilyia-250x250.jpg"
                 ],
                 [
                     "id" => rand(10, 100),
                     "author" => "Пётр Ловыгин",
-                    "rating" => rand(0,5) . '.' . rand(0,9),
+                    "rating" => 4.5,
                     "text" => $this->generateTitle(rand(32, 68)),
                     "avatar" => "/uploads/img/ilyia-250x250.jpg"
                 ]
