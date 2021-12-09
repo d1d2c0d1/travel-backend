@@ -23,7 +23,7 @@ class StaticAPIAuth
         if( strlen($token) < 32 ) {
             return response(
                 MainHelper::getErrorResponse([
-                    MainHelper::getErrorItem(503, 'Static authorization token can\'t be empty')
+                    MainHelper::getErrorItem(403, 'Static authorization token can\'t be empty')
                 ])
             );
         }
@@ -31,7 +31,7 @@ class StaticAPIAuth
         if( $this->isAPIToken($token) === false ) {
             return response(
                 MainHelper::getErrorResponse([
-                    MainHelper::getErrorItem(504, 'Authorization token not defined in config')
+                    MainHelper::getErrorItem(404, 'Authorization token not defined in config')
                 ])
             );
         }
