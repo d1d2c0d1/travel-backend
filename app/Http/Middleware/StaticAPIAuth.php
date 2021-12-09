@@ -23,7 +23,7 @@ class StaticAPIAuth
         if( strlen($token) < 32 ) {
             return response(
                 MainHelper::getErrorResponse([
-                    MainHelper::getErrorItem(500, 'Static authorization token can\'t be empty')
+                    MainHelper::getErrorItem(503, 'Static authorization token can\'t be empty')
                 ])
             );
         }

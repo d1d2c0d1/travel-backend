@@ -18,8 +18,8 @@ class AuthorizationController extends Controller
      */
     public function create(Request $request): Response
     {
-        $login = $request->input('login');
-        $password = $request->input('password');
+        $login = $request->json('login');
+        $password = $request->json('password');
 
         $users = User::where([
             ['email', '=', $login]

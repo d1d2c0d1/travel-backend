@@ -23,7 +23,7 @@ class APIAuth
         if( strlen($token) !== 32 ) {
             return response(
                 MainHelper::getErrorResponse([
-                    MainHelper::getErrorItem(500, 'Client authorization token can\'t be empty')
+                    MainHelper::getErrorItem(503, 'Client authorization token can\'t be empty')
                 ])
             );
         }
@@ -37,7 +37,7 @@ class APIAuth
         if( !is_object($user) || (is_object($user) && !isset($user->id)) ) {
             return response(
                 MainHelper::getErrorResponse([
-                    MainHelper::getErrorItem(500, 'Client authorization token has not defined')
+                    MainHelper::getErrorItem(504, 'Client authorization token has not defined')
                 ])
             );
         }
