@@ -30,8 +30,7 @@ RUN docker-php-ext-install \
             exif \
             pcntl \
             bcmath \
-            gd \
-            xdebug
+            gd
 
 # Clear cache
 RUN apt clean && rm -rf /var/lib/apt/lists/*
