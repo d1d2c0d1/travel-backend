@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdditionalController;
 use App\Http\Controllers\AuthorizationController;
 use App\Http\Controllers\ItemsController;
 use App\Http\Controllers\UserController;
@@ -48,6 +49,15 @@ Route::prefix('filter')->group(function() {
  */
 Route::middleware('api.static.auth')->prefix('auth')->group(function() {
     Route::post('', [AuthorizationController::class, 'create']);
+});
+
+/**
+ * Additional routes
+ */
+Route::middleware('api.static.auth')->prefix('additional')->group(function() {
+
+    Route::get('weather', [AdditionalController::class, 'weather']);
+
 });
 
 /**
