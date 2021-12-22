@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdditionalController;
 use App\Http\Controllers\AuthorizationController;
 use App\Http\Controllers\ItemsController;
+use App\Http\Controllers\PostsController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -49,6 +50,15 @@ Route::prefix('filter')->group(function() {
  */
 Route::middleware('api.static.auth')->prefix('auth')->group(function() {
     Route::post('', [AuthorizationController::class, 'create']);
+});
+
+/**
+ * Posts routes
+ */
+Route::prefix('posts')->group(function() {
+
+    Route::get('/news/last', [PostsController::class, 'news']);
+
 });
 
 /**
