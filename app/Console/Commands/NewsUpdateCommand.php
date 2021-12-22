@@ -36,6 +36,48 @@ class NewsUpdateCommand extends Command
     }
 
     /**
+     * Transliterate-language
+     *
+     * @param string $text
+     * @return string
+     */
+    public function cyr2lat(string $text): string
+    {
+        $cyr = array(
+            'ж',  'ч',  'щ',   'ш',  'ю',  'а', 'б', 'в', 'г', 'д', 'е', 'з', 'и', 'й', 'к', 'л', 'м', 'н', 'о', 'п', 'р', 'с', 'т', 'у', 'ф', 'х', 'ц', 'ъ', 'ь', 'я',
+            'Ж',  'Ч',  'Щ',   'Ш',  'Ю',  'А', 'Б', 'В', 'Г', 'Д', 'Е', 'З', 'И', 'Й', 'К', 'Л', 'М', 'Н', 'О', 'П', 'Р', 'С', 'Т', 'У', 'Ф', 'Х', 'Ц', 'Ъ', 'Ь', 'Я');
+        $lat = array(
+            'zh', 'ch', 'sht', 'sh', 'yu', 'a', 'b', 'v', 'g', 'd', 'e', 'z', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'r', 's', 't', 'u', 'f', 'h', 'c', 'y', 'x', 'q',
+            'Zh', 'Ch', 'Sht', 'Sh', 'Yu', 'A', 'B', 'V', 'G', 'D', 'E', 'Z', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'R', 'S', 'T', 'U', 'F', 'H', 'c', 'Y', 'X', 'Q');
+        if($text) return str_replace($cyr, $lat, $text);
+        return $text;
+    }
+
+    /**
+     * Return slug from text
+     *
+     * @param string $text
+     * @return string
+     */
+    public function prepareSlug(string $text): string
+    {
+        $slug = $this->cyr2lat($text);
+        $divider = '-';
+
+        $slug = preg_replace('~[^\pL\d]+~u', $divider, $slug);
+        $slug = preg_replace('~[^-\w]+~', '', $slug);
+        $slug = trim($slug, $divider);
+        $slug = preg_replace('~-+~', $divider, $slug);
+        $slug = strtolower($slug);
+
+        if (empty($slug)) {
+            return 'n-a';
+        }
+
+        return $slug;
+    }
+
+    /**
      * Execute the console command.
      *
      * @return int
@@ -50,18 +92,21 @@ class NewsUpdateCommand extends Command
             $articles = [];
 
             foreach ($news['articles'] as $article) {
+                $slug = $this->prepareSlug($article['title']);
+
                 $item = [
                     'title' => $article['title'],
                     'link' => $article['url'],
                     'image' => $article['urlToImage'],
                     'description' => $article['description'],
                     'createdAt' => $article['publishedAt'],
+                    'slug' => "/blog/{$slug}/",
                     'source' => [
                         'name' => $article['source']['name']
                     ]
                 ];
 
-                $articles[] = $item;
+                $articles[$slug] = $item;
             }
 
             Redis::set('lastNews', json_encode($articles));

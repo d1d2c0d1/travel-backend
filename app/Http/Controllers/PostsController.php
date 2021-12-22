@@ -25,7 +25,7 @@ class PostsController extends Controller
         $newsData = null;
 
         try {
-            $newsData = json_decode(Redis::get('lastNews'));
+            $newsData = json_decode(Redis::get('lastNews'), true);
         } catch ( Exception $e ) {
             $result['error'] = $e->getMessage();
         }
