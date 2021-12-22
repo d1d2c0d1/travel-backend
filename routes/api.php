@@ -58,6 +58,7 @@ Route::middleware('api.static.auth')->prefix('auth')->group(function() {
 Route::prefix('posts')->group(function() {
 
     Route::get('/news/last', [PostsController::class, 'news']);
+    Route::get('/news/single/{slug}', [PostsController::class, 'singleNews']);
 
 });
 

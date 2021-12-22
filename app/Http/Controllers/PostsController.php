@@ -43,4 +43,37 @@ class PostsController extends Controller
         return $result;
     }
 
+    /**
+     * Route for getting single news
+     *
+     * @param string $slug
+     * @return array
+     */
+    public function singleNews(string $slug): array
+    {
+        $result = [
+            'status' => false,
+            'error' => 'undefined',
+            'data' => []
+        ];
+
+        $newsData = [];
+
+        try {
+            $newsData = json_decode(Redis::get('lastNews'), true);
+        } catch( Exception $e ) {
+            $result['error'] = $e->getMessage();
+        }
+
+        if( isset($newsData[$slug]) ) {
+            $result['data'] = $newsData[$slug];
+            $result['status'] = true;
+            unset($result['error']);
+        } else {
+            $result['error'] = 'Slug not found';
+        }
+
+        return $result;
+    }
+
 }
