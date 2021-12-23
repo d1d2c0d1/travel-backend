@@ -4,6 +4,7 @@ use App\Http\Controllers\AdditionalController;
 use App\Http\Controllers\AuthorizationController;
 use App\Http\Controllers\ItemsController;
 use App\Http\Controllers\PostsController;
+use App\Http\Controllers\SubscribeController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -78,4 +79,11 @@ Route::middleware('api.static.auth')->prefix('additional')->group(function() {
  */
 Route::middleware('api.static.auth')->middleware('api.user.auth')->prefix('user')->group(function () {
     Route::get('', [UserController::class, 'index']);
+});
+
+/**
+ * Subscribe routes
+ */
+Route::middleware('api.static.auth')->prefix('subscribe')->group(function () {
+    Route::get('', [SubscribeController::class, 'index']);
 });
