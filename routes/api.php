@@ -4,6 +4,7 @@ use App\Http\Controllers\AdditionalController;
 use App\Http\Controllers\AuthorizationController;
 use App\Http\Controllers\ItemsController;
 use App\Http\Controllers\PostsController;
+use App\Http\Controllers\SubscribeController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -81,8 +82,8 @@ Route::middleware('api.static.auth')->middleware('api.user.auth')->prefix('user'
 });
 
 /**
- * Lesson routes
+ * Subscribe routes
  */
-Route::middleware('api.static.auth')->middleware('api.user.auth')->prefix('dranik')->group(function () {
-    Route::get('', [UserController::class, 'index']);
+Route::middleware('api.static.auth')->prefix('subscribe')->group(function () {
+    Route::post('', [SubscribeController::class, 'index']);
 });
