@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Country;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
@@ -10,6 +11,15 @@ use Illuminate\Support\Facades\Redis;
 
 class ItemsController extends Controller
 {
+
+    public function test() {
+        $countries = Country::all();
+
+        return [
+            'status' => true,
+            'countries' => $countries
+        ];
+    }
 
     /**
      * @param Request $request

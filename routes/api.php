@@ -35,6 +35,8 @@ Route::get('/test', function(Request $request) {
 
 });
 
+Route::get('/test-country', [ItemsController::class, 'test']);
+
 /**
  * Getting data
  */
