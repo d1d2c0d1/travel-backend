@@ -16,7 +16,7 @@ class APIAuth
      * @param Closure $next
      * @return mixed
      */
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next): mixed
     {
         $token = $request->header('Client-Token');
 
