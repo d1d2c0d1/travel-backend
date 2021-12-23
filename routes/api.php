@@ -79,3 +79,10 @@ Route::middleware('api.static.auth')->prefix('additional')->group(function() {
 Route::middleware('api.static.auth')->middleware('api.user.auth')->prefix('user')->group(function () {
     Route::get('', [UserController::class, 'index']);
 });
+
+/**
+ * Lesson routes
+ */
+Route::middleware('api.static.auth')->middleware('api.user.auth')->prefix('dranik')->group(function () {
+    Route::get('', [UserController::class, 'index']);
+});
