@@ -85,5 +85,5 @@ Route::middleware('api.static.auth')->middleware('api.user.auth')->prefix('user'
  * Subscribe routes
  */
 Route::middleware('api.static.auth')->prefix('subscribe')->group(function () {
-    Route::get('', [SubscribeController::class, 'index']);
+    Route::post('', [SubscribeController::class, 'index']);
 });
