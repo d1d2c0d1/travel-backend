@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdditionalController;
 use App\Http\Controllers\AuthorizationController;
 use App\Http\Controllers\ItemsController;
+use App\Http\Controllers\LocationController;
 use App\Http\Controllers\PostsController;
 use App\Http\Controllers\SubscribeController;
 use App\Http\Controllers\UserController;
@@ -35,8 +36,6 @@ Route::get('/test', function(Request $request) {
     ]);
 
 });
-
-Route::get('/test-country', [ItemsController::class, 'test']);
 
 /**
  * Getting data
@@ -79,6 +78,19 @@ Route::middleware('api.static.auth')->prefix('additional')->group(function() {
  */
 Route::middleware('api.static.auth')->middleware('api.user.auth')->prefix('user')->group(function () {
     Route::get('', [UserController::class, 'index']);
+});
+
+/**
+ * Location routes
+ */
+Route::middleware('api.static.auth')->prefix('location')->group(function() {
+
+    Route::get('languages', [LocationController::class, 'languages'])->name('location.languages');
+    Route::get('countries', [LocationController::class, 'countries'])->name('location.countries');
+    Route::get('regions/{countryId?}', [LocationController::class, 'regions'])->name('location.regions');
+    Route::get('cities', [LocationController::class, 'cities'])->name('location.cities');
+    Route::get('areas', [LocationController::class, 'areas'])->name('location.areas');
+
 });
 
 /**
