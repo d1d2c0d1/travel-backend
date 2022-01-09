@@ -41,31 +41,31 @@ class AuthorizationController extends Controller
         if( $users->isEmpty() ) {
             return response(
                 MainHelper::getErrorResponse([
-                    MainHelper::getErrorItem(404, 'Email not defined in our database')
+                    MainHelper::getErrorItem(406, 'Email not defined in our database')
                 ]),
-                404
+                406
             );
         }
 
         /** @var User $user */
         $user = $users[0];
 
-        if( Hash::check($password, $user->password) ) {
+        if( Hash::check($user->password, $password) ) {
             return response(
                 MainHelper::getErrorResponse([
-                    MainHelper::getErrorItem(404, 'Email or password incorrected')
+                    MainHelper::getErrorItem(404, 'Email or password incorrected', [
+                        'user' => $user
+                    ])
                 ]),
                 404
             );
         }
 
         $token = $user->generateToken();
-
         Redis::set("user:auth:{$token}", json_encode($user->toArray()));
 
         return response(
             MainHelper::getResponse(true, [
-                'user' => $user,
                 'token' => $token
             ])
         );

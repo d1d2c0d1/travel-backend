@@ -57,11 +57,17 @@ class MainHelper
      * @param string $errorMessage
      * @return array
      */
-    public static function getErrorItem(int $errorCode = 404, string $errorMessage = 'Undefined error'): array
+    public static function getErrorItem(int $errorCode = 404, string $errorMessage = 'Undefined error', array $data = []): array
     {
-        return [
+        $result = [
             'message' => $errorMessage,
-            'code' => $errorCode
+            'code' => $errorCode,
         ];
+
+        if( !empty($data) ) {
+            $result['data'] = $data;
+        }
+
+        return $result;
     }
 }
