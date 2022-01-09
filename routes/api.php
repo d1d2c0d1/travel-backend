@@ -71,7 +71,7 @@ Route::middleware('api.static.auth')->prefix('additional')->group(function() {
  * User routes
  */
 Route::middleware('api.static.auth')->prefix('user')->group(function() {
-    Route::post('auth', [AuthorizationController::class, 'create']);
+    Route::post('auth', [AuthorizationController::class, 'auth']);
     Route::post('registration', [AuthorizationController::class, 'registration']);
 });
 

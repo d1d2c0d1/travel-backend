@@ -19,12 +19,12 @@ class AuthorizationController extends Controller
      * @param Request $request
      * @return Response
      */
-    public function create(Request $request): Response
+    public function auth(Request $request): Response
     {
-        $email = $request->json('email');
-        $password = $request->json('password');
+        $email = (string) $request->json('email');
+        $password = (string) $request->json('password');
 
-        if( empty($email) || empty($password) ) {
+        if( mb_strlen($email) <= 8 || mb_strlen($password) <= 6 || !str_contains($email, '@')) {
             return response(
                 MainHelper::getErrorResponse([
                     MainHelper::getErrorItem(403, 'Empty login or password fields')
@@ -50,14 +50,12 @@ class AuthorizationController extends Controller
         /** @var User $user */
         $user = $users[0];
 
-        if( Hash::check($user->password, $password) ) {
+        if( !Hash::check($password, $user->password) ) {
             return response(
                 MainHelper::getErrorResponse([
-                    MainHelper::getErrorItem(404, 'Email or password incorrected', [
-                        'user' => $user
-                    ])
+                    MainHelper::getErrorItem(409, 'Email or password incorrected')
                 ]),
-                404
+                409
             );
         }
 
@@ -80,10 +78,10 @@ class AuthorizationController extends Controller
      */
     public function registration(Request $request): Response
     {
-        $email = $request->json('email');
-        $password = $request->json('password');
+        $email = (string) $request->json('email');
+        $password = (string) $request->json('password');
 
-        if( empty($email) || empty($password) ) {
+        if( mb_strlen($email) <= 8 || mb_strlen($password) <= 6 || !str_contains($email, '@')) {
             return response(
                 MainHelper::getErrorResponse([
                     MainHelper::getErrorItem(403, 'Empty login or password fields')
