@@ -31,8 +31,14 @@ class PostsController extends Controller
         }
 
         if( $newsData && is_array($newsData) ) {
+
+            $resultNewsData = [];
+            foreach ($newsData as $item) {
+                $resultNewsData[] = $item;
+            }
+
             $result['status'] = true;
-            $result['data'] = $newsData;
+            $result['data'] = $resultNewsData;
             unset($result['error']);
         } else {
             if( $result['error'] === 'undefined' ) {
