@@ -58,4 +58,6 @@ RUN composer install
 RUN composer update
 RUN composer dump-autoload
 
+RUN php artisan migrate
+
 RUN sudo chown -R travel:travel /var/www/html/backend/vendor

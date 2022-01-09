@@ -17,7 +17,7 @@ class RolesController extends Controller
      */
     public function index(Request $request): Response
     {
-        $roles = Role::select(['id','name', 'admin'])
+        $roles = Role::select(['id','name', 'is_admin', 'is_moder'])
         ->where([
             ['id', '>=', 1]
         ])->get();

@@ -60,8 +60,7 @@ class Role extends Model
      * @var array
      */
     protected $fillable = [
-        'admin',
-        'name',
+        'name'
     ];
 
     /**
@@ -79,13 +78,12 @@ class Role extends Model
      * @var array
      */
     protected $casts = [
-
         'id' => 'integer',
-        'admin' => 'integer',
+        'is_admin' => 'boolean',
+        'is_moder' => 'boolean',
         'name' => 'string',
         'created_at' => 'datetime:Y-m-d H:i:s',
         'updated_at' => 'datetime:Y-m-d H:i:s',
-
     ];
 
     /**
