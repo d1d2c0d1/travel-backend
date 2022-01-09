@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Hash;
 
 /**
  * Class Users
@@ -126,5 +127,19 @@ class User extends Model
     public function role(): HasOne
     {
         return $this->hasOne(Role::class, 'id', 'role_id');
+    }
+
+    /**
+     * Generate tokens for users
+     *
+     * @return string
+     */
+    public function generateToken(): string
+    {
+        $data = $this->toArray();
+        $data[] = rand(1000, 100000);
+        $data[] = date('M-Yd-HuimSs-Ihy-SA-S');
+        $data[] = rand(1000, 100000);
+        return Hash::make(implode(':', $data));
     }
 }

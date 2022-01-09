@@ -48,13 +48,6 @@ Route::prefix('filter')->group(function() {
 });
 
 /**
- * Auth routes
- */
-Route::middleware('api.static.auth')->prefix('auth')->group(function() {
-    Route::post('', [AuthorizationController::class, 'create']);
-});
-
-/**
  * Posts routes
  */
 Route::prefix('posts')->group(function() {
@@ -75,6 +68,14 @@ Route::middleware('api.static.auth')->prefix('additional')->group(function() {
 
 /**
  * User routes
+ */
+Route::middleware('api.static.auth')->prefix('user')->group(function() {
+    Route::post('auth', [AuthorizationController::class, 'create']);
+    Route::post('registration', [AuthorizationController::class, 'registration']);
+});
+
+/**
+ * Private User routes
  */
 Route::middleware('api.static.auth')->middleware('api.user.auth')->prefix('user')->group(function () {
     Route::get('', [UserController::class, 'index']);

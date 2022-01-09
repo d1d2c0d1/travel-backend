@@ -8,5 +8,4 @@ return [
         'dx91dcd02d25dd950fb19a4d375583db5ed7c6x5',
         '0x368f340028516afcab56335a5f37fe6ca2b8xc'
     ]
-
 ];
