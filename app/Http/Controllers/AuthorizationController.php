@@ -66,7 +66,8 @@ class AuthorizationController extends Controller
 
         return response(
             MainHelper::getResponse(true, [
-                'token' => $token
+                'token' => $token,
+                'roleId' => $user->role_id
             ])
         );
     }
@@ -132,7 +133,8 @@ class AuthorizationController extends Controller
 
         return response(
             MainHelper::getResponse(true, [
-                'token' => $token
+                'token' => $token,
+                'roleId' => $user->role_id
             ])
         );
     }

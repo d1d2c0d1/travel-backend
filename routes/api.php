@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthorizationController;
 use App\Http\Controllers\ItemsController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\PostsController;
+use App\Http\Controllers\RolesController;
 use App\Http\Controllers\SubscribeController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -78,7 +79,7 @@ Route::middleware('api.static.auth')->prefix('user')->group(function() {
  * Private User routes
  */
 Route::middleware('api.static.auth')->middleware('api.user.auth')->prefix('user')->group(function () {
-    Route::get('', [UserController::class, 'index']);
+    Route::get('data', [UserController::class, 'index']);
 });
 
 /**
@@ -91,6 +92,15 @@ Route::middleware('api.static.auth')->prefix('location')->group(function() {
     Route::get('regions/{countryId?}', [LocationController::class, 'regions'])->name('location.regions');
     Route::get('cities', [LocationController::class, 'cities'])->name('location.cities');
     Route::get('areas', [LocationController::class, 'areas'])->name('location.areas');
+
+});
+
+/**
+ * Roles routes
+ */
+Route::middleware('api.static.auth')->prefix('roles')->group(function() {
+
+    Route::get('', [RolesController::class, 'index']);
 
 });
 
