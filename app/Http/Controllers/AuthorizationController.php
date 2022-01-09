@@ -82,6 +82,15 @@ class AuthorizationController extends Controller
         $email = $request->json('email');
         $password = $request->json('password');
 
+        if( empty($email) || empty($password) ) {
+            return response(
+                MainHelper::getErrorResponse([
+                    MainHelper::getErrorItem(403, 'Empty login or password fields')
+                ]),
+                403
+            );
+        }
+
         // Getting data for user by email
         $users = User::where([
             ['email', '=', $email]
