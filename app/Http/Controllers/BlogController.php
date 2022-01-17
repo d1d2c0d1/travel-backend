@@ -96,8 +96,41 @@ class BlogController extends Controller
         return response(
             MainHelper::getResponse(true, [
                 'post' => $post
-            ])
+            ]), 201
         );
     }
 
+    /**
+     * Getting posts by filter
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function index(Request $request): Response
+    {
+        $posts = Post::where([
+            ['id', '>=', 1]
+        ])->orderByDesc('id')->paginate();
+
+        return response(MainHelper::getResponse(true, $posts->toArray()));
+    }
+
+    /**
+     * Getting single post
+     *
+     * @param int $id
+     * @return Response
+     */
+    public function single(int $id): Response
+    {
+        if( $id <= 0 ) {
+            return response(MainHelper::getErrorResponse([
+                MainHelper::getErrorItem(404, 'ID is empty')
+            ]));
+        }
+
+        $post = Post::find($id);
+
+        return response(MainHelper::getResponse((bool) $post, $post?->toArray()));
+    }
 }
