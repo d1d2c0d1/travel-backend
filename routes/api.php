@@ -133,6 +133,7 @@ Route::prefix('blog')->middleware('api.static.auth')->middleware('api.user.auth'
 });
 
 Route::prefix('blog')->middleware('api.static.auth')->group(function() {
-    Route::get('', [BlogController::class, 'index'])->name('blog.index');
+    Route::get('categories', [BlogController::class, 'categories'])->name('blog.categories');
     Route::get('{id}', [BlogController::class, 'single'])->name('blog.single');
+    Route::get('', [BlogController::class, 'index'])->name('blog.index');
 });

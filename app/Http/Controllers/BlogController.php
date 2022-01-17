@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Helpers\MainHelper;
+use App\Models\Category;
 use App\Models\Post;
 use Exception;
 use Illuminate\Http\Request;
@@ -132,5 +133,17 @@ class BlogController extends Controller
         $post = Post::find($id);
 
         return response(MainHelper::getResponse((bool) $post, $post?->toArray()));
+    }
+
+    /**
+     * Getting all categories
+     *
+     * @return Response
+     */
+    public function categories(): Response
+    {
+        $categories = Category::all();
+
+        return response(MainHelper::getResponse(!empty($categories), $categories->toArray()));
     }
 }
