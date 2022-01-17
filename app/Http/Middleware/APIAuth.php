@@ -20,7 +20,7 @@ class APIAuth
     {
         $token = $request->header('Client-Token');
 
-        if( strlen($token) !== 32 ) {
+        if( strlen($token) <= 32 ) {
             return response(
                 MainHelper::getErrorResponse([
                     MainHelper::getErrorItem(403, 'Client authorization token can\'t be empty')

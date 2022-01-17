@@ -55,6 +55,7 @@ class MainHelper
      *
      * @param int $errorCode
      * @param string $errorMessage
+     * @param array $data
      * @return array
      */
     public static function getErrorItem(int $errorCode = 404, string $errorMessage = 'Undefined error', array $data = []): array

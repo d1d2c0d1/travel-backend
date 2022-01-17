@@ -2,8 +2,10 @@
 
 use App\Http\Controllers\AdditionalController;
 use App\Http\Controllers\AuthorizationController;
+use App\Http\Controllers\BlogController;
 use App\Http\Controllers\ItemsController;
 use App\Http\Controllers\LocationController;
+use App\Http\Controllers\MediaController;
 use App\Http\Controllers\PostsController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\SubscribeController;
@@ -70,13 +72,14 @@ Route::middleware('api.static.auth')->prefix('additional')->group(function() {
 /**
  * User routes
  */
-Route::middleware('api.static.auth')->prefix('user')->group(function() {
+Route::prefix('user')->middleware('api.static.auth')->group(function() {
     Route::post('auth', [AuthorizationController::class, 'auth']);
     Route::post('registration', [AuthorizationController::class, 'registration']);
 });
 
 /**
- * Private User routes
+ * User routes
+ * @private
  */
 Route::middleware('api.static.auth')->middleware('api.user.auth')->prefix('user')->group(function () {
     Route::get('data', [UserController::class, 'index']);
@@ -108,5 +111,23 @@ Route::middleware('api.static.auth')->prefix('roles')->group(function() {
  * Subscribe routes
  */
 Route::middleware('api.static.auth')->prefix('subscribe')->group(function () {
-    Route::post('', [SubscribeController::class, 'index']);
+    Route::post('', [SubscribeController::class, 'index'])->name('subscribe');
+});
+
+/**
+ * Attachments routes
+ * @private
+ */
+Route::prefix('attachment')->middleware('api.static.auth')->middleware('api.user.auth')->group(function() {
+
+    Route::post('upload', [MediaController::class, 'upload'])->name('attachment.upload');
+
+});
+
+/**
+ * Posts routes
+ * @private
+ */
+Route::prefix('blog')->middleware('api.static.auth')->middleware('api.user.auth')->group(function() {
+    Route::post('', [BlogController::class, 'create'])->name('blog.create');
 });

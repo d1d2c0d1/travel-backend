@@ -36,7 +36,6 @@ use Illuminate\Support\Carbon;
 class Post extends Model
 {
 
-
     /**
      * The table associated with the model.
      *
@@ -93,6 +92,7 @@ class Post extends Model
         'language_id',
         'company_id',
         'category_id',
+        'user_id',
         'image',
     ];
 
