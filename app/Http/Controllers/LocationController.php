@@ -146,4 +146,18 @@ class LocationController extends Controller
         ];
     }
 
+    public function searchCity(Request $request): array
+    {
+        $search = $request->get('search');
+
+        $cities = City::where([
+            ['name', 'like', "%{$search}%"]
+        ])->limit(5)->get();
+
+        return [
+            'status' => true,
+            'data' => $cities
+        ];
+    }
+
 }

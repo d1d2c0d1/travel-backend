@@ -94,6 +94,7 @@ Route::middleware('api.static.auth')->prefix('location')->group(function() {
     Route::get('countries', [LocationController::class, 'countries'])->name('location.countries');
     Route::get('regions/{countryId?}', [LocationController::class, 'regions'])->name('location.regions');
     Route::get('cities', [LocationController::class, 'cities'])->name('location.cities');
+    Route::get('cities/search', [LocationController::class, 'searchCity'])->name('location.search.cities');
     Route::get('areas', [LocationController::class, 'areas'])->name('location.areas');
 
 });
