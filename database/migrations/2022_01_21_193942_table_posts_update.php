@@ -16,7 +16,7 @@ class TablePostsUpdate extends Migration
         Schema::table('posts', function (Blueprint $table) {
             $table->jsonb('tags')->default('[]');
             $table->mediumText('seo_description');
-            $table->dateTime('published_at');
+            $table->dateTime('published_at')->useCurrent();
         });
     }
 
