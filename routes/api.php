@@ -63,7 +63,7 @@ Route::prefix('posts')->group(function() {
 /**
  * Additional routes
  */
-Route::middleware('api.static.auth')->prefix('additional')->group(function() {
+Route::prefix('additional')->middleware('api.static.auth')->group(function() {
 
     Route::get('weather', [AdditionalController::class, 'weather']);
 
@@ -81,14 +81,14 @@ Route::prefix('user')->middleware('api.static.auth')->group(function() {
  * User routes
  * @private
  */
-Route::middleware('api.static.auth')->middleware('api.user.auth')->prefix('user')->group(function () {
+Route::prefix('user')->middleware('api.static.auth')->middleware('api.user.auth')->group(function () {
     Route::get('data', [UserController::class, 'index']);
 });
 
 /**
  * Location routes
  */
-Route::middleware('api.static.auth')->prefix('location')->group(function() {
+Route::prefix('location')->middleware('api.static.auth')->group(function() {
 
     Route::get('languages', [LocationController::class, 'languages'])->name('location.languages');
     Route::get('countries', [LocationController::class, 'countries'])->name('location.countries');
@@ -102,7 +102,7 @@ Route::middleware('api.static.auth')->prefix('location')->group(function() {
 /**
  * Roles routes
  */
-Route::middleware('api.static.auth')->prefix('roles')->group(function() {
+Route::prefix('roles')->middleware('api.static.auth')->group(function() {
 
     Route::get('', [RolesController::class, 'index']);
 
@@ -111,7 +111,7 @@ Route::middleware('api.static.auth')->prefix('roles')->group(function() {
 /**
  * Subscribe routes
  */
-Route::middleware('api.static.auth')->prefix('subscribe')->group(function () {
+Route::prefix('subscribe')->middleware('api.static.auth')->group(function () {
     Route::post('', [SubscribeController::class, 'index'])->name('subscribe');
 });
 
