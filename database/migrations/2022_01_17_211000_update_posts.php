@@ -18,7 +18,6 @@ class UpdatePosts extends Migration
             $table->bigInteger('likes')->default(0)->change();
             $table->bigInteger('favorites')->default(0)->change();
             $table->bigInteger('comments')->default(0)->change();
-            $table->bigInteger('category_id')->default(0)->change();
         });
     }
 
