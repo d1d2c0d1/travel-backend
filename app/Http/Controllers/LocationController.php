@@ -146,13 +146,21 @@ class LocationController extends Controller
         ];
     }
 
+    /**
+     * Search city by text name
+     *
+     * @param Request $request
+     * @return array
+     */
     public function searchCity(Request $request): array
     {
         $search = $request->get('search');
 
-        $cities = City::where([
-            ['name', 'like', "%{$search}%"]
-        ])->limit(5)->get();
+        $cities = Cache::remember("cities-search-{$search}", 86400, function() use ($search) {
+           return City::where([
+               ['name', 'like', "%{$search}%"]
+           ])->limit(5)->get();
+        });
 
         return [
             'status' => true,
