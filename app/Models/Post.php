@@ -94,6 +94,9 @@ class Post extends Model
         'category_id',
         'user_id',
         'image',
+        'seo_description',
+        'tags',
+        'published_at'
     ];
 
     /**
@@ -131,25 +134,13 @@ class Post extends Model
         'image' => 'string',
         'created_at' => 'datetime:Y-m-d H:i:s',
         'updated_at' => 'datetime:Y-m-d H:i:s',
+        'seo_description' => 'string',
+        'tags' => 'string',
+        'published_at' => 'datetime:Y-m-d H:i:s',
     ];
 
     const RuleList = [
-        'title' => [],
-        'code' => [],
-        'content' => [],
-        'status' => [],
-        'views' => [],
-        'likes' => [],
-        'favorites' => [],
-        'comments' => [],
-        'country_id' => [],
-        'region_id' => [],
-        'city_id' => [],
-        'area_id' => [],
-        'language_id' => [],
-        'company_id' => [],
-        'category_id' => [],
-        'image' => [],
+
     ];
 
 

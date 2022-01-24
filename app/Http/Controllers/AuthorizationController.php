@@ -109,6 +109,7 @@ class AuthorizationController extends Controller
         $user->email = $email;
         $user->password = Hash::make($password);
         $user->role_id = 20;
+        $user->name = explode('@', $email)[0];
 
         try {
 

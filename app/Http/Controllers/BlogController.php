@@ -32,6 +32,9 @@ class BlogController extends Controller
         $companyId = (int) $request->input('company_id');
         $categoryId = (int) $request->input('category_id');
         $image = (string) $request->input('image');
+        $tags = $request->input('tags');
+        $seoDescription = (string) $request->input('seo_description');
+        $publishedAt = (int) $request->input('published_at');
 
         $countryId = ($countryId === 0)? 1 : $countryId;
         $languageId = ($languageId === 0)? 1 : $languageId;
@@ -40,6 +43,7 @@ class BlogController extends Controller
         $cityId = ($cityId === 0)? null : $cityId;
         $areaId = ($areaId === 0)? null : $areaId;
         $companyId = ($companyId === 0)? null : $companyId;
+        $publishedAt = ($publishedAt <= 100)? time() : $publishedAt;
 
         if( empty($title) || mb_strlen($title) <= 5 ) {
             $errors[] = MainHelper::getErrorItem(419, 'title is empty');
@@ -80,7 +84,10 @@ class BlogController extends Controller
             'language_id' => $languageId,
             'company_id' => $companyId,
             'category_id' => $categoryId,
-            'image' => $image
+            'image' => $image,
+            'seo_description' => $seoDescription,
+            'tags' => json_encode($tags),
+            'published_at' => date('Y-m-d H:i:s', $publishedAt)
         ];
 
         $post = new Post($postData);
