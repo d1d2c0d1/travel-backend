@@ -78,6 +78,8 @@ class Post extends Model
      */
     protected $fillable = [
         'title',
+        'is_main',
+        'is_week',
         'code',
         'content',
         'status',

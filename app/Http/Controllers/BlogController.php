@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Post;
 use App\Models\User;
 use Exception;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -66,7 +67,7 @@ class BlogController extends Controller
             return response(MainHelper::getErrorResponse($errors), 419);
         }
 
-        $code = '';
+        $code = MainHelper::cyr2lat($title);
 
         if( !MainHelper::isModer() ) {
             return response(MainHelper::getErrorResponse([
@@ -147,6 +148,69 @@ class BlogController extends Controller
         $post = Post::find($id);
 
         return response(MainHelper::getResponse((bool) $post, $post?->toArray()));
+    }
+
+    /**
+     * Set position for post
+     *
+     * @param string $position
+     * @param int $id
+     * @return Response
+     */
+    public function setPostPosition(string $position, int $id): Response
+    {
+        $post = Post::find($id);
+
+        if( $post?->id >= 1 ) {
+
+            if( !MainHelper::isAdminOrModer() ) {
+                return response(MainHelper::getErrorResponse([
+                    MainHelper::getErrorItem(401, 'Permission denied!')
+                ]));
+            }
+
+            switch ($position) {
+                case 'is_main': $post->is_main = 1; break;
+                case 'is_week': $post->is_week = 1; break;
+                default: return response(MainHelper::getErrorResponse([
+                    MainHelper::getErrorItem(404, 'Position for post not found')
+                ]));
+            }
+
+            $recentPostsOnPosition = Post::where([
+                [$position, '=', 1],
+                ['id', '<>', $post->id]
+            ])->get();
+
+            if( !$recentPostsOnPosition->isEmpty() ) {
+                foreach ($recentPostsOnPosition as $recentPost) {
+                    $recentPost->{$position} = 0;
+                    try {
+                        $recentPost->save();
+                    } catch (Exception $e) {
+                        return response(MainHelper::getErrorResponse([
+                            MainHelper::getErrorItem(422, 'Error in db. Can\'t update recent post.'),
+                            MainHelper::getErrorItem(500, $e->getMessage())
+                        ]));
+                    }
+                }
+            }
+
+            try {
+                $post->save();
+            } catch (Exception $e) {
+                return response(MainHelper::getErrorResponse([
+                    MainHelper::getErrorItem(422, 'Error in db. Can\'t update post.'),
+                    MainHelper::getErrorItem(500, $e->getMessage())
+                ]));
+            }
+
+            return response(MainHelper::getResponse((bool) $post, $post?->toArray()));
+        }
+
+        return response(MainHelper::getErrorResponse([
+            MainHelper::getErrorItem(412, 'Post ID is empty!')
+        ]));
     }
 
     /**
