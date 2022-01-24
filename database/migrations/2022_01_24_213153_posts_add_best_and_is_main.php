@@ -16,7 +16,7 @@ class PostsAddBestAndIsMain extends Migration
         Schema::table('posts', function (Blueprint $table) {
             $table->boolean('is_main')->default(0)->after('id');
             $table->boolean('is_week')->default(0)->after('is_week');
-            $table->jsonb('tags')->after('image')->change();
+            $table->longText('tags')->after('image')->change();
             $table->mediumText('seo_description')->default('')->after('category_id')->change();
             $table->dateTime('published_at')->after('category_id')->change();
         });
