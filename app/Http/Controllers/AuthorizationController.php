@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Helpers\MainHelper;
+use App\Models\Role;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
@@ -104,12 +105,24 @@ class AuthorizationController extends Controller
             );
         }
 
+        $roles = Role::where([
+            ['is_default', '=', 1]
+        ])->get();
+
+        $defaultRole = 0;
+        if( !$roles->isEmpty() ) {
+            $defaultRole = (int) $roles[0]->id;
+        }
+
         $user = new User();
 
         $user->email = $email;
         $user->password = Hash::make($password);
-        $user->role_id = 20;
+        $user->role_id = $defaultRole;
         $user->name = explode('@', $email)[0];
+        $user->country_id = 1; // Российская Федерация
+        $user->region_id = 77; // Москва и МО
+        $user->city_id = 50; // Москва
 
         try {
 

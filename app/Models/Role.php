@@ -81,6 +81,7 @@ class Role extends Model
         'id' => 'integer',
         'is_admin' => 'boolean',
         'is_moder' => 'boolean',
+        'is_default' => 'boolean',
         'name' => 'string',
         'created_at' => 'datetime:Y-m-d H:i:s',
         'updated_at' => 'datetime:Y-m-d H:i:s',
