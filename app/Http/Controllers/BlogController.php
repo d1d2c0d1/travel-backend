@@ -161,6 +161,12 @@ class BlogController extends Controller
         return response(MainHelper::getResponse(!empty($categories), $categories->toArray()));
     }
 
+    /**
+     * Create category for posts
+     *
+     * @param Request $request
+     * @return Response
+     */
     public function createCategory(Request $request): Response
     {
         $name = (string) $request->input('name', '');
