@@ -42,6 +42,14 @@ class APIAuth
             );
         }
 
+        if( MainHelper::getUserId() <= 0 ) {
+            return response(
+                MainHelper::getErrorResponse([
+                    MainHelper::getErrorItem(503, 'User not defined. Authorization is failed!')
+                ])
+            );
+        }
+
         return $next($request);
     }
 }

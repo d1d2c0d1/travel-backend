@@ -2,6 +2,10 @@
 
 namespace App\Http\Helpers;
 
+use App\Models\Role;
+use App\Models\User;
+use Illuminate\Support\Facades\Redis;
+
 class MainHelper
 {
 
@@ -70,5 +74,98 @@ class MainHelper
         }
 
         return $result;
+    }
+
+    /**
+     * Getting current auth user data
+     *
+     * @return User|false
+     */
+    public static function getUser(): User | false {
+
+        $token = (string) app('request')->header('Client-Token', '');
+
+        if( strlen($token) <= 32 ) {
+            return false;
+        }
+
+        global $userData;
+
+        if( $userData instanceof User ) {
+            return $userData;
+        }
+
+        $user = Redis::get("user:auth:{$token}");
+
+        if( strlen($user) >= 32 && stristr($user, '{') ) {
+            $user = json_decode($user);
+        }
+
+        if( !is_object($user) || (is_object($user) && !isset($user->id)) ) {
+            return false;
+        }
+
+        $userData = User::find((int) $user->id);
+
+        if( !$userData || !$userData?->id ) {
+            unset($userData);
+            return false;
+        }
+
+        return $userData;
+    }
+
+    /**
+     * Get current user id
+     *
+     * @return int
+     */
+    public static function getUserId(): int {
+        return (int) self::getUser()?->id;
+    }
+
+    /**
+     * Get role id of current user
+     *
+     * @return int
+     */
+    public static function getUserRoleId(): int {
+        return (int) self::getUser()?->role_id;
+    }
+
+    /**
+     * Get role of current user
+     *
+     * @return Role|null
+     */
+    public static function getUserRole(): Role | null {
+        return self::getUser()?->role;
+    }
+
+    /**
+     * Is current user has moder rules
+     *
+     * @return bool
+     */
+    public static function isModer(): bool {
+        return (bool) self::getUserRole()?->is_moder;
+    }
+
+    /**
+     * Is current user has admin rules
+     *
+     * @return bool
+     */
+    public static function isAdmin(): bool {
+        return (bool) self::getUserRole()?->is_admin;
+    }
+
+    /**
+     * Is current user has moder or admin rules
+     *
+     * @return bool
+     */
+    public static function isAdminOrModer(): bool {
+        return self::isModer() || self::isAdmin();
     }
 }

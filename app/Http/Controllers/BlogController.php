@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Helpers\MainHelper;
 use App\Models\Category;
 use App\Models\Post;
+use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -67,11 +68,17 @@ class BlogController extends Controller
 
         $code = '';
 
+        if( !MainHelper::isModer() ) {
+            return response(MainHelper::getErrorResponse([
+                MainHelper::getErrorItem(503, 'Forbiden! Permission denied.')
+            ]));
+        }
+
         $postData = [
             'title' => $title,
             'code' => $code,
             'content' => $content,
-            'user_id' => 9, // TODO: getting user id
+            'user_id' => MainHelper::getUserId(),
             'status' => 1,
             'views' => 0,
             'likes' => 0,
