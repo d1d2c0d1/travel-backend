@@ -70,7 +70,7 @@ class BlogController extends Controller
 
         if( !MainHelper::isModer() ) {
             return response(MainHelper::getErrorResponse([
-                MainHelper::getErrorItem(503, 'Forbiden! Permission denied.')
+                MainHelper::getErrorItem(503, 'Forbidden! Permission denied.')
             ]));
         }
 
@@ -159,5 +159,42 @@ class BlogController extends Controller
         $categories = Category::all();
 
         return response(MainHelper::getResponse(!empty($categories), $categories->toArray()));
+    }
+
+    public function createCategory(Request $request): Response
+    {
+        $name = (string) $request->input('name', '');
+        $description = (string) $request->input('description', '');
+        $code = (string) $request->input('code', '');
+
+        if( empty($name) || mb_strlen($name) <= 2 ) {
+            return response(MainHelper::getErrorResponse([
+                MainHelper::getErrorItem(412, 'Category name is empty!')
+            ]), 412);
+        }
+
+        if( !MainHelper::isAdminOrModer() ) {
+            return response(MainHelper::getErrorResponse([
+                MainHelper::getErrorItem(401, 'Permissions denied!')
+            ]), 401);
+        }
+
+        $category = new Category();
+        $category->name = $name;
+        $category->description = $description;
+        $category->code = $code;
+        $category->created_user_id = MainHelper::getUserId();
+        $category->edit_user_id = MainHelper::getUserId();
+
+        try {
+            $category->save();
+        } catch (Exception $e) {
+            return response(MainHelper::getErrorResponse([
+                MainHelper::getErrorItem(422, 'Database return error. Category not created!'),
+                MainHelper::getErrorItem(500, $e->getMessage()),
+            ]), 500);
+        }
+
+        return response(MainHelper::getResponse($category?->id >= 2, $category->toArray()));
     }
 }
