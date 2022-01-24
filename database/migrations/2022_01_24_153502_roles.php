@@ -15,7 +15,8 @@ class Roles extends Migration
     {
         Schema::table('roles', function (Blueprint $table) {
             $table->boolean('is_default')->default(0)->after('is_admin');
-            $table->tinyInteger('is_moder')->after('is_admin')->change();
+            $table->boolean('is_moder')->default(0)->after('is_admin')->change();
+            $table->boolean('is_admin')->default(0)->change();
         });
     }
 
