@@ -32,41 +32,33 @@ use Illuminate\Support\Facades\Route;
  * Testing route
  */
 Route::get('/test', function(Request $request) {
-
     return response([
         'status' => true,
         'message' => 'API is successfull working'
     ]);
-
 });
 
 /**
  * Getting data
  */
 Route::prefix('filter')->group(function() {
-
     Route::post('', [ItemsController::class, 'filter']);
     Route::get('single/{id}', [ItemsController::class, 'single']);
-
 });
 
 /**
  * Posts routes
  */
 Route::prefix('posts')->group(function() {
-
     Route::get('/news/last', [PostsController::class, 'news']);
     Route::get('/news/single/{slug}', [PostsController::class, 'singleNews']);
-
 });
 
 /**
  * Additional routes
  */
 Route::prefix('additional')->middleware('api.static.auth')->group(function() {
-
     Route::get('weather', [AdditionalController::class, 'weather']);
-
 });
 
 /**
@@ -89,23 +81,28 @@ Route::prefix('user')->middleware('api.static.auth')->middleware('api.user.auth'
  * Location routes
  */
 Route::prefix('location')->middleware('api.static.auth')->group(function() {
-
     Route::get('languages', [LocationController::class, 'languages'])->name('location.languages');
     Route::get('countries', [LocationController::class, 'countries'])->name('location.countries');
     Route::get('regions/{countryId?}', [LocationController::class, 'regions'])->name('location.regions');
     Route::get('cities', [LocationController::class, 'cities'])->name('location.cities');
     Route::get('cities/search', [LocationController::class, 'searchCity'])->name('location.search.cities');
     Route::get('areas', [LocationController::class, 'areas'])->name('location.areas');
+});
 
+/**
+ * Location private routes
+ * @private
+ */
+Route::prefix('location')->middleware('api.static.auth')->middleware('api.user.auth')->group(function() {
+    Route::put('city/{id}', [LocationController::class, 'updateCity'])->name('location.city.update');
+    Route::post('city', [LocationController::class, 'createCity'])->name('location.city.create');
 });
 
 /**
  * Roles routes
  */
 Route::prefix('roles')->middleware('api.static.auth')->group(function() {
-
     Route::get('', [RolesController::class, 'index']);
-
 });
 
 /**
@@ -120,9 +117,7 @@ Route::prefix('subscribe')->middleware('api.static.auth')->group(function () {
  * @private
  */
 Route::prefix('attachment')->middleware('api.static.auth')->middleware('api.user.auth')->group(function() {
-
     Route::post('upload', [MediaController::class, 'upload'])->name('attachment.upload');
-
 });
 
 /**
@@ -134,8 +129,13 @@ Route::prefix('blog')->middleware('api.static.auth')->middleware('api.user.auth'
     Route::post('category', [BlogController::class, 'createCategory'])->name('blog.create.category');
 });
 
+/**
+ * Posts routes
+ * @public
+ */
 Route::prefix('blog')->middleware('api.static.auth')->group(function() {
     Route::get('categories', [BlogController::class, 'categories'])->name('blog.categories');
     Route::get('{id}', [BlogController::class, 'single'])->name('blog.single');
     Route::get('', [BlogController::class, 'index'])->name('blog.index');
 });
+
