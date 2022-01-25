@@ -42,8 +42,7 @@ Route::get('/test', function(Request $request) {
  * Getting data
  */
 Route::prefix('filter')->group(function() {
-    Route::post('', [ItemsController::class, 'filter']);
-    Route::get('single/{id}', [ItemsController::class, 'single']);
+
 });
 
 /**
@@ -61,6 +60,7 @@ Route::prefix('items')->group(function() {
  * @private
  */
 Route::prefix('items')->middleware('api.static.auth')->middleware('api.user.auth')->group(function () {
+    Route::post('', [ItemsController::class, 'create'])->name('items.create');
     Route::post('categories', [ItemCategoryController::class, 'create'])->name('items.categories.create');
     Route::post('tags', [ItemTagController::class, 'create'])->name('items.tags.create');
     Route::post('properties', [PropertiesController::class, 'create'])->name('items.properties.create');
