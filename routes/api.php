@@ -10,6 +10,7 @@ use App\Http\Controllers\ItemTypeController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\MediaController;
 use App\Http\Controllers\PostsController;
+use App\Http\Controllers\PropertiesController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\SubscribeController;
 use App\Http\Controllers\UserController;
@@ -52,6 +53,7 @@ Route::prefix('items')->group(function() {
     Route::get('types', [ItemTypeController::class, 'index'])->name('items.types');
     Route::get('categories', [ItemCategoryController::class, 'index'])->name('items.categories');
     Route::get('tags', [ItemTagController::class, 'index'])->name('items.tags');
+    Route::get('properties', [PropertiesController::class, 'index'])->name('items.properties');
 });
 
 /**
@@ -61,6 +63,7 @@ Route::prefix('items')->group(function() {
 Route::prefix('items')->middleware('api.static.auth')->middleware('api.user.auth')->group(function () {
     Route::post('categories', [ItemCategoryController::class, 'create'])->name('items.categories.create');
     Route::post('tags', [ItemTagController::class, 'create'])->name('items.tags.create');
+    Route::post('properties', [PropertiesController::class, 'create'])->name('items.properties.create');
 });
 
 /**

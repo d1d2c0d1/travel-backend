@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Helpers\MainHelper;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -54,7 +55,8 @@ class Property extends Model
         'name',
         'code',
         'type_id',
-        'default'
+        'default',
+        'user_id'
     ];
 
     /**
@@ -67,6 +69,38 @@ class Property extends Model
         'name' => 'string',
         'code' => 'string',
         'type_id' => 'integer',
-        'default' => 'string'
+        'default' => 'string',
+        'user_id' => 'integer',
+        'created_at' => 'datetime:Y-m-d H:i:s',
+        'updated_at' => 'datetime:Y-m-d H:i:s'
     ];
+
+    /**
+     * Validator
+     *
+     * @return array
+     */
+    public function validate(): array
+    {
+        $errors = [];
+
+        // NAME
+        if( mb_strlen($this->name) <= 4 ) {
+            $errors[] = MainHelper::getErrorItem(412, 'name field value is too short');
+        }
+
+        // TYPE ID
+        if( $this->type_id <= 0 ) {
+            $errors[] = MainHelper::getErrorItem(412, 'type_id field empty or equal zero');
+        }
+
+        if( !empty($errors) ) {
+            return [
+                'status' => false,
+                'errors' => $errors
+            ];
+        } else {
+            return ['status' => true];
+        }
+    }
 }
