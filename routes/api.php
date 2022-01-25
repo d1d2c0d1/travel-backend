@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdditionalController;
 use App\Http\Controllers\AuthorizationController;
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\ItemCategoryController;
 use App\Http\Controllers\ItemsController;
 use App\Http\Controllers\ItemTypeController;
 use App\Http\Controllers\LocationController;
@@ -48,6 +49,15 @@ Route::prefix('filter')->group(function() {
  */
 Route::prefix('items')->group(function() {
     Route::get('types', [ItemTypeController::class, 'index'])->name('items.types');
+    Route::get('categories', [ItemCategoryController::class, 'index'])->name('items.categories');
+});
+
+/**
+ * Items routes
+ * @private
+ */
+Route::prefix('items')->middleware('api.static.auth')->middleware('api.user.auth')->group(function () {
+    Route::post('categories', [ItemCategoryController::class, 'create'])->name('items.categories.create');
 });
 
 /**

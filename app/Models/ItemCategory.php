@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Helpers\MainHelper;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -73,12 +74,63 @@ class ItemCategory extends Model
     protected $casts = [
         'id' => 'integer',
         'type_id' => 'integer',
-        'name' => 'integer',
+        'name' => 'string',
         'code' => 'string',
         'description' => 'string',
         'created_at' => 'datetime:Y-m-d H:i:s',
-        'updated_at' => 'datetime:Y-m-d H:i:s',
+        'updated_at' => 'datetime:Y-m-d H:i:s'
     ];
+
+    /**
+     * Validator
+     *
+     * @param array $arFields
+     * @return array
+     */
+    public function validate(array &$arFields): array {
+
+        if( empty($arFields) ) {
+            return [
+                'status' => false,
+                'error' => 'All fields not found!'
+            ];
+        }
+
+        $errors = [];
+
+        // TYPE ID
+        if( !isset($arFields['type_id']) ) {
+            $errors[] = MainHelper::getErrorItem(412, 'type_id not found in field list');
+        } else {
+            if( $arFields['type_id'] <= 0 ) {
+                $errors[] = MainHelper::getErrorItem(412, 'type_id cant be empty or equal zero');
+            }
+        }
+
+        // NAME
+        if( !isset($arFields['name']) ) {
+            $errors[] = MainHelper::getErrorItem(412, 'name not found in field list');
+        } else {
+            if( empty($arFields['name']) ) {
+                $errors[] = MainHelper::getErrorItem(412, 'name cant be empty or equal zero');
+            }
+        }
+
+        if( !isset($arFields['description']) ) {
+            $arFields['description'] = '';
+        }
+
+        if( !isset($arFields['code']) ) {
+            $arFields['code'] = '';
+        }
+
+        // Return result
+        if( empty($errors) ) {
+            return ['status' => true];
+        } else {
+            return ['status' => false, 'errors' => $errors];
+        }
+    }
 
     const RuleList = [];
 }
