@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthorizationController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\ItemCategoryController;
 use App\Http\Controllers\ItemsController;
+use App\Http\Controllers\ItemTagController;
 use App\Http\Controllers\ItemTypeController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\MediaController;
@@ -50,6 +51,7 @@ Route::prefix('filter')->group(function() {
 Route::prefix('items')->group(function() {
     Route::get('types', [ItemTypeController::class, 'index'])->name('items.types');
     Route::get('categories', [ItemCategoryController::class, 'index'])->name('items.categories');
+    Route::get('tags', [ItemTagController::class, 'index'])->name('items.tags');
 });
 
 /**
@@ -58,6 +60,7 @@ Route::prefix('items')->group(function() {
  */
 Route::prefix('items')->middleware('api.static.auth')->middleware('api.user.auth')->group(function () {
     Route::post('categories', [ItemCategoryController::class, 'create'])->name('items.categories.create');
+    Route::post('tags', [ItemTagController::class, 'create'])->name('items.tags.create');
 });
 
 /**
