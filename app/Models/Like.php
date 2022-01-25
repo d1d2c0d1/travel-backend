@@ -5,9 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Property extends Model
+class Like extends Model
 {
-
     use HasFactory;
 
     /**
@@ -15,7 +14,7 @@ class Property extends Model
      *
      * @var string
      */
-    protected $table = 'properties';
+    protected $table = 'item_property';
 
     /**
      * The primary key for the model.
@@ -51,11 +50,8 @@ class Property extends Model
      * @var array
      */
     protected $fillable = [
-        'name',
-        'code',
-        'item_type_id',
-        'type_id',
-        'default'
+        'user_id',
+        'item_id',
     ];
 
     /**
@@ -65,10 +61,7 @@ class Property extends Model
      */
     protected $casts = [
         'id' => 'integer',
-        'name' => 'string',
-        'code' => 'string',
-        'item_type_id' => 'integer',
-        'type_id' => 'integer',
-        'default' => 'string'
+        'user_id' => 'integer',
+        'item_id' => 'integer'
     ];
 }
