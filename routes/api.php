@@ -4,6 +4,7 @@ use App\Http\Controllers\AdditionalController;
 use App\Http\Controllers\AuthorizationController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\ItemsController;
+use App\Http\Controllers\ItemTypeController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\MediaController;
 use App\Http\Controllers\PostsController;
@@ -24,10 +25,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::middleware('auth:api')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
-
 /**
  * Testing route
  */
@@ -44,6 +41,13 @@ Route::get('/test', function(Request $request) {
 Route::prefix('filter')->group(function() {
     Route::post('', [ItemsController::class, 'filter']);
     Route::get('single/{id}', [ItemsController::class, 'single']);
+});
+
+/**
+ * Items routes
+ */
+Route::prefix('items')->group(function() {
+    Route::get('types', [ItemTypeController::class, 'index'])->name('items.types');
 });
 
 /**
