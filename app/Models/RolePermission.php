@@ -9,13 +9,24 @@ use Illuminate\Support\Carbon;
 
 /**
  * Class RolePermission
- * @package App\Models
  *
+ * @package App\Models
  * @property integer $id
  * @property integer $role_id
  * @property integer $permission_id
  * @property Carbon $created_at
  * @property Carbon $updated_at
+ * @property-read \App\Models\Permission|null $permission
+ * @property-read \App\Models\Role|null $role
+ * @method static \Illuminate\Database\Eloquent\Builder|RolePermission newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|RolePermission newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|RolePermission query()
+ * @method static \Illuminate\Database\Eloquent\Builder|RolePermission whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|RolePermission whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|RolePermission wherePermissionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|RolePermission whereRoleId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|RolePermission whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class RolePermission extends Model
 {

@@ -7,13 +7,22 @@ use Illuminate\Support\Carbon;
 
 /**
  * Class AdvertType
- * @package App\Models
  *
+ * @package App\Models
  * @property integer $id
  * @property string $name
  * @property string $code
  * @property Carbon $created_at
  * @property Carbon $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|AdvertType newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|AdvertType newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|AdvertType query()
+ * @method static \Illuminate\Database\Eloquent\Builder|AdvertType whereCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AdvertType whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AdvertType whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AdvertType whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|AdvertType whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class AdvertType extends Model
 {

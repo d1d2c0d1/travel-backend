@@ -8,13 +8,23 @@ use Illuminate\Support\Carbon;
 
 /**
  * Class Region
- * @package App\Models
  *
+ * @package App\Models
  * @property integer $id
  * @property integer $country_id
  * @property string $name
  * @property Carbon $created_at
  * @property Carbon $updated_at
+ * @property-read \App\Models\Country|null $country
+ * @method static \Illuminate\Database\Eloquent\Builder|Region newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Region newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Region query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Region whereCountryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Region whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Region whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Region whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Region whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class Region extends Model
 {

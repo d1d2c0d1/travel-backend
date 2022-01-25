@@ -7,11 +7,20 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * Class Languages
- * @package App\Models
  *
+ * @package App\Models
  * @property integer $id
  * @property string $name
  * @property string $code
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Country[] $countries
+ * @property-read int|null $countries_count
+ * @method static \Illuminate\Database\Eloquent\Builder|Language newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Language newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Language query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Language whereCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Language whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Language whereName($value)
+ * @mixin \Eloquent
  */
 class Language extends Model
 {

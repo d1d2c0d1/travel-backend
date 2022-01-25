@@ -6,6 +6,28 @@ use App\Http\Helpers\MainHelper;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Models\ItemCategory
+ *
+ * @property int $id
+ * @property int|null $type_id
+ * @property string $name
+ * @property string $code
+ * @property string $description
+ * @property \datetime $created_at
+ * @property \datetime $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|ItemCategory newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ItemCategory newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ItemCategory query()
+ * @method static \Illuminate\Database\Eloquent\Builder|ItemCategory whereCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ItemCategory whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ItemCategory whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ItemCategory whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ItemCategory whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ItemCategory whereTypeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ItemCategory whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
 class ItemCategory extends Model
 {
     use HasFactory;

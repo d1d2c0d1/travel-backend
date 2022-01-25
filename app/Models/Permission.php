@@ -9,14 +9,26 @@ use Illuminate\Support\Carbon;
 
 /**
  * Class Permission
- * @package App\Models
  *
+ * @package App\Models
  * @property integer $id
  * @property string $name
  * @property string $code
  * @property integer $admin
  * @property Carbon $created_at
  * @property Carbon $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\UserHistory[] $userHistory
+ * @property-read int|null $user_history_count
+ * @method static \Illuminate\Database\Eloquent\Builder|Permission newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Permission newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Permission query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Permission whereAdmin($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Permission whereCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Permission whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Permission whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Permission whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Permission whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class Permission extends Model
 {

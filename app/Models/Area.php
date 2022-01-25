@@ -8,8 +8,8 @@ use Illuminate\Support\Carbon;
 
 /**
  * Class Area
- * @package App\Models
  *
+ * @package App\Models
  * @property integer $id
  * @property integer $country_id
  * @property integer $region_id
@@ -17,6 +17,20 @@ use Illuminate\Support\Carbon;
  * @property string $name
  * @property Carbon $created_at
  * @property Carbon $updated_at
+ * @property-read \App\Models\City|null $city
+ * @property-read \App\Models\Country|null $country
+ * @property-read \App\Models\Region|null $region
+ * @method static \Illuminate\Database\Eloquent\Builder|Area newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Area newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Area query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Area whereCityId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Area whereCountryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Area whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Area whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Area whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Area whereRegionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Area whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class Area extends Model
 {

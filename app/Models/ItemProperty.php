@@ -5,6 +5,30 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Models\ItemProperty
+ *
+ * @property int $id
+ * @property int $created_user_id
+ * @property int|null $edit_user_id
+ * @property int $item_id
+ * @property int $property_id
+ * @property string|null $value
+ * @property \datetime $created_at
+ * @property \datetime $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|ItemProperty newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ItemProperty newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ItemProperty query()
+ * @method static \Illuminate\Database\Eloquent\Builder|ItemProperty whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ItemProperty whereCreatedUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ItemProperty whereEditUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ItemProperty whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ItemProperty whereItemId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ItemProperty wherePropertyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ItemProperty whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ItemProperty whereValue($value)
+ * @mixin \Eloquent
+ */
 class ItemProperty extends Model
 {
     use HasFactory;

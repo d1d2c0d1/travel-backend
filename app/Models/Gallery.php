@@ -10,12 +10,20 @@ use Illuminate\Support\Carbon;
 
 /**
  * Class Gallery
- * @package App\Models
  *
+ * @package App\Models
  * @property integer $id
  * @property integer $created_user_id
  * @property Carbon $created_at
  * @property Carbon $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|Gallery newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Gallery newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Gallery query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Gallery whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Gallery whereCreatedUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Gallery whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Gallery whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class Gallery extends Model
 {

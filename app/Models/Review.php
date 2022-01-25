@@ -10,8 +10,8 @@ use Illuminate\Support\Carbon;
 
 /**
  * Class Review
- * @package App\Models
  *
+ * @package App\Models
  * @property integer $id
  * @property integer $created_user_id
  * @property integer $accepted_user_id
@@ -23,6 +23,25 @@ use Illuminate\Support\Carbon;
  * @property integer $gallery
  * @property Carbon $created_at
  * @property Carbon $updated_at
+ * @property int|null $gallery_id
+ * @property-read \App\Models\User|null $acceptedUser
+ * @property-read \App\Models\User|null $createdUser
+ * @property-read \App\Models\User|null $editedUser
+ * @method static \Illuminate\Database\Eloquent\Builder|Review newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Review newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Review query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Review whereAcceptedUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Review whereComment($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Review whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Review whereCreatedUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Review whereEditUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Review whereGalleryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Review whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Review whereItemId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Review whereRating($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Review whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Review whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class Review extends Model
 {

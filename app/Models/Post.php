@@ -10,9 +10,9 @@ use Illuminate\Support\Carbon;
 
 /**
  * Class Post
+ *
  * @package App\Models
  * @mixin Model
- *
  * @property integer $id
  * @property bool $is_main
  * @property bool $is_week
@@ -38,6 +38,35 @@ use Illuminate\Support\Carbon;
  * @property Carbon $published_at
  * @property Carbon $created_at
  * @property Carbon $updated_at
+ * @property-read \App\Models\User|null $user
+ * @method static \Illuminate\Database\Eloquent\Builder|Post newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Post newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Post query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Post whereAreaId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Post whereCategoryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Post whereCityId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Post whereCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Post whereComments($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Post whereCompanyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Post whereContent($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Post whereCountryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Post whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Post whereFavorites($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Post whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Post whereImage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Post whereIsMain($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Post whereIsWeek($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Post whereLanguageId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Post whereLikes($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Post wherePublishedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Post whereRegionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Post whereSeoDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Post whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Post whereTags($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Post whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Post whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Post whereUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Post whereViews($value)
  */
 class Post extends Model
 {

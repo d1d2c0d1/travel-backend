@@ -8,13 +8,29 @@ use Illuminate\Support\Carbon;
 
 /**
  * Class Roles
- * @package App\Models
  *
+ * @package App\Models
  * @property integer $id
  * @property integer $admin
  * @property string $name
  * @property Carbon $created_at
  * @property Carbon $updated_at
+ * @property bool $is_admin
+ * @property bool $is_default
+ * @property bool $is_moder
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $user
+ * @property-read int|null $user_count
+ * @method static \Illuminate\Database\Eloquent\Builder|Role newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Role newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Role query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Role whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Role whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Role whereIsAdmin($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Role whereIsDefault($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Role whereIsModer($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Role whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Role whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class Role extends Model
 {

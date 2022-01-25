@@ -5,6 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Models\PriceType
+ *
+ * @property int $id
+ * @property string $name
+ * @property string $code
+ * @method static \Illuminate\Database\Eloquent\Builder|PriceType newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|PriceType newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|PriceType query()
+ * @method static \Illuminate\Database\Eloquent\Builder|PriceType whereCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PriceType whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PriceType whereName($value)
+ * @mixin \Eloquent
+ */
 class PriceType extends Model
 {
     use HasFactory;

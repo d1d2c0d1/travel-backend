@@ -10,8 +10,8 @@ use Illuminate\Support\Carbon;
 
 /**
  * Class Category
- * @package App\Models
  *
+ * @package App\Models
  * @property integer $id
  * @property string $name
  * @property string $code
@@ -20,6 +20,20 @@ use Illuminate\Support\Carbon;
  * @property integer $edit_user_id
  * @property Carbon $created_at
  * @property Carbon $updated_at
+ * @property-read \App\Models\User|null $createdUser
+ * @property-read \App\Models\User|null $editUser
+ * @method static \Illuminate\Database\Eloquent\Builder|Category newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Category newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Category query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Category whereCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Category whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Category whereCreatedUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Category whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Category whereEditUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Category whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Category whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Category whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class Category extends Model
 {

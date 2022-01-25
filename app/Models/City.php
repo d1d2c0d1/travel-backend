@@ -8,14 +8,34 @@ use Illuminate\Support\Carbon;
 
 /**
  * Class City
- * @package App\Models
  *
+ * @package App\Models
  * @property integer $id
  * @property integer $country_id
  * @property integer $region_id
  * @property string $name
  * @property Carbon $created_at
  * @property Carbon $updated_at
+ * @property string $title
+ * @property string $description
+ * @property string $image
+ * @property string $faq
+ * @property-read \App\Models\Country|null $country
+ * @property-read \App\Models\Region|null $region
+ * @method static \Illuminate\Database\Eloquent\Builder|City newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|City newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|City query()
+ * @method static \Illuminate\Database\Eloquent\Builder|City whereCountryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|City whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|City whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|City whereFaq($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|City whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|City whereImage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|City whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|City whereRegionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|City whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|City whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class City extends Model
 {

@@ -5,6 +5,30 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Models\Like
+ *
+ * @property int $id
+ * @property int $created_user_id
+ * @property int|null $edit_user_id
+ * @property int $item_id
+ * @property int $property_id
+ * @property string|null $value
+ * @property string $created_at
+ * @property string $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|Like newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Like newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Like query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Like whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Like whereCreatedUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Like whereEditUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Like whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Like whereItemId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Like wherePropertyId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Like whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Like whereValue($value)
+ * @mixin \Eloquent
+ */
 class Like extends Model
 {
     use HasFactory;

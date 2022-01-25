@@ -8,8 +8,8 @@ use Illuminate\Support\Carbon;
 
 /**
  * Class UserHistory
- * @package App\Models
  *
+ * @package App\Models
  * @property integer $id
  * @property integer $user_id
  * @property integer $role_id
@@ -18,6 +18,19 @@ use Illuminate\Support\Carbon;
  * @property string $additional
  * @property Carbon $created_at
  * @property Carbon $updated_at
+ * @property-read \App\Models\User $user
+ * @method static \Illuminate\Database\Eloquent\Builder|UserHistory newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|UserHistory newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|UserHistory query()
+ * @method static \Illuminate\Database\Eloquent\Builder|UserHistory whereAdditional($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|UserHistory whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|UserHistory whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|UserHistory wherePermissionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|UserHistory whereRoleId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|UserHistory whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|UserHistory whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|UserHistory whereUserId($value)
+ * @mixin \Eloquent
  */
 class UserHistory extends Model
 {

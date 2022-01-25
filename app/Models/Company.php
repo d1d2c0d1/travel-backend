@@ -10,8 +10,8 @@ use Illuminate\Support\Carbon;
 
 /**
  * Class Company
- * @package App\Models
  *
+ * @package App\Models
  * @property integer $id
  * @property integer $status
  * @property string $name
@@ -32,6 +32,32 @@ use Illuminate\Support\Carbon;
  * @property integer $favorites
  * @property Carbon $created_at
  * @property Carbon $updated_at
+ * @property-read \App\Models\User|null $createdUser
+ * @property-read \App\Models\User|null $ownerUser
+ * @method static \Illuminate\Database\Eloquent\Builder|Company newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Company newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Company query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Company whereAreaId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Company whereCityId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Company whereCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Company whereCountryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Company whereCreateUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Company whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Company whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Company whereFavorites($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Company whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Company whereLanguageId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Company whereLikes($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Company whereLogo($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Company whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Company whereOwnerUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Company wherePoint($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Company whereRegionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Company whereReviews($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Company whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Company whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Company whereViews($value)
+ * @mixin \Eloquent
  */
 class Company extends Model
 {

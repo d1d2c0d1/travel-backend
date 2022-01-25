@@ -5,6 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Models\ItemType
+ *
+ * @property int $id
+ * @property string $name
+ * @property string $code
+ * @method static \Illuminate\Database\Eloquent\Builder|ItemType newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ItemType newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ItemType query()
+ * @method static \Illuminate\Database\Eloquent\Builder|ItemType whereCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ItemType whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ItemType whereName($value)
+ * @mixin \Eloquent
+ */
 class ItemType extends Model
 {
     use HasFactory;

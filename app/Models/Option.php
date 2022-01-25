@@ -6,12 +6,22 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class Option
- * @package App\Models
  *
+ * @package App\Models
  * @property integer $id
  * @property string $name
  * @property string $code
  * @property string $value
+ * @property \datetime $created_at
+ * @property \datetime $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|Option newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Option newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Option query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Option whereCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Option whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Option whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Option whereValue($value)
+ * @mixin \Eloquent
  */
 class Option extends Model
 {

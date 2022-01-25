@@ -5,6 +5,24 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Models\ItemTag
+ *
+ * @property int $id
+ * @property string $title
+ * @property int|null $user_id
+ * @property \datetime $created_at
+ * @property \datetime $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|ItemTag newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ItemTag newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ItemTag query()
+ * @method static \Illuminate\Database\Eloquent\Builder|ItemTag whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ItemTag whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ItemTag whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ItemTag whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ItemTag whereUserId($value)
+ * @mixin \Eloquent
+ */
 class ItemTag extends Model
 {
     use HasFactory;

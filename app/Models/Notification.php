@@ -7,8 +7,8 @@ use Illuminate\Support\Carbon;
 
 /**
  * Class Notification
- * @package App\Models
  *
+ * @package App\Models
  * @property integer $id
  * @property string $title
  * @property string $description
@@ -17,6 +17,18 @@ use Illuminate\Support\Carbon;
  * @property string $additional
  * @property Carbon $created_at
  * @property Carbon $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|Notification newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Notification newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Notification query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Notification whereAdditional($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Notification whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Notification whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Notification whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Notification whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Notification whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Notification whereUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Notification whereView($value)
+ * @mixin \Eloquent
  */
 class Notification extends Model
 {

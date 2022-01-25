@@ -8,13 +8,23 @@ use Illuminate\Support\Carbon;
 
 /**
  * Class Countries
- * @package App\Models
  *
+ * @package App\Models
  * @property integer $id
  * @property string $name
  * @property integer $language_id
  * @property Carbon $created_at
  * @property Carbon $updated_at
+ * @property-read \App\Models\Language|null $language
+ * @method static \Illuminate\Database\Eloquent\Builder|Country newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Country newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Country query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Country whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Country whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Country whereLanguageId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Country whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Country whereUpdatedAt($value)
+ * @mixin \Eloquent
  */
 class Country extends Model
 {

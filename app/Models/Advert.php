@@ -7,8 +7,8 @@ use Illuminate\Support\Carbon;
 
 /**
  * Class Advert
- * @package App\Models
  *
+ * @package App\Models
  * @property integer $id
  * @property string $title
  * @property string $description
@@ -17,6 +17,16 @@ use Illuminate\Support\Carbon;
  * @property integer $language_id
  * @property Carbon $created_at
  * @property Carbon $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|Advert newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Advert newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Advert query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Advert whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Advert whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Advert whereImage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Advert whereLanguageId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Advert whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Advert whereTypeId($value)
+ * @mixin \Eloquent
  */
 class Advert extends Model
 {

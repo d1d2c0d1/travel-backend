@@ -6,6 +6,30 @@ use App\Http\Helpers\MainHelper;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Models\Property
+ *
+ * @property int $id
+ * @property string $name
+ * @property string $code
+ * @property int|null $type_id
+ * @property string $default
+ * @property int $user_id
+ * @property \datetime $created_at
+ * @property \datetime $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|Property newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Property newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Property query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Property whereCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Property whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Property whereDefault($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Property whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Property whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Property whereTypeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Property whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Property whereUserId($value)
+ * @mixin \Eloquent
+ */
 class Property extends Model
 {
 
