@@ -53,7 +53,6 @@ class Property extends Model
     protected $fillable = [
         'name',
         'code',
-        'item_type_id',
         'type_id',
         'default'
     ];
@@ -67,7 +66,6 @@ class Property extends Model
         'id' => 'integer',
         'name' => 'string',
         'code' => 'string',
-        'item_type_id' => 'integer',
         'type_id' => 'integer',
         'default' => 'string'
     ];
