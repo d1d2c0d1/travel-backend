@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Helpers\MainHelper;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -96,4 +97,25 @@ class ItemProperty extends Model
         'created_at' => 'datetime:Y-m-d H:i:s',
         'updated_at' => 'datetime:Y-m-d H:i:s'
     ];
+
+    public static function createRow(array $arFields): static | false
+    {
+        if( empty($arFields) ) {
+            return false;
+        }
+
+        if( ((int) $arFields['property_id']) <= 0 ) {
+            return false;
+        }
+
+        if( ((int) $arFields['item_id']) <= 0 ) {
+            return false;
+        }
+
+        if( !isset($arFields['created_user_id']) ) {
+            $arFields['created_user_id'] = MainHelper::getUserId();
+        }
+
+        return new static($arFields);
+    }
 }
