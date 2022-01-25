@@ -126,6 +126,7 @@ Route::prefix('attachment')->middleware('api.static.auth')->middleware('api.user
  */
 Route::prefix('blog')->middleware('api.static.auth')->middleware('api.user.auth')->group(function() {
     Route::post('', [BlogController::class, 'create'])->name('blog.create');
+    Route::put('{id}', [BlogController::class, 'update'])->name('blog.update');
     Route::post('{position}/{id}', [BlogController::class, 'setPostPosition'])->name('blog.position.update');
     Route::post('category', [BlogController::class, 'createCategory'])->name('blog.create.category');
 });

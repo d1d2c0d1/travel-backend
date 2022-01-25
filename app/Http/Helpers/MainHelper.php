@@ -118,6 +118,24 @@ class MainHelper
     }
 
     /**
+     * Generate random string
+     *
+     * @param int $length
+     * @return string
+     */
+    public static function randomString(int $length = 8): string
+    {
+        $alphabet = 'G9bd4eafg2hcijknlmopVqrtuvwxyzXBDEFIHJKALMNs_OPCQRSTUWYZ1730568';
+        $pass = array(); //remember to declare $pass as an array
+        $alphaLength = strlen($alphabet) - 1; //put the length -1 in cache
+        for ($i = 0; $i < $length; $i++) {
+            $n = rand(0, $alphaLength);
+            $pass[] = $alphabet[$n];
+        }
+        return implode($pass); //turn the array into a string
+    }
+
+    /**
      * Getting current auth user data
      *
      * @return User|false

@@ -117,6 +117,97 @@ class BlogController extends Controller
     }
 
     /**
+     * Update post data
+     *
+     * @param int $id
+     * @param Request $request
+     * @return Response
+     */
+    public function update(int $id, Request $request): Response
+    {
+
+        /** @var Post | null $post */
+        $post = Post::find($id);
+
+        if( !$post || !$post?->id ) {
+            return response(MainHelper::getErrorResponse([
+                MainHelper::getErrorItem(404, 'ID is empty')
+            ]), 404);
+        }
+
+        if( $request->has('title') ) {
+            $post->title = (string) $request->input('title');
+        }
+
+        if( $request->has('content') ) {
+            $post->content = (string) $request->input('content');
+        }
+
+        if( $request->has('status') ) {
+            $post->status = (int) $request->input('status');
+        }
+
+        if( $request->has('language_id') ) {
+            $post->language_id = (int) $request->input('language_id');
+        }
+
+        if( $request->has('country_id') ) {
+            $post->country_id = (int) $request->input('country_id');
+        }
+
+        if( $request->has('region_id') ) {
+            $post->region_id = (int) $request->input('region_id');
+        }
+
+        if( $request->has('city_id') ) {
+            $post->city_id = (int) $request->input('city_id');
+        }
+
+        if( $request->has('area_id') ) {
+            $post->area_id = (int) $request->input('area_id');
+        }
+
+        if( $request->has('category_id') ) {
+            $post->category_id = (int) $request->input('category_id');
+        }
+
+        if( $request->has('company_id') ) {
+            $post->company_id = (int) $request->input('company_id');
+        }
+
+        if( $request->has('image') ) {
+            $post->image = (string) $request->input('image');
+        }
+
+        if( $request->has('code') ) {
+            $post->code = (string) $request->input('code');
+        }
+
+        if( $request->has('tags') ) {
+            $post->tags = (string) $request->input('tags');
+        }
+
+        if( $request->has('seo_description') ) {
+            $post->seo_description = (string) $request->input('seo_description');
+        }
+
+        if( $request->has('published_at') ) {
+            $post->published_at = (int) $request->input('published_at');
+        }
+
+        try {
+            $post->save();
+        } catch (Exception $e) {
+            return response(MainHelper::getErrorResponse([
+                MainHelper::getErrorItem(422, 'Error in db. Can\'t update post.'),
+                MainHelper::getErrorItem(500, $e->getMessage())
+            ]), 422);
+        }
+
+        return response(MainHelper::getResponse((bool) $post?->id, $post->toArray()));
+    }
+
+    /**
      * Getting posts by filter
      *
      * @param Request $request

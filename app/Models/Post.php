@@ -11,8 +11,11 @@ use Illuminate\Support\Carbon;
 /**
  * Class Post
  * @package App\Models
+ * @mixin Model
  *
  * @property integer $id
+ * @property bool $is_main
+ * @property bool $is_week
  * @property string $title
  * @property string $code
  * @property string $content
@@ -30,6 +33,9 @@ use Illuminate\Support\Carbon;
  * @property integer $company_id
  * @property integer $category_id
  * @property string $image
+ * @property string $seo_description
+ * @property string $tags
+ * @property Carbon $published_at
  * @property Carbon $created_at
  * @property Carbon $updated_at
  */
@@ -117,6 +123,8 @@ class Post extends Model
      */
     protected $casts = [
         'id' => 'integer',
+        'is_main' => 'boolean',
+        'is_week' => 'boolean',
         'title' => 'string',
         'code' => 'string',
         'content' => 'string',
