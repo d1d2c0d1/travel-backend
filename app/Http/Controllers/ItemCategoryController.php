@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Helpers\MainHelper;
-use App\Models\ItemCategory;
+use App\Models\CardCategory;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -22,7 +22,7 @@ class ItemCategoryController extends Controller
         $search = (string) $request->input('search');
         $typeId = (int) $request->input('type_id');
 
-        $res = ItemCategory::where([
+        $res = CardCategory::where([
             ['name', 'like', "%{$search}%"]
         ])->orderByDesc('id')->limit(5);
 
@@ -53,7 +53,7 @@ class ItemCategoryController extends Controller
             'description' => (string) $request->input('description')
         ];
 
-        $category = new ItemCategory($arFields);
+        $category = new CardCategory($arFields);
         $validator = $category->validate($arFields);
 
         if( $validator['status'] === false ) {
@@ -71,7 +71,7 @@ class ItemCategoryController extends Controller
             ], 401);
         }
 
-        $recentCategories = ItemCategory::where([
+        $recentCategories = CardCategory::where([
             ['type_id', '=', $arFields['type_id']],
             ['name', '=', $arFields['name']]
         ])->get();

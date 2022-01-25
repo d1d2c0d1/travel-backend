@@ -16,19 +16,19 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $description
  * @property \datetime $created_at
  * @property \datetime $updated_at
- * @method static \Illuminate\Database\Eloquent\Builder|ItemCategory newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|ItemCategory newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|ItemCategory query()
- * @method static \Illuminate\Database\Eloquent\Builder|ItemCategory whereCode($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ItemCategory whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ItemCategory whereDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ItemCategory whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ItemCategory whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ItemCategory whereTypeId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ItemCategory whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CardCategory newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|CardCategory newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|CardCategory query()
+ * @method static \Illuminate\Database\Eloquent\Builder|CardCategory whereCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CardCategory whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CardCategory whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CardCategory whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CardCategory whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CardCategory whereTypeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CardCategory whereUpdatedAt($value)
  * @mixin \Eloquent
  */
-class ItemCategory extends Model
+class CardCategory extends Model
 {
     use HasFactory;
 
@@ -37,7 +37,7 @@ class ItemCategory extends Model
      *
      * @var string
      */
-    protected $table = 'item_categories';
+    protected $table = 'card_categories';
 
     /**
      * The primary key for the model.

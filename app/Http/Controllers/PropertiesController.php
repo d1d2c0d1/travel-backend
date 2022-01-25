@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Helpers\MainHelper;
-use App\Models\ItemTag;
+use App\Models\CardTag;
 use App\Models\Property;
 use Exception;
 use Illuminate\Http\Request;

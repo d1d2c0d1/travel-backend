@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Helpers\MainHelper;
-use App\Models\ItemTag;
+use App\Models\CardTag;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -21,7 +21,7 @@ class ItemTagController extends Controller
     {
         $search = (string) $request->input('search');
 
-        $res = ItemTag::where([
+        $res = CardTag::where([
             ['title', 'like', "%{$search}%"]
         ])->orderByDesc('id')->limit(5);
 
@@ -53,7 +53,7 @@ class ItemTagController extends Controller
             ], 401);
         }
 
-        $tag = new ItemTag($arFields);
+        $tag = new CardTag($arFields);
         $validator = $tag->validate($arFields);
 
         if( $validator['status'] === false ) {

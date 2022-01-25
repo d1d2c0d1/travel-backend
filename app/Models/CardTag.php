@@ -13,17 +13,17 @@ use Illuminate\Database\Eloquent\Model;
  * @property int|null $user_id
  * @property \datetime $created_at
  * @property \datetime $updated_at
- * @method static \Illuminate\Database\Eloquent\Builder|ItemTag newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|ItemTag newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|ItemTag query()
- * @method static \Illuminate\Database\Eloquent\Builder|ItemTag whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ItemTag whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ItemTag whereTitle($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ItemTag whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ItemTag whereUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CardTag newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|CardTag newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|CardTag query()
+ * @method static \Illuminate\Database\Eloquent\Builder|CardTag whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CardTag whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CardTag whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CardTag whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CardTag whereUserId($value)
  * @mixin \Eloquent
  */
-class ItemTag extends Model
+class CardTag extends Model
 {
     use HasFactory;
 
@@ -32,7 +32,7 @@ class ItemTag extends Model
      *
      * @var string
      */
-    protected $table = 'item_tags';
+    protected $table = 'card_tags';
 
     /**
      * The primary key for the model.
