@@ -16,6 +16,8 @@ class FixItemTables extends Migration
         Schema::table('items', function (Blueprint $table) {
             $table->removeColumn('category_id');
             $table->removeColumn('price_type_id');
+            $table->dropIndex('items_category_id_index');
+            $table->dropIndex('items_price_type_id_index');
             $table->dropColumn('category_id');
             $table->dropColumn('price_type_id');
         });
