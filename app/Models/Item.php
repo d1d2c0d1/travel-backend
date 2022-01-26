@@ -8,6 +8,7 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
  * App\Models\Item
@@ -218,5 +219,35 @@ class Item extends Model
             'status' => false,
             'errors' => $errors
         ];
+    }
+
+    /**
+     * Relationship for getting categories
+     *
+     * @return BelongsToMany
+     */
+    public function properties(): BelongsToMany
+    {
+        return $this->belongsToMany(Property::class, 'item_property', 'item_id', 'property_id')->withTimestamps()->as('properties');
+    }
+
+    /**
+     * Relationship for getting categories
+     *
+     * @return BelongsToMany
+     */
+    public function categories(): BelongsToMany
+    {
+        return $this->belongsToMany(CardCategory::class, 'item_category', 'item_id', 'category_id')->as('categories');
+    }
+
+    /**
+     * Relationship for getting categories
+     *
+     * @return BelongsToMany
+     */
+    public function tags(): BelongsToMany
+    {
+        return $this->belongsToMany(CardTag::class, 'item_tag', 'item_id', 'tag_id')->as('tags');
     }
 }

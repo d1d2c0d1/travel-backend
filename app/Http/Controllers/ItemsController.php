@@ -105,7 +105,6 @@ class ItemsController extends Controller
 
         // Save properties
         $properties = $request->input('properties');
-        $itemProperties = [];
 
         foreach ($properties as $property) {
             if( !isset($property['property_id']) || !isset($property['value']) ) {
@@ -116,30 +115,39 @@ class ItemsController extends Controller
                 continue;
             }
 
-            $arPropertyFields = [
-                'item_id' => $item?->id,
-                'property_id' => (int) $property['property_id'],
-                'value' => (string) $property['value']
-            ];
-
-            $itemProperty = ItemProperty::createRow($arPropertyFields);
-
             try {
-                $itemProperty->save();
+                $item->properties()->attach($property['property_id'], [
+                    'created_user_id' => MainHelper::getUserId()
+                ]);
             } catch (Exception $e) {
                 $itemProperties[$property['property_id'] . '_error'] = $e->getMessage();
             }
 
-            $itemProperties[] = $itemProperty;
-
         }
 
-        $a = 2 + 3;
+        // Create tags
+        $tags = (array) $request->input('tags');
+        foreach ($tags as $tagId) {
+            $item->tags()->attach((int) $tagId, [
+                'user_id' => MainHelper::getUserId()
+            ]);
+        }
+
+        // Create categories
+        $categories = (array) $request->input('categories');
+        foreach ($categories as $categoryId) {
+            $item->categories()->attach((int) $categoryId, [
+                'user_id' => MainHelper::getUserId()
+            ]);
+        }
+
         return response([
             'status' => true,
             'data' => [
                 'item' => $item,
-                'properties' => $itemProperties,
+                'properties' => $item->properties,
+                'tags' => $item->tags,
+                'categories' => $item->categories
             ]
         ]);
     }
