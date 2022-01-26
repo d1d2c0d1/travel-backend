@@ -15,19 +15,19 @@ class CreateItemCardCategory extends Migration
     public function up()
     {
         Schema::create('item_category', function (Blueprint $table) {
-            $table->unsignedInteger('id')->autoIncrement();
+            $table->unsignedBigInteger('id')->autoIncrement();
             $table->unsignedBigInteger('item_id');
-            $table->unsignedInteger('tag_id');
+            $table->unsignedInteger('category_id');
             $table->unsignedBigInteger('user_id');
 
             $table->index('item_id');
-            $table->index('tag_id');
-            $table->index(['item_id', 'tag_id']);
+            $table->index('category_id');
+            $table->index(['item_id', 'category_id']);
         });
 
         DB::statement("ALTER TABLE `item_category` ADD CONSTRAINT `item_category_fk0` FOREIGN KEY (`user_id`) REFERENCES `users`(`id`);");
         DB::statement("ALTER TABLE `item_category` ADD CONSTRAINT `item_category_fk1` FOREIGN KEY (`item_id`) REFERENCES `items`(`id`);");
-        DB::statement("ALTER TABLE `item_category` ADD CONSTRAINT `item_category_fk2` FOREIGN KEY (`tag_id`) REFERENCES `card_tags`(`id`);");
+        DB::statement("ALTER TABLE `item_category` ADD CONSTRAINT `item_category_fk2` FOREIGN KEY (`category_id`) REFERENCES `card_categories`(`id`);");
     }
 
     /**
