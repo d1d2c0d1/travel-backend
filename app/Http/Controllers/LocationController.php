@@ -150,6 +150,28 @@ class LocationController extends Controller
     }
 
     /**
+     * Search region by text name
+     *
+     * @param Request $request
+     * @return array
+     */
+    public function searchRegions(Request $request): array
+    {
+        $search = $request->get('search');
+
+        $regions = Cache::remember("regions-search-{$search}", 86400, function () use ($search) {
+            return Region::where([
+                ['name', 'like', "%{$search}%"]
+            ])->limit(5)->get();
+        });
+
+        return [
+            'status' => true,
+            'data' => $regions
+        ];
+    }
+
+    /**
      * Search city by text name
      *
      * @param Request $request
