@@ -153,11 +153,23 @@ class LocationController extends Controller
      * Search region by text name
      *
      * @param Request $request
-     * @return array
+     * @return Response|array
      */
-    public function searchRegions(Request $request): array
+    public function searchRegions(Request $request): Response | array
     {
         $search = $request->get('search');
+
+        if( mb_strlen($search) <= 3 ) {
+            return response(MainHelper::getErrorResponse([
+                MainHelper::getErrorItem(412, 'Region name is empty or very short!')
+            ]), 412);
+        }
+
+        if( mb_strlen($search) >= 255 ) {
+            return response(MainHelper::getErrorResponse([
+                MainHelper::getErrorItem(412, 'Region name is too long!')
+            ]), 412);
+        }
 
         $regions = Cache::remember("regions-search-{$search}", 86400, function () use ($search) {
             return Region::where([
