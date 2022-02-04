@@ -51,7 +51,7 @@ class LocationController extends Controller
     }
 
     /**
-     * Route for getting regions
+     * Route for getting regions array
      *
      * @param int $countryId
      * @return array
@@ -73,7 +73,7 @@ class LocationController extends Controller
     }
 
     /**
-     * Route for getting regions
+     * Route for getting cities array
      *
      * @param Request $request
      * @return array
@@ -109,7 +109,7 @@ class LocationController extends Controller
     }
 
     /**
-     * Route for getting cities
+     * Route for getting areas array
      *
      * @param Request $request
      * @return array
