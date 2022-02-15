@@ -158,6 +158,7 @@ class LocationController extends Controller
     public function searchRegions(Request $request): Response | array
     {
         $search = $request->get('search');
+        $countryId = $request->get('country_id', 0);
 
         if( mb_strlen($search) <= 3 ) {
             return response(MainHelper::getErrorResponse([
@@ -171,10 +172,18 @@ class LocationController extends Controller
             ]), 412);
         }
 
-        $regions = Cache::remember("regions-search-{$search}", 86400, function () use ($search) {
-            return Region::where([
+        $regions = Cache::remember("regions-search-{$search}-{$countryId}", 86400, function () use ($countryId, $search) {
+
+            $regionQuery = Region::where([
                 ['name', 'like', "%{$search}%"]
-            ])->limit(5)->get();
+            ]);
+
+            if ( $countryId >= 1 ) {
+                $regionQuery->where('country_id', $countryId);
+            }
+
+            return $regionQuery->limit(5)->get();
+
         });
 
         return [
