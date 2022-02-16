@@ -49,6 +49,7 @@ Route::prefix('filter')->group(function() {
  * Items routes
  */
 Route::prefix('items')->group(function() {
+    Route::post('filter', [ItemsController::class, 'filter'])->name('items.filter');
     Route::get('types', [ItemTypeController::class, 'index'])->name('items.types');
     Route::get('categories', [ItemCategoryController::class, 'index'])->name('items.categories');
     Route::get('tags', [ItemTagController::class, 'index'])->name('items.tags');
@@ -64,14 +65,6 @@ Route::prefix('items')->middleware('api.static.auth')->middleware('api.user.auth
     Route::post('categories', [ItemCategoryController::class, 'create'])->name('items.categories.create');
     Route::post('tags', [ItemTagController::class, 'create'])->name('items.tags.create');
     Route::post('properties', [PropertiesController::class, 'create'])->name('items.properties.create');
-});
-
-/**
- * Items routes
- * @public
- */
-Route::prefix('items')->middleware('api.static.auth')->group(function () {
-    Route::post('filter', [ItemsController::class, 'filter'])->name('items.filter');
 });
 
 /**
@@ -103,6 +96,9 @@ Route::prefix('user')->middleware('api.static.auth')->group(function() {
  */
 Route::prefix('user')->middleware('api.static.auth')->middleware('api.user.auth')->group(function () {
     Route::get('data', [UserController::class, 'index']);
+    Route::post('filter', [UserController::class, 'filter']);
+    Route::post('update/{id}', [UserController::class, 'update']);
+    Route::get('{id}', [UserController::class, 'single']);
 });
 
 /**

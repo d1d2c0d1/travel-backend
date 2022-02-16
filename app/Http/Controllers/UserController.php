@@ -10,6 +10,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redis;
 
 class UserController extends Controller
@@ -144,11 +145,46 @@ class UserController extends Controller
             ], 404);
         }
 
-        $request->input('')
+        if( $request->has('name') && !empty($request->input('name')) ) {
+            $user->name = $request->input('name');
+        }
+
+        if( $request->has('email') && !empty($request->input('email')) ) {
+            $user->email = $request->input('email');
+        }
+
+        if( $request->has('password') && !empty($request->input('password')) ) {
+            $user->password = Hash::make($request->input('email'));
+        }
+
+        if( $request->has('role_id') && (int) $request->input('role_id') >= 1 ) {
+
+            // Only admins can edit user role
+            if( !MainHelper::isAdmin() ) {
+                return response([
+                    'status' => false,
+                    'error' => 'Permission denied. Only administrators can update user role'
+                ], 401);
+            }
+
+            $user->role_id = $request->input('role_id');
+        }
+
+        try {
+
+            $user->save();
+
+        } catch (Exception $e) {
+            return response([
+                'status' => false,
+                'error' => 'Error with request in database',
+                'dbError' => (MainHelper::isAdmin() ? $e->getMessage() : '...')
+            ], 500);
+        }
 
         return response([
             'status' => true,
-            'user' => ''
+            'user' => $user
         ]);
     }
 
