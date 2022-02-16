@@ -67,6 +67,14 @@ Route::prefix('items')->middleware('api.static.auth')->middleware('api.user.auth
 });
 
 /**
+ * Items routes
+ * @public
+ */
+Route::prefix('items')->middleware('api.static.auth')->group(function () {
+    Route::post('filter', [ItemsController::class, 'filter'])->name('items.filter');
+});
+
+/**
  * Posts routes
  */
 Route::prefix('posts')->group(function() {

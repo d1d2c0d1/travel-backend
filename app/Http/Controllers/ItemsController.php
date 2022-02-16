@@ -141,6 +141,8 @@ class ItemsController extends Controller
             ]);
         }
 
+
+
         return response([
             'status' => true,
             'data' => [
@@ -149,6 +151,29 @@ class ItemsController extends Controller
                 'tags' => $item->tags,
                 'categories' => $item->categories
             ]
+        ]);
+    }
+
+    /**
+     * Getting list items
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function filter(Request $request): Response
+    {
+
+        $itemsDB = Item::where([
+            ['id', '>=', 1]
+        ]);
+
+        // TODO: Filter here
+
+        $items = $itemsDB->paginate();
+
+        return response([
+            'status' => true,
+            'items' => $items
         ]);
     }
 
