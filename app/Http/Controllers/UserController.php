@@ -37,9 +37,9 @@ class UserController extends Controller
 
         if( $tmpUser?->id >= 1 ) {
 
-            $user = Cache::remember('user-' . $tmpUser?->id, 86400, function () use ($tmpUser) {
-                User::find($tmpUser?->id);
-            });
+            $cacheKey = 'user-' . $tmpUser?->id;
+
+            $user = User::find($tmpUser?->id);
 
             if (!$user) {
                 return response([
