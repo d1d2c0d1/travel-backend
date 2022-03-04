@@ -51,7 +51,7 @@ class LocationController extends Controller
     }
 
     /**
-     * Route for getting regions
+     * Route for getting regions array
      *
      * @param int $countryId
      * @return array
@@ -73,7 +73,7 @@ class LocationController extends Controller
     }
 
     /**
-     * Route for getting regions
+     * Route for getting cities array
      *
      * @param Request $request
      * @return array
@@ -109,7 +109,7 @@ class LocationController extends Controller
     }
 
     /**
-     * Route for getting cities
+     * Route for getting areas array
      *
      * @param Request $request
      * @return array
@@ -146,6 +146,49 @@ class LocationController extends Controller
         return [
             'status' => true,
             'data' => $areas
+        ];
+    }
+
+    /**
+     * Search region by text name
+     *
+     * @param Request $request
+     * @return Response|array
+     */
+    public function searchRegions(Request $request): Response | array
+    {
+        $search = $request->get('search');
+        $countryId = $request->get('country_id', 0);
+
+        if( mb_strlen($search) <= 3 ) {
+            return response(MainHelper::getErrorResponse([
+                MainHelper::getErrorItem(412, 'Region name is empty or very short!')
+            ]), 412);
+        }
+
+        if( mb_strlen($search) >= 255 ) {
+            return response(MainHelper::getErrorResponse([
+                MainHelper::getErrorItem(412, 'Region name is too long!')
+            ]), 412);
+        }
+
+        $regions = Cache::remember("regions-search-{$search}-{$countryId}", 86400, function () use ($countryId, $search) {
+
+            $regionQuery = Region::where([
+                ['name', 'like', "%{$search}%"]
+            ]);
+
+            if ( $countryId >= 1 ) {
+                $regionQuery->where('country_id', $countryId);
+            }
+
+            return $regionQuery->limit(5)->get();
+
+        });
+
+        return [
+            'status' => true,
+            'data' => $regions
         ];
     }
 
