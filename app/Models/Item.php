@@ -201,12 +201,12 @@ class Item extends Model
 
         // NAME
         if( mb_strlen($this->name) <= 8 ) {
-            $errors[] = MainHelper::getErrorItem(412, 'Field name is empty');
+            $errors[] = MainHelper::getErrorItem(412, 'Field name is empty or too short. Min: 8 symbols');
         }
 
         // DESCRIPTION
         if( mb_strlen($this->description) <= 16 ) {
-            $errors[] = MainHelper::getErrorItem(412, 'Field description is empty');
+            $errors[] = MainHelper::getErrorItem(412, 'Field description is empty or too short. Min: 16 symbols');
         }
 
         // Without errors
