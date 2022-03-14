@@ -208,6 +208,35 @@ class BlogController extends Controller
     }
 
     /**
+     * Remove blog post
+     *
+     * @param int $id
+     * @param Request $request
+     * @return Response
+     */
+    public function delete(int $id, Request $request): Response
+    {
+        if( $id <= 0 ) {
+            return response([
+                "status" => false,
+                "error" => "ID is empty"
+            ]);
+        }
+
+        /** @var Post $post */
+        $post = Post::find($id);
+
+        if( $post && $post?->id >= 1 ) {
+            $post->delete();
+        }
+
+        return response([
+            "status" => true,
+            "id" => $id
+        ]);
+    }
+
+    /**
      * Getting posts by filter
      *
      * @param Request $request
