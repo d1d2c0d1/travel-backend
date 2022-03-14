@@ -192,7 +192,7 @@ class BlogController extends Controller
         }
 
         if( $request->has('published_at') ) {
-            $post->published_at = (int) $request->input('published_at');
+            $post->published_at = date('Y-m-d H:i:s', (int) $request->input('published_at'));
         }
 
         try {
