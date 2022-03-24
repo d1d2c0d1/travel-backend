@@ -161,7 +161,7 @@ class Item extends Model
         'name' => 'string',
         'code' => 'string',
         'description' => 'string',
-        'images' => 'string',
+        'images' => 'json',
         'views' => 'integer',
         'reviews' => 'integer',
         'likes' => 'integer',
