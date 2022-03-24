@@ -167,7 +167,11 @@ class ItemsController extends Controller
             ['id', '>=', 1]
         ]);
 
-        // TODO: Filter here
+        $typeId = (int) $request->input('type_id');
+
+        if( $typeId >= 1 ) {
+            $itemsDB->where('type_id', '=', $typeId);
+        }
 
         $items = $itemsDB->paginate();
 
