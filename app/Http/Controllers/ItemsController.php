@@ -173,6 +173,8 @@ class ItemsController extends Controller
             $itemsDB->where('type_id', '=', $typeId);
         }
 
+        $itemsDB->with('categories')->with('tags')->with('properties');
+
         $items = $itemsDB->paginate();
 
         return response([

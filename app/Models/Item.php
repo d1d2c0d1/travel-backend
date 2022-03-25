@@ -228,7 +228,7 @@ class Item extends Model
      */
     public function properties(): BelongsToMany
     {
-        return $this->belongsToMany(Property::class, 'item_property', 'item_id', 'property_id')->withTimestamps()->as('properties');
+        return $this->belongsToMany(Property::class, 'item_property', 'item_id', 'property_id')->withPivot('value')->withTimestamps()->as('properties');
     }
 
     /**
