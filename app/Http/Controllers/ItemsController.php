@@ -69,7 +69,7 @@ class ItemsController extends Controller
             ]);
         }
 
-        $arFields['images'] = json_encode($images);
+        $arFields['images'] = $images;
 
         // Create Item
         $item = new Item($arFields);
