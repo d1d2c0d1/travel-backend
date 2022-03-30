@@ -54,6 +54,7 @@ Route::prefix('items')->group(function() {
     Route::get('categories', [ItemCategoryController::class, 'index'])->name('items.categories');
     Route::get('tags', [ItemTagController::class, 'index'])->name('items.tags');
     Route::get('properties', [PropertiesController::class, 'index'])->name('items.properties');
+    Route::delete('{id}', [ItemsController::class, 'delete'])->name('items.delete');
 });
 
 /**

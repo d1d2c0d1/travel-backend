@@ -155,6 +155,53 @@ class ItemsController extends Controller
     }
 
     /**
+     * Remove item
+     *
+     * @param int $id
+     * @param Request $request
+     * @return Response
+     */
+    public function delete(int $id, Request $request): Response
+    {
+        if( !MainHelper::isAdminOrModer() ) {
+            return response([
+                'status' => false,
+                'error' => 'Permission denied'
+            ], 401);
+        }
+
+        if( !$id || $id <= 0 ) {
+            return response([
+                'status' => false,
+                'error' => 'ID can\'t be empty!'
+            ]);
+        }
+
+        $item = Item::find($id);
+
+        if( !$item || !$item?->id || $item?->id <= 0 ) {
+            return response([
+                'status' => false,
+                'error' => 'Row with id:' . $id . ' not found!'
+            ]);
+        }
+
+        try {
+            $item->delete();
+        } catch (Exception $e) {
+            return response([
+                'status' => false,
+                'error' => $e->getMessage()
+            ]);
+        }
+
+        return response([
+            'status' => true,
+            'data' => $item
+        ]);
+    }
+
+    /**
      * Getting list items
      *
      * @param Request $request
@@ -168,9 +215,14 @@ class ItemsController extends Controller
         ]);
 
         $typeId = (int) $request->input('type_id');
+        $status = (int) $request->input('status');
 
         if( $typeId >= 1 ) {
             $itemsDB->where('type_id', '=', $typeId);
+        }
+
+        if( $typeId >= 1 ) {
+            $itemsDB->where('status', '=', $status);
         }
 
         $itemsDB->with('categories')->with('tags')->with('properties');
