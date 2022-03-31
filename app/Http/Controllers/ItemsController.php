@@ -214,18 +214,21 @@ class ItemsController extends Controller
     public function filter(Request $request): Response
     {
 
-        $itemsDB = Item::where([
-            ['id', '>=', 1]
-        ]);
+        $itemsDB = Item::orderByDesc('created_at');
 
         $typeId = (int) $request->input('type_id');
         $status = (int) $request->input('status');
+        $id = (int) $request->input('id');
+
+        if( $id >= 1 ) {
+            $itemsDB->where('id', '=', $id);
+        }
 
         if( $typeId >= 1 ) {
             $itemsDB->where('type_id', '=', $typeId);
         }
 
-        if( $typeId >= 1 ) {
+        if( $status >= 1 ) {
             $itemsDB->where('status', '=', $status);
         }
 
