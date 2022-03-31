@@ -71,6 +71,9 @@ class ItemsController extends Controller
 
         $arFields['images'] = $images;
 
+        // Formatting phone and convert to integer
+        $arFields['phone'] = (int) preg_replace('/[^0-9]/', '', $arFields['phone']);
+
         // Create Item
         $item = new Item($arFields);
         $validator = $item->validate();
@@ -117,7 +120,8 @@ class ItemsController extends Controller
 
             try {
                 $item->properties()->attach($property['property_id'], [
-                    'created_user_id' => MainHelper::getUserId()
+                    'created_user_id' => MainHelper::getUserId(),
+                    'value' => $property['value']
                 ]);
             } catch (Exception $e) {
                 $itemProperties[$property['property_id'] . '_error'] = $e->getMessage();

@@ -39,13 +39,6 @@ Route::get('/test', function(Request $request) {
 });
 
 /**
- * Getting data
- */
-Route::prefix('filter')->group(function() {
-
-});
-
-/**
  * Items routes
  */
 Route::prefix('items')->group(function() {
@@ -163,6 +156,7 @@ Route::prefix('blog')->middleware('api.static.auth')->middleware('api.user.auth'
  * @public
  */
 Route::prefix('blog')->middleware('api.static.auth')->group(function() {
+    Route::post('filter', [BlogController::class, 'filter'])->name('blog.filter');
     Route::get('categories', [BlogController::class, 'categories'])->name('blog.categories');
     Route::get('{id}', [BlogController::class, 'single'])->name('blog.single');
     Route::get('', [BlogController::class, 'index'])->name('blog.index');

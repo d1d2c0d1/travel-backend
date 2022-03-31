@@ -237,7 +237,7 @@ class BlogController extends Controller
     }
 
     /**
-     * Getting posts by filter
+     * Getting all posts from blog
      *
      * @param Request $request
      * @return Response
@@ -246,7 +246,66 @@ class BlogController extends Controller
     {
         $posts = Post::where([
             ['id', '>=', 1]
-        ])->orderByDesc('id')->paginate();
+        ])->orderByDesc('published_at')->paginate();
+
+        return response(MainHelper::getResponse(true, $posts->toArray()));
+    }
+
+    /**
+     * Getting posts by filter
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function filter(Request $request): Response
+    {
+        $filter = [];
+
+        if( $request->has('is_main') && (int) $request->input('is_main') === 1  ) {
+            $filter[] = ['is_main', '=', 1];
+        }
+
+        if( $request->has('is_week') && (int) $request->input('is_week') === 1 ) {
+            $filter[] = ['is_week', '=', 1];
+        }
+
+        if( $request->has('user_id') && (int) $request->input('user_id') >= 1 ) {
+            $filter[] = ['user_id', '=', (int) $request->input('user_id')];
+        }
+
+        if( $request->has('status') && (int) $request->input('status') >= 0 ) {
+            $filter[] = ['status', '=', (int) $request->input('status')];
+        }
+
+        if( $request->has('country_id') && (int) $request->input('country_id') >= 1 ) {
+            $filter[] = ['country_id', '=', (int) $request->input('country_id')];
+        }
+
+        if( $request->has('region_id') && (int) $request->input('region_id') >= 1 ) {
+            $filter[] = ['region_id', '=', (int) $request->input('region_id')];
+        }
+
+        if( $request->has('city_id') && (int) $request->input('city_id') >= 1 ) {
+            $filter[] = ['city_id', '=', (int) $request->input('city_id')];
+        }
+
+        if( $request->has('language_id') && (int) $request->input('language_id') >= 1 ) {
+            $filter[] = ['language_id', '=', (int) $request->input('language_id')];
+        }
+
+        if( $request->has('category_id') && (int) $request->input('category_id') >= 1 ) {
+            $filter[] = ['category_id', '=', (int) $request->input('category_id')];
+        }
+
+        if( $request->has('id') && (int) $request->input('id') >= 1 ) {
+            $filter[] = ['id', '=', (int) $request->input('id')];
+        }
+
+        if( $request->has('code') && mb_strlen((string) $request->input('code')) >= 3 ) {
+            $filter[] = ['code', '=', (int) $request->input('code')];
+        }
+
+        $posts = Post::where($filter)->orderByDesc('published_at')->paginate();
 
         return response(MainHelper::getResponse(true, $posts->toArray()));
     }

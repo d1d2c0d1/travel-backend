@@ -127,6 +127,8 @@ class Item extends Model
         'price_type_id',
         'type_id',
         'price',
+        'phone',
+        'address',
         'name',
         'code',
         'description',
@@ -158,6 +160,8 @@ class Item extends Model
         'price_type_id' => 'integer',
         'type_id' => 'integer',
         'price' => 'integer',
+        'phone' => 'integer',
+        'address' => 'string',
         'name' => 'string',
         'code' => 'string',
         'description' => 'string',
@@ -228,7 +232,7 @@ class Item extends Model
      */
     public function properties(): BelongsToMany
     {
-        return $this->belongsToMany(Property::class, 'item_property', 'item_id', 'property_id')->withPivot('value')->withTimestamps()->as('properties');
+        return $this->belongsToMany(Property::class, 'item_property', 'item_id', 'property_id')->withPivot('value')->withTimestamps()->as('property');
     }
 
     /**
@@ -238,7 +242,7 @@ class Item extends Model
      */
     public function categories(): BelongsToMany
     {
-        return $this->belongsToMany(CardCategory::class, 'item_category', 'item_id', 'category_id')->as('categories');
+        return $this->belongsToMany(CardCategory::class, 'item_category', 'item_id', 'category_id')->as('category');
     }
 
     /**
