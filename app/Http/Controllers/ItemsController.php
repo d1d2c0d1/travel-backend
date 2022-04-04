@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Helpers\MainHelper;
 use App\Models\City;
 use App\Models\Item;
-use App\Models\ItemProperty;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -145,8 +144,6 @@ class ItemsController extends Controller
             ]);
         }
 
-
-
         return response([
             'status' => true,
             'data' => [
@@ -167,18 +164,18 @@ class ItemsController extends Controller
      */
     public function delete(int $id, Request $request): Response
     {
-        if( !MainHelper::isAdminOrModer() ) {
-            return response([
-                'status' => false,
-                'error' => 'Permission denied'
-            ], 401);
-        }
-
         if( !$id || $id <= 0 ) {
             return response([
                 'status' => false,
                 'error' => 'ID can\'t be empty!'
             ]);
+        }
+
+        if( !MainHelper::isAdminOrModer() ) {
+            return response([
+                'status' => false,
+                'error' => 'Permission denied'
+            ], 401);
         }
 
         $item = Item::find($id);
@@ -239,6 +236,181 @@ class ItemsController extends Controller
         return response([
             'status' => true,
             'items' => $items
+        ]);
+    }
+
+    /**
+     * Item update
+     *
+     * @param int $id
+     * @param Request $request
+     * @return Response
+     */
+    public function update(int $id, Request $request): Response
+    {
+
+        if( $id <= 0 ) {
+            return response([
+               'status' => false,
+               'error' => 'ID cant be empty!'
+            ], 405);
+        }
+
+        if( !MainHelper::isAdminOrModer() ) {
+            return response([
+                'status' => false,
+                'error' => 'Permission denied'
+            ], 401);
+        }
+
+        $item = Item::find($id);
+
+        if( !$item || !$item?->id ) {
+            return response([
+                'status' => false,
+                'error' => 'Item with id:' . $id . ' not found'
+            ], 404);
+        }
+
+        // Set name
+        if( $request->has('name') ) {
+            $item->name = $request->input('name');
+        }
+
+        // Set status
+        if( $request->has('status') ) {
+            $item->status = (int) $request->input('status');
+        }
+
+        // Set phone
+        if( $request->has('phone') ) {
+            $item->phone = (int) preg_replace('/[^0-9]/', '', $request->input('phone'));
+        }
+
+        // Set address
+        if( $request->has('address') ) {
+            $item->address = $request->input('address');
+        }
+
+        // Set price
+        if( $request->has('price') ) {
+            $item->price = $request->input('price');
+        }
+
+        // Set code
+        if( $request->has('code') ) {
+            $item->code = $request->input('code');
+        }
+
+        // Set description
+        if( $request->has('description') ) {
+            $item->description = $request->input('description');
+        }
+
+        // Set description
+        if( $request->has('type_id') && ((int) $request->input('type_id') >= 1) ) {
+            $item->type_id = (int) $request->input('type_id');
+        }
+
+        // Set images
+        if( $request->has('images') ) {
+            $item->images = (array) $request->input('images');
+        }
+
+        // Save item
+        try {
+            $item->save();
+        } catch (Exception $e) {
+            return response([
+                'status' => false,
+                'error' => $e->getMessage()
+            ], 500);
+        }
+
+        return response([
+            'status' => true,
+            'data' => $item
+        ]);
+    }
+
+    /**
+     * Detaching or attaching tag from item
+     *
+     * @param string $type
+     * @param string $action
+     * @param int $itemId
+     * @param int $attachId
+     * @return Response
+     */
+    public function connector(string $type, string $action, int $itemId, int $attachId, string $value = ''): Response
+    {
+        if( $itemId <= 0 || $attachId <= 0 ) {
+            return response([
+                'status' => false,
+                'error' => 'Empty required fields: itemID or attachmentID.'
+            ]);
+        }
+
+        if( !MainHelper::isAdminOrModer() ) {
+            return response([
+                'status' => false,
+                'error' => 'Permission denied'
+            ], 401);
+        }
+
+        $item = Item::with('tags')->with('categories')->with('properties')->find($itemId);
+
+        if( !$item || !$item?->id ) {
+            return response([
+                'status' => false,
+                'error' => "Item with id:{$itemId} not found in db"
+            ]);
+        }
+
+        try {
+            if ($type === 'tag') {
+                if ($action === 'attach') {
+                    $item->tags()->attach($attachId, [
+                        'user_id' => MainHelper::getUserId()
+                    ]);
+                } else {
+                    $item->tags()->detach($attachId);
+                }
+            }
+
+            if ($type === 'category') {
+                if ($action === 'attach') {
+                    $item->categories()->attach($attachId, [
+                        'user_id' => MainHelper::getUserId()
+                    ]);
+                } else {
+                    $item->categories()->detach($attachId);
+                }
+            }
+
+            if ($type === 'property') {
+                if ($action === 'attach') {
+                    $item->properties()->attach($attachId, [
+                        'created_user_id' => MainHelper::getUserId(),
+                        'value' => ''
+                    ]);
+                } else {
+                    $item->properties()->detach($attachId);
+                }
+            }
+        } catch (Exception $e) {
+            return response([
+                'status' => false,
+                'error' => [
+                    'message' => $e->getMessage(),
+                    'code' => $e->getCode()
+                ]
+            ], 500);
+        }
+
+        return response([
+            'status' => true,
+            'data' => $item
         ]);
     }
 

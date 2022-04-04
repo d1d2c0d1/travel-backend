@@ -56,6 +56,8 @@ Route::prefix('items')->group(function() {
  */
 Route::prefix('items')->middleware('api.static.auth')->middleware('api.user.auth')->group(function () {
     Route::post('', [ItemsController::class, 'create'])->name('items.create');
+    Route::get('{type}/{action}/{itemId}/{attachmentId}', [ItemsController::class, 'connector'])->name('items.relations');
+    Route::patch('{id}', [ItemsController::class, 'update'])->name('items.update');
     Route::post('categories', [ItemCategoryController::class, 'create'])->name('items.categories.create');
     Route::post('tags', [ItemTagController::class, 'create'])->name('items.tags.create');
     Route::post('properties', [PropertiesController::class, 'create'])->name('items.properties.create');
