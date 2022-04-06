@@ -32,7 +32,7 @@ class MediaController extends Controller
             );
         }
 
-        $filename = $file->getClientOriginalName();
+        $filename = md5(rand(1000, 150000) . 'sold') . '-' . $file->getClientOriginalName();
         $path = '/attachments/' . date('Y/m/d/');
 
         $storage = Storage::disk('local')->putFileAs(
