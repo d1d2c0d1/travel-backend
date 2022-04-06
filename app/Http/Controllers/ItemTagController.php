@@ -23,7 +23,7 @@ class ItemTagController extends Controller
 
         $res = CardTag::where([
             ['title', 'like', "%{$search}%"]
-        ])->orderByDesc('id')->limit(5);
+        ])->orderByDesc('id');
 
         $tags = $res->get();
 

@@ -24,7 +24,7 @@ class ItemCategoryController extends Controller
 
         $res = CardCategory::where([
             ['name', 'like', "%{$search}%"]
-        ])->orderByDesc('id')->limit(5);
+        ])->orderByDesc('id');
 
         if( $typeId >= 1 ) {
             $res->where('type_id', $typeId);
