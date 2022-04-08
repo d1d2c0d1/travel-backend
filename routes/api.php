@@ -39,6 +39,13 @@ Route::get('/test', function(Request $request) {
 });
 
 /**
+ * Routes for documentation
+ */
+Route::get('/documentation', function(Request $request) {
+    return view('scribe/index');
+});
+
+/**
  * Items routes
  */
 Route::prefix('items')->group(function() {
