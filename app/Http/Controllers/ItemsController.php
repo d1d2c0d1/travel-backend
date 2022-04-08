@@ -216,6 +216,7 @@ class ItemsController extends Controller
         $typeId = (int) $request->input('type_id');
         $status = (int) $request->input('status');
         $id = (int) $request->input('id');
+        $cityId = (int) $request->input('city_id');
 
         if( $id >= 1 ) {
             $itemsDB->where('id', '=', $id);
@@ -227,6 +228,10 @@ class ItemsController extends Controller
 
         if( $status >= 1 ) {
             $itemsDB->where('status', '=', $status);
+        }
+
+        if( $cityId >= 1 ) {
+            $itemsDB->where('city_id', '=', $cityId);
         }
 
         $itemsDB->with('categories')->with('tags')->with('properties');
