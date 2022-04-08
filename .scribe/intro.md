@@ -9,5 +9,5 @@
 > Base URL
 
 ```yaml
-http://localhost
+https://u-gid.com
 ```
