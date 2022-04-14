@@ -11,6 +11,7 @@ use App\Http\Controllers\LocationController;
 use App\Http\Controllers\MediaController;
 use App\Http\Controllers\PostsController;
 use App\Http\Controllers\PropertiesController;
+use App\Http\Controllers\ReviewsController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\SubscribeController;
 use App\Http\Controllers\UserController;
@@ -54,13 +55,44 @@ Route::prefix('items')->group(function() {
  * Items routes
  * @private
  */
-Route::prefix('items')->middleware('api.static.auth')->middleware('api.user.auth')->group(function () {
+Route::prefix('items')->middleware('api.static.auth')->middleware('api.user.auth')->middleware('api.is.moder')->group(function () {
     Route::post('', [ItemsController::class, 'create'])->name('items.create');
     Route::get('{type}/{action}/{itemId}/{attachmentId}', [ItemsController::class, 'connector'])->name('items.relations');
     Route::patch('{id}', [ItemsController::class, 'update'])->name('items.update');
     Route::post('categories', [ItemCategoryController::class, 'create'])->name('items.categories.create');
     Route::post('tags', [ItemTagController::class, 'create'])->name('items.tags.create');
     Route::post('properties', [PropertiesController::class, 'create'])->name('items.properties.create');
+});
+
+/**
+ * Reviews routes
+ * @private
+ */
+Route::prefix('reviews')->middleware('api.static.auth')->middleware('api.user.auth')->middleware('api.is.moder')->group(function () {
+
+
+
+});
+
+/**
+ * Reviews routes
+ * @public
+ */
+Route::prefix('reviews')->middleware('api.static.auth')->middleware('api.user.auth')->group(function () {
+
+    Route::post('', [ReviewsController::class, 'create'])->name('reviews.create');
+    Route::put('', [ReviewsController::class, 'create'])->name('reviews.update');
+
+});
+
+/**
+ * Reviews routes
+ * @public
+ */
+Route::prefix('reviews')->middleware('api.static.auth')->group(function () {
+
+    Route::get('', [ReviewsController::class, 'index'])->name('reviews.index');
+
 });
 
 /**
@@ -114,7 +146,7 @@ Route::prefix('location')->middleware('api.static.auth')->group(function() {
  * Location private routes
  * @private
  */
-Route::prefix('location')->middleware('api.static.auth')->middleware('api.user.auth')->group(function() {
+Route::prefix('location')->middleware('api.static.auth')->middleware('api.user.auth')->middleware('api.is.moder')->group(function() {
     Route::put('city/{id}', [LocationController::class, 'updateCity'])->name('location.city.update');
     Route::post('city', [LocationController::class, 'createCity'])->name('location.city.create');
 });
@@ -138,14 +170,14 @@ Route::prefix('subscribe')->middleware('api.static.auth')->group(function () {
  * @private
  */
 Route::prefix('attachment')->middleware('api.static.auth')->middleware('api.user.auth')->group(function() {
-    Route::post('upload', [MediaController::class, 'upload'])->name('attachment.upload');
+    Route::middleware('api.is.moder')->post('upload', [MediaController::class, 'upload'])->name('attachment.upload');
 });
 
 /**
  * Posts routes
  * @private
  */
-Route::prefix('blog')->middleware('api.static.auth')->middleware('api.user.auth')->group(function() {
+Route::prefix('blog')->middleware('api.static.auth')->middleware('api.user.auth')->middleware('api.is.moder')->group(function() {
     Route::post('', [BlogController::class, 'create'])->name('blog.create');
     Route::put('{id}', [BlogController::class, 'update'])->name('blog.update');
     Route::delete('{id}', [BlogController::class, 'delete'])->name('blog.delete');

@@ -4,6 +4,8 @@ namespace App\Http\Helpers;
 
 use App\Models\Role;
 use App\Models\User;
+use Exception;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Redis;
 
 class MainHelper
@@ -180,7 +182,11 @@ class MainHelper
      * @return int
      */
     public static function getUserId(): int {
-        return (int) self::getUser()?->id;
+        try {
+            return (int)self::getUser()?->id;
+        } catch (Exception $e) {
+            return 0;
+        }
     }
 
     /**
@@ -189,7 +195,11 @@ class MainHelper
      * @return int
      */
     public static function getUserRoleId(): int {
-        return (int) self::getUser()?->role_id;
+        try {
+            return (int) self::getUser()?->role_id;
+        } catch (Exception $e) {
+            return 0;
+        }
     }
 
     /**
@@ -198,7 +208,11 @@ class MainHelper
      * @return Role|null
      */
     public static function getUserRole(): Role | null {
-        return self::getUser()?->role;
+        try {
+            return self::getUser()?->role;
+        } catch (Exception $e) {
+            return null;
+        }
     }
 
     /**

@@ -20,10 +20,9 @@ use Illuminate\Support\Carbon;
  * @property mixed $item_id
  * @property integer $rating
  * @property string $comment
- * @property integer $gallery
+ * @property array $gallery
  * @property Carbon $created_at
  * @property Carbon $updated_at
- * @property int|null $gallery_id
  * @property-read \App\Models\User|null $acceptedUser
  * @property-read \App\Models\User|null $createdUser
  * @property-read \App\Models\User|null $editedUser
@@ -120,7 +119,7 @@ class Review extends Model
         'status' => 'integer',
         'rating' => 'integer',
         'comment' => 'string',
-        'gallery' => 'integer',
+        'gallery' => 'json',
         'created_at' => 'datetime:Y-m-d H:i:s',
         'updated_at' => 'datetime:Y-m-d H:i:s',
     ];
