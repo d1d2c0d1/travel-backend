@@ -33,6 +33,14 @@ class ReviewsController extends Controller
             }
         }
 
+        if( $request->has('status') ) {
+            $status = (int) $request->input('status');
+
+            if( $status >= 1 ) {
+                $reviewsDB->where('status', $status);
+            }
+        }
+
         if( $request->has('author_id') ) {
             $authorId = (int) $request->input('author_id');
 
@@ -235,6 +243,7 @@ class ReviewsController extends Controller
      * Set moderated status
      *
      * @param int $id
+     * @param int $status
      * @return Response
      */
     public function setStatus(int $id, int $status = 0): Response
