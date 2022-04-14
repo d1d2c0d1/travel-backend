@@ -81,7 +81,7 @@ Route::prefix('reviews')->middleware('api.static.auth')->middleware('api.user.au
 Route::prefix('reviews')->middleware('api.static.auth')->middleware('api.user.auth')->group(function () {
 
     Route::post('', [ReviewsController::class, 'create'])->name('reviews.create');
-    Route::put('', [ReviewsController::class, 'create'])->name('reviews.update');
+    Route::patch('', [ReviewsController::class, 'update'])->name('reviews.update');
 
 });
 
