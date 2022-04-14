@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Helpers\MainHelper;
 use App\Models\Item;
 use App\Models\Review;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -115,7 +116,7 @@ class ReviewsController extends Controller
 
         try {
             $review->save();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response([
                 'status' => false,
                 'error' => 'Error with database',
@@ -182,7 +183,7 @@ class ReviewsController extends Controller
 
         try {
             $review->save();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response([
                 'status' => false,
                 'error' => 'Error with database',
@@ -192,17 +193,82 @@ class ReviewsController extends Controller
 
         return response([
             'status' => true,
+            'review' => $review
         ]);
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove Review
      *
      * @param  int  $id
      * @return Response
      */
     public function destroy(int $id): Response
     {
-        //
+
+        $review = Review::find($id);
+
+        if( $review?->id !== $id ) {
+            return response([
+                'status' => false,
+                'error' => "Review with ID: {$id} not found!"
+            ], 404);
+        }
+
+        try {
+            $review->delete();
+        } catch (Exception $e) {
+            return response([
+                'status' => false,
+                'error' => 'Error in database',
+                'databaseError' => $e->getMessage()
+            ], 500);
+        }
+
+        return response([
+            'status' => true,
+            'data' => $review
+        ]);
+    }
+
+    /**
+     * Set moderated status
+     *
+     * @param int $id
+     * @return Response
+     */
+    public function setStatus(int $id, int $status = 0): Response
+    {
+        $review = Review::find($id);
+
+        if( $review?->id !== $id ) {
+            return response([
+                'status' => true,
+                'error' => "Review with ID: {$id} not found!"
+            ], 404);
+        }
+
+        $review->status = $status;
+
+        if( $status === 2 ) {
+            $review->accepted_user_id = MainHelper::getUserId();
+        }
+
+        $review->edit_user_id = MainHelper::getUserId();
+
+        try {
+            $review->save();
+        } catch (Exception $e) {
+            return response([
+                'status' => false,
+                'error' => 'Error with database',
+                'databaseError' => $e->getMessage()
+            ]);
+        }
+
+        return response([
+            'status' => true,
+            'data' => $review
+        ]);
     }
 }

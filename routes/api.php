@@ -66,32 +66,34 @@ Route::prefix('items')->middleware('api.static.auth')->middleware('api.user.auth
 
 /**
  * Reviews routes
- * @private
- */
-Route::prefix('reviews')->middleware('api.static.auth')->middleware('api.user.auth')->middleware('api.is.moder')->group(function () {
-
-
-
-});
-
-/**
- * Reviews routes
  * @public
  */
 Route::prefix('reviews')->middleware('api.static.auth')->middleware('api.user.auth')->group(function () {
 
     Route::post('', [ReviewsController::class, 'create'])->name('reviews.create');
-    Route::patch('', [ReviewsController::class, 'update'])->name('reviews.update');
+    Route::patch('{id}', [ReviewsController::class, 'update'])->name('reviews.update');
 
 });
 
 /**
  * Reviews routes
- * @public
+ * @private
  */
 Route::prefix('reviews')->middleware('api.static.auth')->group(function () {
 
     Route::get('', [ReviewsController::class, 'index'])->name('reviews.index');
+
+});
+
+/**
+ * Reviews routes
+ * @private
+ * @moderator
+ */
+Route::prefix('reviews')->middleware('api.static.auth')->middleware('api.user.auth')->middleware('api.is.moder')->group(function () {
+
+    Route::delete('{id}', [ReviewsController::class, 'destroy'])->name('review.delete');
+    Route::patch('status/{id}/{status}', [ReviewsController::class, 'setStatus'])->name('review.set.status');
 
 });
 
