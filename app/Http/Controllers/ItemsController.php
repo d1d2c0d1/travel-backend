@@ -51,7 +51,7 @@ class ItemsController extends Controller
             return response([
                 'status' => false,
                 'error' => 'Field city_id is incorrect and not found in database'
-            ]);
+            ], 449);
         }
 
         $arFields['country_id'] = $city->country_id;
@@ -65,7 +65,7 @@ class ItemsController extends Controller
             return response([
                 'status' => false,
                 'error' => 'Feild images is empty'
-            ]);
+            ], 449);
         }
 
         $arFields['images'] = $images;
@@ -82,7 +82,7 @@ class ItemsController extends Controller
                 'status' => false,
                 'error' => 'Bad credentials',
                 'validator' => $validator
-            ]);
+            ], 449);
         }
 
         try {

@@ -329,13 +329,18 @@ class BlogController extends Controller
         $previousId = (int) Post::where('id', '<', $id)->max('id');
         $nextId = (int) Post::where('id', '>', $id)->min('id');
 
+        $prevPost = Post::find($previousId);
+        $nextPost = Post::find($nextId);
+
         return response(MainHelper::getResponse((bool) $post, [
             'post' => $post?->toArray(),
             'meta' => [
                 'previous' => $previousId <= 0 ? null : $previousId,
                 'next' => $nextId <= 0 ? null : $nextId,
                 'previous_link' => route('blog.single', $previousId),
-                'next_link' => route('blog.single', $nextId)
+                'next_link' => route('blog.single', $nextId),
+                'previous_post' => $prevPost,
+                'next_post' => $nextPost
             ]
         ]));
     }
