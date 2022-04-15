@@ -49,7 +49,12 @@ class ReviewsController extends Controller
             }
         }
 
-        $reviews = $reviewsDB->paginate();
+        $reviews = $reviewsDB
+            ->with('item')
+            ->with('createdUser')
+            ->with('editedUser')
+            ->with('acceptedUser')
+            ->paginate();
 
         return response([
             'status' => true,

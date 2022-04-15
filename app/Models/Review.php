@@ -142,7 +142,7 @@ class Review extends Model
      **/
     public function createdUser(): HasOne
     {
-        return $this->hasOne(User::class, 'id', 'created_user_id');
+        return $this->hasOne(User::class, 'id', 'created_user_id')->with('role');
     }
 
     /**
@@ -152,7 +152,7 @@ class Review extends Model
      **/
     public function acceptedUser(): HasOne
     {
-        return $this->hasOne(User::class, 'id', 'accepted_user_id');
+        return $this->hasOne(User::class, 'id', 'accepted_user_id')->with('role');
     }
 
     /**
@@ -162,6 +162,16 @@ class Review extends Model
      **/
     public function editedUser(): HasOne
     {
-        return $this->hasOne(User::class, 'id', 'edit_user_id');
+        return $this->hasOne(User::class, 'id', 'edit_user_id')->with('role');
+    }
+
+    /**
+     * Relationships for getting item
+     *
+     * @return HasOne
+     */
+    public function item(): HasOne
+    {
+        return $this->hasOne(Item::class, 'id', 'item_id')->with('properties')->with('categories')->with('tags');
     }
 }
