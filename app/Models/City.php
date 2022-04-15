@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Observers\CityObserver;
+use App\Observers\CommentObserver;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
@@ -120,6 +122,17 @@ class City extends Model
         'name' => ['min:2', 'required', 'string'],
 
     ];
+
+    /**
+     * Boot config for model
+     *
+     * @return void
+     */
+    public static function boot(): void
+    {
+        parent::boot();
+        self::observe(CityObserver::class);
+    }
 
     /**
      * Relationship for connection with Country model

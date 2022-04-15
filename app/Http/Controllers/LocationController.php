@@ -23,13 +23,9 @@ class LocationController extends Controller
      */
     public function languages(): array
     {
-        $languages = Cache::remember('locations.languages', 86400, function () {
-            return Language::all();
-        });
-
         return [
             'status' => true,
-            'data' => $languages
+            'data' => Language::all()
         ];
     }
 
@@ -40,13 +36,9 @@ class LocationController extends Controller
      */
     public function countries(): array
     {
-        $countries = Cache::remember('locations.countries', 86400, function () {
-            return Country::all();
-        });
-
         return [
             'status' => true,
-            'data' => $countries
+            'data' => Country::all()
         ];
     }
 
@@ -58,13 +50,12 @@ class LocationController extends Controller
      */
     public function regions(int $countryId = 0): array
     {
-        $regions = Cache::remember("locations.regions-{$countryId}", 86400, function () use ($countryId) {
-            if ($countryId <= 0) {
-                return Region::all();
-            } else {
-                return Region::where('country_id', $countryId)->get();
-            }
-        });
+
+        if ($countryId <= 0) {
+            $regions = Region::all();
+        } else {
+            $regions = Region::where('country_id', $countryId)->get();
+        }
 
         return [
             'status' => true,
@@ -84,7 +75,7 @@ class LocationController extends Controller
         $countryId = (int)$request->get('country_id', 0);
         $regionId = (int)$request->get('region_id', 0);
 
-        $countries = Cache::remember("locations.countries-{$countryId}-{$regionId}", 86400, function () use ($countryId, $regionId) {
+        $countries = Cache::remember("locations.cities-{$countryId}-{$regionId}", 86400, function () use ($countryId, $regionId) {
             if ($countryId >= 1 && $regionId <= 0) {
                 return City::where('country_id', $countryId)->get();
 
