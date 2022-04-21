@@ -75,23 +75,21 @@ class LocationController extends Controller
         $countryId = (int)$request->get('country_id', 0);
         $regionId = (int)$request->get('region_id', 0);
 
-        $countries = Cache::remember("locations.cities-{$countryId}-{$regionId}", 86400, function () use ($countryId, $regionId) {
-            if ($countryId >= 1 && $regionId <= 0) {
-                return City::where('country_id', $countryId)->get();
+        if ($countryId >= 1 && $regionId <= 0) {
+            $countries = City::where('country_id', $countryId)->get();
 
-            } elseif ($countryId <= 0 && $regionId >= 1) {
-                return City::where('region_id', $regionId)->get();
+        } elseif ($countryId <= 0 && $regionId >= 1) {
+            $countries = City::where('region_id', $regionId)->get();
 
-            } elseif ($countryId >= 1 && $regionId >= 1) {
-                return City::where([
-                    ['country_id', '=', $countryId],
-                    ['region_id', '=', $regionId],
-                ])->get();
+        } elseif ($countryId >= 1 && $regionId >= 1) {
+            $countries = City::where([
+                ['country_id', '=', $countryId],
+                ['region_id', '=', $regionId],
+            ])->get();
 
-            } else {
-                return City::all();
-            }
-        });
+        } else {
+            $countries = City::all();
+        }
 
         return [
             'status' => true,
