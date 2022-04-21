@@ -109,6 +109,15 @@ class Item extends Model
     public $timestamps = true;
 
     /**
+     * The append attributes (custom attributes)
+     *
+     * @var array
+     */
+    protected $appends = [
+        'is_favorite'
+    ];
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
@@ -259,10 +268,37 @@ class Item extends Model
     /**
      * Relationship for getting promotions
      *
-     * @return BelongsToMany
+     * @return HasMany
      */
     public function promotions(): HasMany
     {
         return $this->hasMany(Promotion::class, 'item_id', 'id');
+    }
+
+    /**
+     * Relationship for getting favorites
+     *
+     * @return HasMany
+     */
+    public function favorites(): HasMany
+    {
+        return $this->hasMany(Favorite::class, 'item_id', 'id');
+    }
+
+    /**
+     * Is favorite item or not for authorized user
+     *
+     * @return bool
+     */
+    public function getIsFavoriteAttribute(): bool
+    {
+
+        if( MainHelper::getUserId() <= 0 ) {
+            return false;
+        }
+
+        $favorite = $this->favorites()->where('user_id', MainHelper::getUserId())->first();
+
+        return $favorite?->id >= 1;
     }
 }
