@@ -234,7 +234,7 @@ class ItemsController extends Controller
             $itemsDB->where('city_id', '=', $cityId);
         }
 
-        $itemsDB->with('categories')->with('tags')->with('properties');
+        $itemsDB->with('categories')->with('tags')->with('properties')->with('promotions');
 
         $items = $itemsDB->paginate();
 

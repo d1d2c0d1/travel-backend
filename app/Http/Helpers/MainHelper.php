@@ -241,4 +241,13 @@ class MainHelper
     public static function isAdminOrModer(): bool {
         return self::isModer() || self::isAdmin();
     }
+
+    /**
+     * Is current user has Guide rules
+     *
+     * @return bool
+     */
+    public static function isGuide(): bool {
+        return self::getUserRole()?->is_guide || self::isAdminOrModer();
+    }
 }

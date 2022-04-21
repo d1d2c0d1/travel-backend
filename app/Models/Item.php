@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * App\Models\Item
@@ -246,12 +247,22 @@ class Item extends Model
     }
 
     /**
-     * Relationship for getting categories
+     * Relationship for getting tags
      *
      * @return BelongsToMany
      */
     public function tags(): BelongsToMany
     {
         return $this->belongsToMany(CardTag::class, 'item_tag', 'item_id', 'tag_id')->as('tags');
+    }
+
+    /**
+     * Relationship for getting promotions
+     *
+     * @return BelongsToMany
+     */
+    public function promotions(): HasMany
+    {
+        return $this->hasMany(Promotion::class, 'item_id', 'id');
     }
 }

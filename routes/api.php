@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdditionalController;
 use App\Http\Controllers\AuthorizationController;
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\FavoritesController;
 use App\Http\Controllers\ItemCategoryController;
 use App\Http\Controllers\ItemsController;
 use App\Http\Controllers\ItemTagController;
@@ -10,6 +11,7 @@ use App\Http\Controllers\ItemTypeController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\MediaController;
 use App\Http\Controllers\PostsController;
+use App\Http\Controllers\PromotionsController;
 use App\Http\Controllers\PropertiesController;
 use App\Http\Controllers\ReviewsController;
 use App\Http\Controllers\RolesController;
@@ -53,7 +55,15 @@ Route::prefix('items')->group(function() {
 
 /**
  * Items routes
- * @private
+ * @private (users)
+ */
+Route::prefix('items')->middleware('api.static.auth')->middleware('api.user.auth')->group(function() {
+    Route::post('favorite/{id}', [FavoritesController::class, 'toggle'])->name('items.favorites.toggle');
+});
+
+/**
+ * Items routes
+ * @private (admin or moder)
  */
 Route::prefix('items')->middleware('api.static.auth')->middleware('api.user.auth')->middleware('api.is.moder')->group(function () {
     Route::post('', [ItemsController::class, 'create'])->name('items.create');
@@ -62,6 +72,18 @@ Route::prefix('items')->middleware('api.static.auth')->middleware('api.user.auth
     Route::post('categories', [ItemCategoryController::class, 'create'])->name('items.categories.create');
     Route::post('tags', [ItemTagController::class, 'create'])->name('items.tags.create');
     Route::post('properties', [PropertiesController::class, 'create'])->name('items.properties.create');
+});
+
+/**
+ * Promotions routes
+ * @private
+ * @guide
+ */
+Route::prefix('promotion')->middleware('api.static.auth')->middleware('api.user.auth')->middleware('api.is.guide')->group(function() {
+
+    Route::post('', [PromotionsController::class, 'store'])->name('promotions.store');
+    Route::get('{id}', [PromotionsController::class, 'single'])->name('promotions.single');
+
 });
 
 /**

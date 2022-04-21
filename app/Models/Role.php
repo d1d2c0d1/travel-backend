@@ -18,6 +18,7 @@ use Illuminate\Support\Carbon;
  * @property bool $is_admin
  * @property bool $is_default
  * @property bool $is_moder
+ * @property bool $is_guide
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $user
  * @property-read int|null $user_count
  * @method static \Illuminate\Database\Eloquent\Builder|Role newModelQuery()
@@ -97,6 +98,7 @@ class Role extends Model
         'id' => 'integer',
         'is_admin' => 'boolean',
         'is_moder' => 'boolean',
+        'is_guide' => 'boolean',
         'is_default' => 'boolean',
         'name' => 'string',
         'created_at' => 'datetime:Y-m-d H:i:s',
