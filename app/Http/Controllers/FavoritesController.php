@@ -15,7 +15,7 @@ class FavoritesController extends Controller
     /**
      * Toggle favorite to item
      *
-     * @param int $itemId
+     * @param int $id
      * @return Response
      */
     public function toggle(int $id): Response
@@ -94,6 +94,21 @@ class FavoritesController extends Controller
         return response([
             'status' => true,
             'isFavorite' => $isFavorite
+        ]);
+    }
+
+    /**
+     * Getting list favorites
+     *
+     * @return Response
+     */
+    public function index(): Response
+    {
+        $favorites = Favorite::where('user_id', MainHelper::getUserId())->with('item')->with('user')->paginate();
+
+        return response([
+            'status' => true,
+            'items' => $favorites
         ]);
     }
 

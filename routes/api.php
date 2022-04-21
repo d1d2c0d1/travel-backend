@@ -58,6 +58,7 @@ Route::prefix('items')->group(function() {
  * @private (users)
  */
 Route::prefix('items')->middleware('api.static.auth')->middleware('api.user.auth')->group(function() {
+    Route::get('favorites', [FavoritesController::class, 'index'])->name('items.favorites.list');
     Route::post('favorite/{id}', [FavoritesController::class, 'toggle'])->name('items.favorites.toggle');
 });
 
