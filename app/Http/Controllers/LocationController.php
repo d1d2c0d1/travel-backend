@@ -193,11 +193,9 @@ class LocationController extends Controller
     {
         $search = $request->get('search');
 
-        $cities = Cache::remember("cities-search-{$search}", 86400, function () use ($search) {
-            return City::where([
-                ['name', 'like', "%{$search}%"]
-            ])->limit(5)->get();
-        });
+        $cities = City::where([
+            ['name', 'like', "%{$search}%"]
+        ])->limit(10)->get();
 
         return [
             'status' => true,
