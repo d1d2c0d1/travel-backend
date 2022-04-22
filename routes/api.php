@@ -10,6 +10,7 @@ use App\Http\Controllers\ItemTagController;
 use App\Http\Controllers\ItemTypeController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\MediaController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PostsController;
 use App\Http\Controllers\PromotionsController;
 use App\Http\Controllers\PropertiesController;
@@ -219,5 +220,28 @@ Route::prefix('blog')->middleware('api.static.auth')->group(function() {
     Route::get('categories', [BlogController::class, 'categories'])->name('blog.categories');
     Route::get('{id}', [BlogController::class, 'single'])->name('blog.single');
     Route::get('', [BlogController::class, 'index'])->name('blog.index');
+});
+
+/**
+ * Orders routes
+ * @public
+ */
+Route::prefix('orders')->middleware('api.static.auth')->group(function() {
+    Route::post('', [OrderController::class, 'store'])->name('order.store');
+
+    /**
+     * @private (only for authorized users)
+     */
+    Route::middleware('api.user.auth')->group(function() {
+        Route::get('', [OrderController::class, 'index'])->name('order.list');
+
+        /**
+         * @private (only for guide)
+         */
+        Route::middleware('api.is.guide')->group(function() {
+            Route::patch('accepted/{id}', [OrderController::class, 'accepted'])->name('order.accepted');
+            Route::patch('canceled/{id}', [OrderController::class, 'canceled'])->name('order.canceled');
+        });
+    });
 });
 
