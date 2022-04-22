@@ -250,4 +250,19 @@ class MainHelper
     public static function isGuide(): bool {
         return self::getUserRole()?->is_guide || self::isAdminOrModer();
     }
+
+    /**
+     * Return DB Error for responses
+     *
+     * @param Exception $e
+     * @return Response
+     */
+    public static function getDBError(Exception $e): Response
+    {
+        return response([
+            'status' => false,
+            'error' => 'Error in database',
+            'database_error' => $e->getMessage()
+        ], 500);
+    }
 }

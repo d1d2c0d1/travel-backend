@@ -45,35 +45,38 @@ Route::get('/test', function(Request $request) {
 /**
  * Items routes
  */
-Route::prefix('items')->group(function() {
+Route::prefix('items')->middleware('api.static.auth')->group(function() {
     Route::post('filter', [ItemsController::class, 'filter'])->name('items.filter');
     Route::get('types', [ItemTypeController::class, 'index'])->name('items.types');
     Route::get('categories', [ItemCategoryController::class, 'index'])->name('items.categories');
     Route::get('tags', [ItemTagController::class, 'index'])->name('items.tags');
     Route::get('properties', [PropertiesController::class, 'index'])->name('items.properties');
     Route::delete('{id}', [ItemsController::class, 'delete'])->name('items.delete');
-});
 
-/**
- * Items routes
- * @private (users)
- */
-Route::prefix('items')->middleware('api.static.auth')->middleware('api.user.auth')->group(function() {
-    Route::get('favorites', [FavoritesController::class, 'index'])->name('items.favorites.list');
-    Route::post('favorite/{id}', [FavoritesController::class, 'toggle'])->name('items.favorites.toggle');
-});
+    /**
+     * Items routes
+     * @private (only for authorized users)
+     */
+    Route::middleware('api.user.auth')->group(function() {
+        Route::get('favorites', [FavoritesController::class, 'index'])->name('items.favorites.list');
+        Route::post('favorite/{id}', [FavoritesController::class, 'toggle'])->name('items.favorites.toggle');
 
-/**
- * Items routes
- * @private (admin or moder)
- */
-Route::prefix('items')->middleware('api.static.auth')->middleware('api.user.auth')->middleware('api.is.moder')->group(function () {
-    Route::post('', [ItemsController::class, 'create'])->name('items.create');
-    Route::get('{type}/{action}/{itemId}/{attachmentId}', [ItemsController::class, 'connector'])->name('items.relations');
-    Route::patch('{id}', [ItemsController::class, 'update'])->name('items.update');
-    Route::post('categories', [ItemCategoryController::class, 'create'])->name('items.categories.create');
-    Route::post('tags', [ItemTagController::class, 'create'])->name('items.tags.create');
-    Route::post('properties', [PropertiesController::class, 'create'])->name('items.properties.create');
+        /**
+         * Items routes
+         * @private (admin or moder)
+         */
+        Route::middleware('api.is.moder')->group(function () {
+            Route::post('', [ItemsController::class, 'create'])->name('items.create');
+            Route::patch('accepted/{id}', [ItemsController::class, 'accepted'])->name('items.accepted');
+            Route::patch('canceled/{id}', [ItemsController::class, 'canceled'])->name('items.canceled');
+            Route::patch('{id}', [ItemsController::class, 'update'])->name('items.update');
+            Route::post('categories', [ItemCategoryController::class, 'create'])->name('items.categories.create');
+            Route::post('tags', [ItemTagController::class, 'create'])->name('items.tags.create');
+            Route::post('properties', [PropertiesController::class, 'create'])->name('items.properties.create');
+            Route::patch('remarks/{id}', [ItemsController::class, 'remarks'])->name('items.remarks.edit');
+            Route::get('{type}/{action}/{itemId}/{attachmentId}', [ItemsController::class, 'connector'])->name('items.relations');
+        });
+    });
 });
 
 /**
@@ -104,21 +107,16 @@ Route::prefix('reviews')->middleware('api.static.auth')->middleware('api.user.au
  * @private
  */
 Route::prefix('reviews')->middleware('api.static.auth')->group(function () {
-
     Route::get('', [ReviewsController::class, 'index'])->name('reviews.index');
 
-});
-
-/**
- * Reviews routes
- * @private
- * @moderator
- */
-Route::prefix('reviews')->middleware('api.static.auth')->middleware('api.user.auth')->middleware('api.is.moder')->group(function () {
-
-    Route::delete('{id}', [ReviewsController::class, 'destroy'])->name('review.delete');
-    Route::patch('status/{id}/{status}', [ReviewsController::class, 'setStatus'])->name('review.set.status');
-
+    /**
+     * Reviews routes
+     * @private (only for moderators)
+     */
+    Route::middleware('api.user.auth')->middleware('api.is.moder')->group(function () {
+        Route::delete('{id}', [ReviewsController::class, 'destroy'])->name('review.delete');
+        Route::patch('status/{id}/{status}', [ReviewsController::class, 'setStatus'])->name('review.set.status');
+    });
 });
 
 /**

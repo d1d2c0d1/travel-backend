@@ -218,6 +218,10 @@ class ItemsController extends Controller
         $id = (int) $request->input('id');
         $cityId = (int) $request->input('city_id');
 
+        if( $request->input('short') !== true ) {
+            $itemsDB->with('categories')->with('tags')->with('properties')->with('promotions');
+        }
+
         if( $id >= 1 ) {
             $itemsDB->where('id', '=', $id);
         }
@@ -234,8 +238,22 @@ class ItemsController extends Controller
             $itemsDB->where('city_id', '=', $cityId);
         }
 
-        if( $request->input('short') !== true ) {
-            $itemsDB->with('categories')->with('tags')->with('properties')->with('promotions');
+        // Filter by created_at
+        if( $request->has('created_at') ) {
+            $createdAts = (array) $request->input('created_at');
+
+            if( !empty($createdAts) ) {
+                $startPeriod = (int) strtotime($createdAts[0]);
+                $endPeriod = (int) strtotime($createdAts[1] ?? null);
+
+                if( $startPeriod >= 15000 ) {
+                    $itemsDB->where('created_at', '>=', date('Y-m-d H:i:s', $startPeriod));
+
+                    if($endPeriod >= 15000) {
+                        $itemsDB->where('created_at', '<=', date('Y-m-d H:i:s', $endPeriod));
+                    }
+                }
+            }
         }
 
         $items = $itemsDB->paginate();
@@ -244,6 +262,62 @@ class ItemsController extends Controller
             'status' => true,
             'items' => $items
         ]);
+    }
+
+    /**
+     * Set status to Item
+     *
+     * @param int $id
+     * @param int $status
+     * @return Response
+     */
+    public function setStatus(int $id, int $status = 0): Response
+    {
+        $item = Item::select(['id', 'status'])->find($id);
+
+        if( $item?->id !== $id ) {
+            return response([
+                'status' => false,
+                'error' => "Item with ID: {$id} not found"
+            ], 404);
+        }
+
+        if( $item->status !== $status ) {
+            $item->status = $status;
+
+            try {
+                $item->save();
+            } catch (Exception $e) {
+                return MainHelper::getDBError($e);
+            }
+        }
+
+        return response([
+            'status' => true,
+            'item' => $item
+        ]);
+    }
+
+    /**
+     * Accepted Item by moderator or administrator
+     *
+     * @param int $id
+     * @return Response
+     */
+    public function accepted(int $id): Response
+    {
+        return $this->setStatus($id, 2);
+    }
+
+    /**
+     * Accepted Item by moderator or administrator
+     *
+     * @param int $id
+     * @return Response
+     */
+    public function canceled(int $id): Response
+    {
+        return $this->setStatus($id, 1);
     }
 
     /**
@@ -341,12 +415,55 @@ class ItemsController extends Controller
     }
 
     /**
+     * Edit remarks in Item
+     *
+     * @param int $id
+     * @param Request $request
+     * @return Response
+     */
+    public function remarks(int $id, Request $request): Response
+    {
+        $item = Item::select(['id', 'remarks'])->find($id);
+
+        if( $item?->id !== $id ) {
+            return response([
+                'status' => false,
+                'error' => "Item with ID: {$id} not found"
+            ], 404);
+        }
+
+        $remarks = (string) $request->input('remarks');
+
+        if( $item->remarks !== $remarks ) {
+
+            $item->remarks = $remarks;
+            $item->status = 3; // Set is not moderated status
+
+            try {
+                $item->save();
+            } catch (Exception $e) {
+                return response([
+                    'status' => false,
+                    'error' => 'Error in database',
+                    'database_error' => $e->getMessage()
+                ]);
+            }
+        }
+
+        return response([
+            'status' => true,
+            'item' => $item
+        ]);
+    }
+
+    /**
      * Detaching or attaching tag from item
      *
      * @param string $type
      * @param string $action
      * @param int $itemId
      * @param int $attachId
+     * @param string $value
      * @return Response
      */
     public function connector(string $type, string $action, int $itemId, int $attachId, string $value = ''): Response

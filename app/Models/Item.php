@@ -37,6 +37,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int $likes
  * @property int $favorites
  * @property string|null $address
+ * @property string|null $remarks
  * @property datetime $created_at
  * @property datetime $updated_at
  * @method static Builder|Item newModelQuery()
@@ -147,6 +148,7 @@ class Item extends Model
         'reviews',
         'likes',
         'favorites',
+        'remarks'
     ];
 
     /**
@@ -180,6 +182,7 @@ class Item extends Model
         'reviews' => 'integer',
         'likes' => 'integer',
         'favorites' => 'integer',
+        'remarks' => 'string',
         'created_at' => 'datetime:Y-m-d H:i:s',
         'updated_at' => 'datetime:Y-m-d H:i:s',
     ];
