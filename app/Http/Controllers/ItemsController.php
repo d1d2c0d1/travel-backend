@@ -220,6 +220,7 @@ class ItemsController extends Controller
         $cityId = (int) $request->input('city_id');
         $cityCode = (string) $request->input('city_code');
         $typeCode = (string) $request->input('type_code');
+        $itemCode = (string) $request->input('code');
 
         if( $request->input('short') !== true ) {
             $itemsDB->with('categories')->with('tags')->with('properties')->with('promotions');
@@ -244,6 +245,10 @@ class ItemsController extends Controller
             if( $city?->id >= 1 ) {
                 $itemsDB->where('city_id', '=', $city->id);
             }
+        }
+
+        if( mb_strlen($itemCode) >= 1 ) {
+            $itemsDB->where('code', '=', $itemCode);
         }
 
         // Find by Type Code
