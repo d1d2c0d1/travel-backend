@@ -110,6 +110,7 @@ class City extends Model
         'country_id' => 'integer',
         'region_id' => 'integer',
         'name' => 'string',
+        'code' => 'string',
         'created_at' => 'datetime:Y-m-d H:i:s',
         'updated_at' => 'datetime:Y-m-d H:i:s',
 

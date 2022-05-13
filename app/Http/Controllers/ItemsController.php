@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Helpers\MainHelper;
 use App\Models\City;
 use App\Models\Item;
+use App\Models\ItemType;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -217,6 +218,8 @@ class ItemsController extends Controller
         $status = (int) $request->input('status');
         $id = (int) $request->input('id');
         $cityId = (int) $request->input('city_id');
+        $cityCode = (string) $request->input('city_code');
+        $typeCode = (string) $request->input('type_code');
 
         if( $request->input('short') !== true ) {
             $itemsDB->with('categories')->with('tags')->with('properties')->with('promotions');
@@ -232,6 +235,24 @@ class ItemsController extends Controller
 
         if( $status >= 1 ) {
             $itemsDB->where('status', '=', $status);
+        }
+
+        // Find by City Code
+        if( mb_strlen($cityCode) >= 1 ) {
+            $city = City::select('id')->where('code', '=', $cityCode)->first();
+
+            if( $city?->id >= 1 ) {
+                $itemsDB->where('city_id', '=', $city->id);
+            }
+        }
+
+        // Find by Type Code
+        if( mb_strlen($typeCode) >= 1 ) {
+            $type = ItemType::select('id')->where('code', '=', $typeCode)->first();
+
+            if( $type?->id >= 1 ) {
+                $itemsDB->where('type_id', '=', $type->id);
+            }
         }
 
         if( $cityId >= 1 ) {
