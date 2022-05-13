@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  * App\Models\Item
@@ -286,6 +287,26 @@ class Item extends Model
     public function favorites(): HasMany
     {
         return $this->hasMany(Favorite::class, 'item_id', 'id');
+    }
+
+    /**
+     * Relationship for getting city
+     *
+     * @return HasOne
+     */
+    public function city(): HasOne
+    {
+        return $this->hasOne(City::class, 'city_id', 'id');
+    }
+
+    /**
+     * Relationship for getting type
+     *
+     * @return HasOne
+     */
+    public function type(): HasOne
+    {
+        return $this->hasOne(ItemType::class, 'type_id', 'id');
     }
 
     /**

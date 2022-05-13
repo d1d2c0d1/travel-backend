@@ -223,7 +223,13 @@ class ItemsController extends Controller
         $itemCode = (string) $request->input('code');
 
         if( $request->input('short') !== true ) {
-            $itemsDB->with('categories')->with('tags')->with('properties')->with('promotions');
+            $itemsDB
+                ->with('categories')
+                ->with('tags')
+                ->with('properties')
+                ->with('promotions')
+                ->with('city')
+                ->with('type');
         }
 
         if( $id >= 1 ) {
