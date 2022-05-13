@@ -296,7 +296,7 @@ class Item extends Model
      */
     public function city(): HasOne
     {
-        return $this->hasOne(City::class, 'city_id', 'id');
+        return $this->hasOne(City::class, 'id', 'city_id');
     }
 
     /**
@@ -306,7 +306,7 @@ class Item extends Model
      */
     public function type(): HasOne
     {
-        return $this->hasOne(ItemType::class, 'type_id', 'id');
+        return $this->hasOne(ItemType::class, 'id', 'type_id');
     }
 
     /**
