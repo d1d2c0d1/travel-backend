@@ -194,7 +194,7 @@ Route::prefix('subscribe')->middleware('api.static.auth')->group(function () {
  * @private
  */
 Route::prefix('attachment')->middleware('api.static.auth')->middleware('api.user.auth')->group(function() {
-    Route::middleware('api.is.moder')->post('upload', [MediaController::class, 'upload'])->name('attachment.upload');
+    Route::post('upload', [MediaController::class, 'upload'])->name('attachment.upload');
 });
 
 /**

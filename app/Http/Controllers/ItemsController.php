@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Helpers\MainHelper;
+use App\Models\Category;
 use App\Models\City;
 use App\Models\Item;
 use App\Models\ItemType;
@@ -222,16 +223,6 @@ class ItemsController extends Controller
         $typeCode = (string) $request->input('type_code');
         $itemCode = (string) $request->input('code');
 
-        if( $request->input('short') !== true ) {
-            $itemsDB
-                ->with('categories')
-                ->with('tags')
-                ->with('properties')
-                ->with('promotions')
-                ->with('city')
-                ->with('type');
-        }
-
         if( $id >= 1 ) {
             $itemsDB->where('id', '=', $id);
         }
@@ -288,12 +279,92 @@ class ItemsController extends Controller
             }
         }
 
+        // Getting IDS for filters
+        $itemsDBClone = $itemsDB->clone();
+
+        if( $request->input('short') !== true ) {
+            $itemsDB
+                ->with('categories')
+                ->with('tags')
+                ->with('properties')
+                ->with('promotions')
+                ->with('city')
+                ->with('type');
+        }
+
+        // Getting filter data
+        $itemsID = $itemsDBClone->select(['id', 'city_id', 'type_id'])->get();
+
+        // Getting data with paginate object
         $items = $itemsDB->paginate();
+
+
 
         return response([
             'status' => true,
-            'items' => $items
+            'items' => $items,
+            'filter' => $this->prepareFilter($itemsID)
         ]);
+    }
+
+    /**
+     * Prepare IDs Array
+     *
+     * @param $items
+     * @return array
+     */
+    public function prepareFilter($items): array
+    {
+        $ids = [];
+        $cityIds = [];
+        $types = ItemType::all();
+
+        foreach ($items as $item) {
+            $ids[] = $item->id;
+            $cityIds[] = $item->city_id;
+        }
+
+        // Clear arrays from repeat and not normal indexes
+        $cityIds = array_values(array_unique($cityIds));
+        $cities = City::select(['id', 'name', 'code'])->whereIn('id', $cityIds)->get();
+
+        // TODO: Properties
+
+        $filter = [
+            'fields' => [
+                'title' => [
+                    'type' => 'input',
+                    'valueType' => 'string',
+                    'min' => 2,
+                    'max' => 255
+                ],
+                'description' => [
+                    'type' => 'textarea',
+                    'valueType' => 'string',
+                    'min' => 3,
+                    'max' => 255
+                ],
+                'cities' => [
+                    'type' => 'searchSelect',
+                    'valueType' => 'integer',
+                    'items' => $cities
+                ],
+                'types' => [
+                    'type' => 'searchSelect',
+                    'valueType' => 'integer',
+                    'items' => $types
+                ],
+                'properties' => [
+                    'type' => 'checkbox',
+                    'valueType' => 'any',
+                    'items' => []
+                ]
+            ]
+        ];
+
+//        $categories = Category::where([])
+
+        return $filter;
     }
 
     /**
