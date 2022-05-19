@@ -420,7 +420,7 @@ class ItemsController extends Controller
      */
     public function canceled(int $id): Response
     {
-        return $this->setStatus($id, 1);
+        return $this->setStatus($id, 3);
     }
 
     /**
