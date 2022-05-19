@@ -241,6 +241,8 @@ class ItemsController extends Controller
 
             if( $city?->id >= 1 ) {
                 $itemsDB->where('city_id', '=', $city->id);
+            } else {
+                $itemsDB->where('city_id', '=', 0);
             }
         }
 
