@@ -316,18 +316,22 @@ class BlogController extends Controller
      * @param int $id
      * @return Response
      */
-    public function single(int $id): Response
+    public function single(int|string $idOrCode): Response
     {
-        if( $id <= 0 ) {
+        if( $idOrCode <= 0 || (is_string($idOrCode) && mb_strlen($idOrCode) <= 0) ) {
             return response(MainHelper::getErrorResponse([
-                MainHelper::getErrorItem(404, 'ID is empty')
+                MainHelper::getErrorItem(404, 'ID or Code is empty')
             ]));
         }
 
-        $post = Post::find($id);
+        if( (int) $idOrCode >= 1 ) {
+            $post = Post::find((int) $idOrCode);
+        } else {
+            $post = Post::where('code', $idOrCode)->first();
+        }
 
-        $previousId = (int) Post::where('id', '<', $id)->max('id');
-        $nextId = (int) Post::where('id', '>', $id)->min('id');
+        $previousId = (int) Post::where('id', '<', $post?->id)->max('id');
+        $nextId = (int) Post::where('id', '>', $post?->id)->min('id');
 
         $prevPost = Post::find($previousId);
         $nextPost = Post::find($nextId);
