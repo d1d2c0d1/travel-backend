@@ -248,6 +248,9 @@ class MainHelper
      * @return bool
      */
     public static function isGuide(): bool {
+
+        $isGuide = self::getUserRole()?->is_guide;
+
         return self::getUserRole()?->is_guide || self::isAdminOrModer();
     }
 

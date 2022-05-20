@@ -42,14 +42,7 @@ class ItemsController extends Controller
 
         // Set status for user role or permission denied
         if( MainHelper::isAdminOrModer() ) {
-            $arFields['status'] = 1;
-        } elseif( MainHelper::isGuide() ) {
-            $arFields['status'] = 0;
-        } else {
-            return response([
-                'status' => false,
-                'error' => 'Permission denied'
-            ], 401);
+            $arFields['status'] = 2;
         }
 
         // Getting city from database

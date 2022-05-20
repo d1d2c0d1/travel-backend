@@ -61,12 +61,15 @@ Route::prefix('items')->middleware('api.static.auth')->group(function() {
         Route::get('favorites', [FavoritesController::class, 'index'])->name('items.favorites.list');
         Route::post('favorite/{id}', [FavoritesController::class, 'toggle'])->name('items.favorites.toggle');
 
+        Route::middleware('api.is.guide')->group(function () {
+            Route::post('', [ItemsController::class, 'create'])->name('items.create');
+        });
+
         /**
          * Items routes
          * @private (admin or moder)
          */
         Route::middleware('api.is.moder')->group(function () {
-            Route::post('', [ItemsController::class, 'create'])->name('items.create');
             Route::patch('accepted/{id}', [ItemsController::class, 'accepted'])->name('items.accepted');
             Route::patch('canceled/{id}', [ItemsController::class, 'canceled'])->name('items.canceled');
             Route::patch('{id}', [ItemsController::class, 'update'])->name('items.update');
