@@ -33,13 +33,19 @@ class ItemsController extends Controller
             'phone' => (string) $request->input('phone'),
             'address' => (string) $request->input('address'),
             'description' => (string) $request->input('description'),
+            'status' => 0
         ];
 
         if( $request->has('area_id') ) {
             $arFields['area_id'] = (int) $request->input('area_id');
         }
 
-        if( !MainHelper::isAdminOrModer() ) {
+        // Set status for user role or permission denied
+        if( MainHelper::isAdminOrModer() ) {
+            $arFields['status'] = 1;
+        } elseif( MainHelper::isGuide() ) {
+            $arFields['status'] = 0;
+        } else {
             return response([
                 'status' => false,
                 'error' => 'Permission denied'
