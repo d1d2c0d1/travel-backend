@@ -567,7 +567,7 @@ class ItemsController extends Controller
         if( $item->remarks !== $remarks ) {
 
             $item->remarks = $remarks;
-            $item->status = 3; // Set is not moderated status
+            $item->status = 1; // Set is not moderated status
 
             try {
                 $item->save();

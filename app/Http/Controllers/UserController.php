@@ -129,7 +129,7 @@ class UserController extends Controller
      */
     public function update(int $id, Request $request): Response
     {
-        if( !MainHelper::isAdminOrModer() ) {
+        if( !MainHelper::isAdminOrModer() && $id !== MainHelper::getUserId() ) {
             return response([
                 'status' => false,
                 'error' => 'Permission denied'
