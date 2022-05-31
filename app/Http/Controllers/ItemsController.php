@@ -222,6 +222,8 @@ class ItemsController extends Controller
 
         $itemsDB = Item::orderByDesc('created_at');
 
+        // TODO: Need to be refactoring to array
+        // Getting data for filter
         $typeId = (int) $request->input('type_id');
         $status = (int) $request->input('status');
         $id = (int) $request->input('id');
@@ -229,17 +231,32 @@ class ItemsController extends Controller
         $cityCode = (string) $request->input('city_code');
         $typeCode = (string) $request->input('type_code');
         $itemCode = (string) $request->input('code');
+        $name = (string) $request->input('name');
+        $authorID = (int) $request->input('author_id');
 
+        // Search by ID
         if( $id >= 1 ) {
             $itemsDB->where('id', '=', $id);
         }
 
+        // Search by card type
         if( $typeId >= 1 ) {
             $itemsDB->where('type_id', '=', $typeId);
         }
 
+        // Search by card status (1 of 3)
         if( $status >= 1 ) {
             $itemsDB->where('status', '=', $status);
+        }
+
+        // Search by item title
+        if( mb_strlen($name) >= 3 ) {
+            $itemsDB->where('name', 'like', "%{$name}%");
+        }
+
+        // Search by author
+        if( $authorID >= 1 ) {
+            $itemsDB->where('created_user_id', '=', $authorID);
         }
 
         // Find by City Code
@@ -249,10 +266,11 @@ class ItemsController extends Controller
             if( $city?->id >= 1 ) {
                 $itemsDB->where('city_id', '=', $city->id);
             } else {
-                $itemsDB->where('city_id', '=', 0);
+                $itemsDB->where('city_id', '=', 0); // For getting all cards
             }
         }
 
+        // Search by code
         if( mb_strlen($itemCode) >= 1 ) {
             $itemsDB->where('code', '=', $itemCode);
         }
@@ -266,6 +284,7 @@ class ItemsController extends Controller
             }
         }
 
+        // Search by city identify
         if( $cityId >= 1 ) {
             $itemsDB->where('city_id', '=', $cityId);
         }
@@ -291,6 +310,7 @@ class ItemsController extends Controller
         // Getting IDS for filters
         $itemsDBClone = $itemsDB->clone();
 
+        // Requesting data by relationships
         if( $request->input('short') !== true ) {
             $itemsDB
                 ->with('categories')
@@ -306,8 +326,6 @@ class ItemsController extends Controller
 
         // Getting data with paginate object
         $items = $itemsDB->paginate();
-
-
 
         return response([
             'status' => true,
