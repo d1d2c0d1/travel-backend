@@ -180,7 +180,7 @@ class ItemsController extends Controller
             ]);
         }
 
-        if( !MainHelper::isAdminOrModer() ) {
+        if( !MainHelper::isGuide() ) {
             return response([
                 'status' => false,
                 'error' => 'Permission denied'
@@ -194,6 +194,15 @@ class ItemsController extends Controller
                 'status' => false,
                 'error' => 'Row with id:' . $id . ' not found!'
             ]);
+        }
+
+        if( MainHelper::getUserRole()?->is_guide ) {
+            if( $item->created_user_id !== MainHelper::getUserId() ) {
+                return response([
+                    'status' => false,
+                    'error' => 'User can\'t remove that record. Only authors or moders can be that!'
+                ], 403);
+            }
         }
 
         try {
