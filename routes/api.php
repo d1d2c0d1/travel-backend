@@ -60,6 +60,7 @@ Route::prefix('items')->middleware('api.static.auth')->group(function() {
     Route::middleware('api.user.auth')->group(function() {
         Route::get('favorites', [FavoritesController::class, 'index'])->name('items.favorites.list');
         Route::post('favorite/{id}', [FavoritesController::class, 'toggle'])->name('items.favorites.toggle');
+        Route::patch('{id}', [ItemsController::class, 'update'])->name('items.update');
 
         Route::middleware('api.is.guide')->group(function () {
             Route::post('', [ItemsController::class, 'create'])->name('items.create');
@@ -72,7 +73,6 @@ Route::prefix('items')->middleware('api.static.auth')->group(function() {
         Route::middleware('api.is.moder')->group(function () {
             Route::patch('accepted/{id}', [ItemsController::class, 'accepted'])->name('items.accepted');
             Route::patch('canceled/{id}', [ItemsController::class, 'canceled'])->name('items.canceled');
-            Route::patch('{id}', [ItemsController::class, 'update'])->name('items.update');
             Route::post('categories', [ItemCategoryController::class, 'create'])->name('items.categories.create');
             Route::post('tags', [ItemTagController::class, 'create'])->name('items.tags.create');
             Route::post('properties', [PropertiesController::class, 'create'])->name('items.properties.create');

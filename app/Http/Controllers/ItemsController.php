@@ -479,7 +479,7 @@ class ItemsController extends Controller
         if( !MainHelper::isGuide() ) {
             return response([
                 'status' => false,
-                'error' => 'Permission denied'
+                'error' => 'Permission denied 123'
             ], 401);
         }
 
