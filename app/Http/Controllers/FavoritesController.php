@@ -102,8 +102,14 @@ class FavoritesController extends Controller
      *
      * @return Response
      */
-    public function index(): Response
+    public function index(Request $request): Response
     {
+
+        $typeCode = (string) $request->input('type_code');
+        $cityCode = (string) $request->input('city_code');
+
+
+
         $favorites = Favorite::where('user_id', MainHelper::getUserId())->with('item')->with('user')->paginate();
 
         return response([

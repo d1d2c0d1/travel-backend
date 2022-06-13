@@ -196,7 +196,7 @@ class ItemsController extends Controller
             ]);
         }
 
-        if( MainHelper::getUserRole()?->is_guide ) {
+        if( MainHelper::getUserRole()?->is_guide && !MainHelper::isAdminOrModer() ) {
             if( $item->created_user_id !== MainHelper::getUserId() ) {
                 return response([
                     'status' => false,
