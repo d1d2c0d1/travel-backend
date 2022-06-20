@@ -138,14 +138,25 @@ class OrderController extends Controller
             ], 404);
         }
 
-        if( $order->item->created_user_id !== MainHelper::getUserId() ) {
-            return response([
-                'status' => false,
-                'error' => 'Only item owner can change order status'
-            ], 403);
+        if( MainHelper::isGuide() && !MainHelper::isAdminOrModer() ) {
+            if ($order->item->created_user_id !== MainHelper::getUserId()) {
+                return response([
+                    'status' => false,
+                    'error' => 'Only item owner can change order status'
+                ], 403);
+            }
         }
 
-        $order->status = 1;
+        if( !MainHelper::isAdminOrModer() ) {
+            if( $order->user_id !== MainHelper::getUserId() ) {
+                return response([
+                    'status' => false,
+                    'error' => 'Only creator can canceled self order!'
+                ], 403);
+            }
+        }
+
+        $order->status = $status;
 
         try {
             $order->save();

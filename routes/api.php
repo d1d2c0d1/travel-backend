@@ -236,13 +236,13 @@ Route::prefix('orders')->middleware('api.static.auth')->group(function() {
      */
     Route::middleware('api.user.auth')->group(function() {
         Route::get('', [OrderController::class, 'index'])->name('order.list');
+        Route::patch('canceled/{id}', [OrderController::class, 'canceled'])->name('order.canceled');
 
         /**
          * @private (only for guide)
          */
         Route::middleware('api.is.guide')->group(function() {
             Route::patch('accepted/{id}', [OrderController::class, 'accepted'])->name('order.accepted');
-            Route::patch('canceled/{id}', [OrderController::class, 'canceled'])->name('order.canceled');
         });
     });
 });
