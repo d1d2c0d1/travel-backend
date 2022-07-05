@@ -113,6 +113,44 @@ class OrderController extends Controller
     }
 
     /**
+     * Getting orders by guide ID
+     *
+     * @param int $id
+     * @return Response
+     */
+    public function guides(int $id): Response
+    {
+
+        if( $id <= 0 ) {
+            return response([
+                'status' => false,
+                'error' => 'Empty user_id field'
+            ]);
+        }
+
+        if( !MainHelper::isAdminOrModer() && $id !== MainHelper::getUserId() ) {
+            return response([
+                'status' => false,
+                'error' => 'Permission denied! Only self ID can be explored!'
+            ]);
+        }
+
+        $items = Item::where('created_user_id', $id)->get();
+        $itemsIds = [];
+
+        foreach ($items as $item) {
+            $itemsIds[] = $item->id;
+        }
+
+        $orders = Order::whereIn('item_id', $itemsIds)->get();
+
+        return response([
+           'status' => true,
+           'orders' => $orders
+        ]);
+    }
+
+    /**
      * Set status to order
      *
      * @param int $id

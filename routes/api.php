@@ -88,10 +88,8 @@ Route::prefix('items')->middleware('api.static.auth')->group(function() {
  * @guide
  */
 Route::prefix('promotion')->middleware('api.static.auth')->middleware('api.user.auth')->middleware('api.is.guide')->group(function() {
-
     Route::post('', [PromotionsController::class, 'store'])->name('promotions.store');
     Route::get('{id}', [PromotionsController::class, 'single'])->name('promotions.single');
-
 });
 
 /**
@@ -236,6 +234,7 @@ Route::prefix('orders')->middleware('api.static.auth')->group(function() {
      */
     Route::middleware('api.user.auth')->group(function() {
         Route::get('', [OrderController::class, 'index'])->name('order.list');
+        Route::get('guide/{id}', [OrderController::class, 'guides'])->name('order.guides.list');
         Route::patch('canceled/{id}', [OrderController::class, 'canceled'])->name('order.canceled');
 
         /**

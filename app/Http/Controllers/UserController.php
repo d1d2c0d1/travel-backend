@@ -157,10 +157,11 @@ class UserController extends Controller
             $user->password = Hash::make($request->input('email'));
         }
 
+        // Change roles
         if( $request->has('role_id') && (int) $request->input('role_id') >= 1 ) {
 
             // Only admins can edit user role
-            if( !MainHelper::isAdmin() ) {
+            if( !MainHelper::isAdminOrModer() ) {
                 return response([
                     'status' => false,
                     'error' => 'Permission denied. Only administrators can update user role'

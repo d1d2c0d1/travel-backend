@@ -46,7 +46,7 @@ class ItemTagController extends Controller
             'user_id' => MainHelper::getUserId()
         ];
 
-        if( !MainHelper::isAdminOrModer() ) {
+        if( !MainHelper::isGuide() ) {
             return response([
                 'status' => false,
                 'error' => 'Permission denied'

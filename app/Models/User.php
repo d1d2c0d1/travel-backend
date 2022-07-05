@@ -93,6 +93,7 @@ class User extends Model
         'role_id',
         'name',
         'email',
+        'phone',
         'password',
         'remember_token',
         'country_id',
@@ -120,8 +121,10 @@ class User extends Model
 
         'id' => 'integer',
         'role_id' => 'integer',
+        'type_id' => 'integer',
         'name' => 'string',
         'email' => 'string',
+        'phone' => 'integer',
         'password' => 'string',
         'remember_token' => 'string',
         'country_id' => 'integer',
@@ -143,6 +146,16 @@ class User extends Model
     public function role(): HasOne
     {
         return $this->hasOne(Role::class, 'id', 'role_id');
+    }
+
+    /**
+     * Relationship for getting user type
+     *
+     * @return HasOne
+     **/
+    public function type(): HasOne
+    {
+        return $this->hasOne(UserType::class, 'id', 'type_id');
     }
 
     /**

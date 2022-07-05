@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\City;
 use App\Models\Item;
 use App\Models\ItemType;
+use App\Models\Property;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -364,7 +365,8 @@ class ItemsController extends Controller
         $cityIds = array_values(array_unique($cityIds));
         $cities = City::select(['id', 'name', 'code'])->whereIn('id', $cityIds)->get();
 
-        // TODO: Properties
+        $properties = Property::all();
+        $categories = Category::all();
 
         $filter = [
             'fields' => [
@@ -390,15 +392,24 @@ class ItemsController extends Controller
                     'valueType' => 'integer',
                     'items' => $types
                 ],
+                'categories' => [
+                    'type' => 'checkbox',
+                    'valueType' => 'any',
+                    'items' => $categories
+                ],
                 'properties' => [
                     'type' => 'checkbox',
                     'valueType' => 'any',
-                    'items' => []
+                    'items' => $properties
+                ],
+                'price' => [
+                    'type' => 'range',
+                    'valueType' => 'integer',
+                    'min' => 1,
+                    'max' => 100000
                 ]
             ]
         ];
-
-//        $categories = Category::where([])
 
         return $filter;
     }
@@ -537,7 +548,7 @@ class ItemsController extends Controller
             $item->description = $request->input('description');
         }
 
-        // Set description
+        // Set type_id
         if( $request->has('type_id') && ((int) $request->input('type_id') >= 1) ) {
             $item->type_id = (int) $request->input('type_id');
         }
