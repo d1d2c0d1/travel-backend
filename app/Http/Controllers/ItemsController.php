@@ -471,6 +471,17 @@ class ItemsController extends Controller
     }
 
     /**
+     * Set wait status for items
+     *
+     * @param int $id
+     * @return Response
+     */
+    public function waited(int $id): Response
+    {
+        return $this->setStatus($id);
+    }
+
+    /**
      * Item update
      *
      * @param int $id

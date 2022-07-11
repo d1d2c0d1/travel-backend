@@ -61,6 +61,7 @@ Route::prefix('items')->middleware('api.static.auth')->group(function() {
         Route::get('favorites', [FavoritesController::class, 'index'])->name('items.favorites.list');
         Route::post('favorite/{id}', [FavoritesController::class, 'toggle'])->name('items.favorites.toggle');
         Route::patch('{id}', [ItemsController::class, 'update'])->name('items.update');
+        Route::patch('waited/{id}', [ItemsController::class, 'waited'])->name('items.waited');
 
         Route::middleware('api.is.guide')->group(function () {
             Route::post('', [ItemsController::class, 'create'])->name('items.create');
