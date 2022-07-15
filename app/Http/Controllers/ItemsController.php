@@ -564,6 +564,11 @@ class ItemsController extends Controller
             $item->type_id = (int) $request->input('type_id');
         }
 
+        // Set type_id
+        if( $request->has('city_id') && ((int) $request->input('city_id') >= 1) ) {
+            $item->city_id = (int) $request->input('city_id');
+        }
+
         // Set images
         if( $request->has('images') ) {
             $item->images = (array) $request->input('images');
