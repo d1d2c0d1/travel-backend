@@ -515,7 +515,7 @@ class ItemsController extends Controller
         }
 
         // If guide send request
-        if( MainHelper::getUserRole()?->is_guide ) {
+        if( !MainHelper::isAdminOrModer() ) {
             if( $item->created_user_id !== MainHelper::getUserId() ) {
                 return response([
                     'status' => false,
