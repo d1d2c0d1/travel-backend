@@ -36,7 +36,7 @@ class OrderController extends Controller
                 'status' => false,
                 'error' => 'Validation error',
                 'error_messages' => $validator->errors()
-            ]);
+            ], 403);
         }
 
         $data = $validator->getData();
@@ -58,7 +58,7 @@ class OrderController extends Controller
                 'status' => false,
                 'error' => 'Error in database',
                 'database_error' => $e->getMessage()
-            ]);
+            ], 500);
         }
 
         return response([
