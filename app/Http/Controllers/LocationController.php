@@ -323,6 +323,7 @@ class LocationController extends Controller
         $city->description = $validator['description'];
         $city->image = $validator['image'];
         $city->faq = $validator['faq'];
+        $city->code = MainHelper::cyr2lat($validator['name']);
 
         try {
             $city->save();
