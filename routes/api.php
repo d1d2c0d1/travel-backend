@@ -4,6 +4,7 @@ use App\Http\Controllers\AdditionalController;
 use App\Http\Controllers\AuthorizationController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\FavoritesController;
+use App\Http\Controllers\GuideController;
 use App\Http\Controllers\ItemCategoryController;
 use App\Http\Controllers\ItemsController;
 use App\Http\Controllers\ItemTagController;
@@ -247,3 +248,22 @@ Route::prefix('orders')->middleware('api.static.auth')->group(function() {
     });
 });
 
+/**
+ * Guide routes
+ * @public
+ */
+Route::prefix('guides')->middleware('api.static.auth')->group(function() {
+
+    /**
+     * @private (only for authorized users)
+     */
+    Route::middleware('api.user.auth')->group(function() {
+        Route::get('orders', [GuideController::class, 'orders'])->name('guide.orders.list');
+        Route::post('orders', [GuideController::class, 'order'])->name('guide.orders.create');
+        Route::patch('order/accepted/{id}', [GuideController::class, 'accepted'])->name('guide.orders.accepted');
+        Route::patch('order/canceled/{id}', [GuideController::class, 'canceled'])->name('guide.orders.canceled');
+        Route::patch('order/waiting/{id}', [GuideController::class, 'waiting'])->name('guide.orders.waiting');
+        Route::patch('order/comment/{id}', [GuideController::class, 'changeComment'])->name('guide.orders.comment');
+    });
+
+});
