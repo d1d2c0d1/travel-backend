@@ -74,6 +74,36 @@ class GuideController extends Controller
 
         $ordersDB = GuideOrder::orderByDesc('created_at');
 
+        // Filtering by status
+        $status = (string) $request->input('status');
+        if( !empty($status) ) {
+            $ordersDB->where('status', (int) $status);
+        }
+
+        // Filtering by city_id
+        $cityId = (int) $request->input('city_id');
+        if( $cityId >= 1 ) {
+            $ordersDB->where('city_id', $cityId);
+        }
+
+        // Filtering by excursions text
+        $excursions = (string) $request->input('excursions');
+        if( !empty($excursions) ) {
+            $ordersDB->where('excursions', 'like', '%' . $excursions . '%');
+        }
+
+        // Filtering by about text
+        $about = (string) $request->input('about');
+        if( !empty($excursions) ) {
+            $ordersDB->where('about', 'like', '%' . $about . '%');
+        }
+
+        // Filtering by work_experience
+        $workExpirience = (string) $request->input('work_experience');
+        if( !empty($workExpirience) ) {
+            $ordersDB->where('work_experience', (int) $workExpirience);
+        }
+
         if (!MainHelper::isAdminOrModer()) {
             $ordersDB->where('created_user_id', MainHelper::getUserId());
         } else {
@@ -92,6 +122,14 @@ class GuideController extends Controller
 
         $ordersDB->with('createdUser')->with('acceptedUser')->with('editUser')->with('city');
         $orders = $ordersDB->paginate();
+
+        if( $orders->isEmpty() ) {
+            return response([
+                'status' => false,
+                'error' => 'Orders not found by filtering params',
+                'data' => $orders
+            ], 404);
+        }
 
         return response([
             'status' => true,
