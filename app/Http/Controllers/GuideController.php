@@ -81,6 +81,7 @@ class GuideController extends Controller
 
         }
 
+        $ordersDB->with('createdUser')->with('acceptedUser')->with('editUser')->with('city');
         $orders = $ordersDB->paginate();
 
         return response([

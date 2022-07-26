@@ -114,9 +114,19 @@ class GuideOrder extends Model
      *
      * @return HasOne
      */
+    public function editUser(): HasOne
+    {
+        return $this->hasOne(User::class, 'id', 'edit_user_id')->with('role');
+    }
+
+    /**
+     * Relationship for getting created user
+     *
+     * @return HasOne
+     */
     public function city(): HasOne
     {
-        return $this->hasOne(City::class, 'id', 'city_id')->with('role');
+        return $this->hasOne(City::class, 'id', 'city_id')->with('country')->with('region');
     }
 
 }
