@@ -36,6 +36,15 @@ class GuideController extends Controller
             'about' => (string)$request->input('about')
         ];
 
+        $orders = GuideOrder::where('created_user_id', MainHelper::getUserId())->get();
+
+        if( !$orders->isEmpty() ) {
+            return response([
+                'status' => false,
+                'error' => 'Duplicate order'
+            ], 403);
+        }
+
         $order = new GuideOrder($orderData);
 
         try {
