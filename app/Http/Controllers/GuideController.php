@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Helpers\MainHelper;
 use App\Models\GuideOrder;
+use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -147,9 +148,25 @@ class GuideController extends Controller
 
         // Set status to order
         $order->status = $status;
+        $order->accepted_user_id = MainHelper::getUserId();
+
+        /** @var User $user */
+        $user = $order->createdUser;
+
+        if( !$user || !$user?->id ) {
+            return response([
+                'status' => false,
+                'error' => 'Created user not found'
+            ], 403);
+        }
+
+        if( $status === 2 ) {
+            $user->role_id = 50; // Guide role - 50
+        }
 
         try {
             $order->save();
+            $user->save();
         } catch (Exception $e) {
             return response([
                 'status' => false,
