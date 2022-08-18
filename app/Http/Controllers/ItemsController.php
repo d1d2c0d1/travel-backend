@@ -359,7 +359,8 @@ class ItemsController extends Controller
             }
         }
 
-        $itemsDB->where('status', '=', 1);
+        // Getting only active items
+        $itemsDB->where('status', '=', 2);
 
         // Getting IDS for filters
         $itemsDBClone = $itemsDB->clone();
