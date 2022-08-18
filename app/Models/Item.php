@@ -310,6 +310,26 @@ class Item extends Model
     }
 
     /**
+     * Relationship for getting author of item
+     *
+     * @return HasOne
+     */
+    public function author(): HasOne
+    {
+        return $this->hasOne(User::class, 'id', 'created_user_id');
+    }
+
+    /**
+     * Relationship for getting accepted user
+     *
+     * @return HasOne
+     */
+    public function accepted(): HasOne
+    {
+        return $this->hasOne(User::class, 'id', 'accepted_user_id');
+    }
+
+    /**
      * Is favorite item or not for authorized user
      *
      * @return bool

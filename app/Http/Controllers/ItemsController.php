@@ -372,7 +372,9 @@ class ItemsController extends Controller
                 ->with('properties')
                 ->with('promotions')
                 ->with('city')
-                ->with('type');
+                ->with('type')
+                ->with('author')
+                ->with('accepted');
         }
 
         // Getting filter data
@@ -384,7 +386,7 @@ class ItemsController extends Controller
         $status = 200;
 
         // Set status Not Found
-        if( empty($items->data) ) {
+        if( $items->isEmpty() ) {
             $status = 404;
         }
 
