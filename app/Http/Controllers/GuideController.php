@@ -196,7 +196,6 @@ class GuideController extends Controller
 
         // Set status to order
         $order->status = $status;
-        $order->accepted_user_id = MainHelper::getUserId();
 
         /** @var User $user */
         $user = $order->createdUser;
@@ -208,8 +207,15 @@ class GuideController extends Controller
             ], 403);
         }
 
+        // If user stay on guide role
         if( $status === 2 ) {
             $user->role_id = 50; // Guide role - 50
+            $order->accepted_user_id = MainHelper::getUserId();
+        }
+
+        if( $status === 2 ) {
+            $user->role_id = 50; // Guide role - 50
+            $order->accepted_user_id = MainHelper::getUserId();
         }
 
         try {
