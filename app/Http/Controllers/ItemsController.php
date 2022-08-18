@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Helpers\MainHelper;
+use App\Models\CardCategory;
 use App\Models\Category;
 use App\Models\City;
 use App\Models\Item;
@@ -420,7 +421,7 @@ class ItemsController extends Controller
         $cities = City::select(['id', 'name', 'code'])->whereIn('id', $cityIds)->get();
 
         $properties = Property::all();
-        $categories = Category::all();
+        $categories = CardCategory::all();
 
         $filter = [
             'fields' => [
