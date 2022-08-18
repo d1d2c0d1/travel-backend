@@ -317,6 +317,36 @@ class ItemsController extends Controller
             }
         }
 
+        // Filtering by categories
+        if( $request->has('categories') ) {
+            $categories = (array) $request->input('categories');
+
+            if( !empty($categories) ) {
+                $itemsDB->whereHas('categories', function ($query) use ($categories) {
+                    $query->where(function($query) use ($categories) {
+                        foreach ($categories as $categoryId) {
+                            $query->orWhere('category_id', $categoryId);
+                        }
+                    });
+                });
+            }
+        }
+
+        // Filtering by tags
+        if( $request->has('tags') ) {
+            $tags = (array) $request->input('tags');
+
+            if( !empty($tags) ) {
+                $itemsDB->whereHas('tags', function ($query) use ($tags) {
+                    $query->where(function($query) use ($tags) {
+                        foreach ($tags as $tagId) {
+                            $query->orWhere('tag_id', $tagId);
+                        }
+                    });
+                });
+            }
+        }
+
         // Getting IDS for filters
         $itemsDBClone = $itemsDB->clone();
 
@@ -337,11 +367,13 @@ class ItemsController extends Controller
         // Getting data with paginate object
         $items = $itemsDB->paginate();
 
+        $status = 200;
+
         return response([
             'status' => true,
             'items' => $items,
             'filter' => $this->prepareFilter($itemsID)
-        ]);
+        ], $status);
     }
 
     /**
