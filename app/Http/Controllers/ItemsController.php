@@ -243,6 +243,8 @@ class ItemsController extends Controller
         $itemCode = (string) $request->input('code');
         $name = (string) $request->input('name');
         $authorID = (int) $request->input('author_id');
+        $acceptedID = (int) $request->input('accepted_user_id');
+        $editedID = (int) $request->input('edit_user_id');
 
         // Search by ID
         if( $id >= 1 ) {
@@ -267,6 +269,16 @@ class ItemsController extends Controller
         // Search by author
         if( $authorID >= 1 ) {
             $itemsDB->where('created_user_id', '=', $authorID);
+        }
+
+        // Search by accepted user
+        if( $acceptedID >= 1 ) {
+            $itemsDB->where('accepted_user_id', '=', $acceptedID);
+        }
+
+        // Search by edited user
+        if( $editedID >= 1 ) {
+            $itemsDB->where('edit_user_id', '=', $editedID);
         }
 
         // Find by City Code
@@ -347,6 +359,8 @@ class ItemsController extends Controller
             }
         }
 
+        $itemsDB->where('status', '=', 1);
+
         // Getting IDS for filters
         $itemsDBClone = $itemsDB->clone();
 
@@ -368,6 +382,11 @@ class ItemsController extends Controller
         $items = $itemsDB->paginate();
 
         $status = 200;
+
+        // Set status Not Found
+        if( empty($items->data) ) {
+            $status = 404;
+        }
 
         return response([
             'status' => true,
