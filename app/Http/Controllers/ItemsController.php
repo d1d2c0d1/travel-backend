@@ -258,8 +258,12 @@ class ItemsController extends Controller
         }
 
         // Search by card status (1 of 3)
-        if( $status >= 1 ) {
-            $itemsDB->where('status', '=', $status);
+        if( MainHelper::isAdminOrModer() ) {
+            if( $status >= 1 ) {
+                $itemsDB->where('status', '=', $status);
+            }
+        } else {
+            $itemsDB->where('status', '=', 2);
         }
 
         // Search by item title
@@ -359,9 +363,6 @@ class ItemsController extends Controller
                 });
             }
         }
-
-        // Getting only active items
-        $itemsDB->where('status', '=', 2);
 
         // Getting IDS for filters
         $itemsDBClone = $itemsDB->clone();
