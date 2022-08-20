@@ -146,11 +146,15 @@ class UserController extends Controller
         }
 
         if( $request->has('name') && !empty($request->input('name')) ) {
-            $user->name = $request->input('name');
+            $user->name = (string) $request->input('name');
+        }
+
+        if( $request->has('photo') && !empty($request->input('photo')) ) {
+            $user->photo = (string) $request->input('photo');
         }
 
         if( $request->has('email') && !empty($request->input('email')) ) {
-            $user->email = $request->input('email');
+            $user->email = (string) $request->input('email');
         }
 
         if( $request->has('password') && !empty($request->input('password')) ) {
@@ -168,7 +172,7 @@ class UserController extends Controller
                 ], 401);
             }
 
-            $user->role_id = $request->input('role_id');
+            $user->role_id = (int) $request->input('role_id');
         }
 
         try {
