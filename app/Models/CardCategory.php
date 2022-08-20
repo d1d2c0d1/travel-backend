@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Http\Helpers\MainHelper;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  * App\Models\ItemCategory
@@ -76,7 +77,8 @@ class CardCategory extends Model
         'type_id',
         'name',
         'code',
-        'description'
+        'description',
+        'author_id'
     ];
 
     /**
@@ -100,7 +102,8 @@ class CardCategory extends Model
         'code' => 'string',
         'description' => 'string',
         'created_at' => 'datetime:Y-m-d H:i:s',
-        'updated_at' => 'datetime:Y-m-d H:i:s'
+        'updated_at' => 'datetime:Y-m-d H:i:s',
+        'author_id' => 'integer',
     ];
 
     /**
@@ -119,6 +122,15 @@ class CardCategory extends Model
         }
 
         $errors = [];
+
+        // AUTHOR ID
+        if( !isset($arFields['author_id']) ) {
+            $errors[] = MainHelper::getErrorItem(412, 'author_id not found in field list');
+        } else {
+            if( $arFields['author_id'] <= 0 ) {
+                $errors[] = MainHelper::getErrorItem(412, 'author_id cant be empty or equal zero');
+            }
+        }
 
         // TYPE ID
         if( !isset($arFields['type_id']) ) {
@@ -155,4 +167,14 @@ class CardCategory extends Model
     }
 
     const RuleList = [];
+
+    /**
+     * Relationship for getting author (user row)
+     *
+     * @return HasOne
+     */
+    public function author(): HasOne
+    {
+        return $this->hasOne(User::class, 'id', 'author_id')->with('role');
+    }
 }

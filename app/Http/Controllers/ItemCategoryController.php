@@ -30,6 +30,8 @@ class ItemCategoryController extends Controller
             $res->where('type_id', $typeId);
         }
 
+        $res->with('author');
+
         $categories = $res->get();
 
         return response([
@@ -47,6 +49,7 @@ class ItemCategoryController extends Controller
     public function create(Request $request): Response
     {
         $arFields = [
+            'author_id' => MainHelper::getUserId(),
             'type_id' => (int) $request->input('type_id'),
             'name' => (string) $request->input('name'),
             'code' => '',

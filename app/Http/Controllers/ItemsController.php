@@ -42,7 +42,7 @@ class ItemsController extends Controller
             $arFields['area_id'] = (int) $request->input('area_id');
         }
 
-        // Set status for user role or permission denied
+        // Set status accepted
         if( MainHelper::isAdminOrModer() ) {
             $arFields['status'] = 2;
         }
