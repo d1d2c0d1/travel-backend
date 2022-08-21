@@ -213,9 +213,8 @@ class GuideController extends Controller
             $order->accepted_user_id = MainHelper::getUserId();
         }
 
-        if( $status === 2 ) {
-            $user->role_id = 50; // Guide role - 50
-            $order->accepted_user_id = MainHelper::getUserId();
+        if( $status === 1 ) {
+            $user->role_id = 20; // User role - 20
         }
 
         try {
