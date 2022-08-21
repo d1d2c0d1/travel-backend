@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Helpers\MainHelper;
+use App\Models\Role;
 use App\Models\User;
 use Cache;
 use Exception;
@@ -190,6 +191,53 @@ class UserController extends Controller
         return response([
             'status' => true,
             'user' => $user
+        ]);
+    }
+
+    /**
+     * Getting guides
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function guides(Request $request): Response
+    {
+        // Getting from request count rows per page
+        $perPage = (int) $request->input('per_page');
+
+        // Set default value for count rows of per page
+        if( $perPage <= 0 ) {
+            $perPage = 15;
+        }
+
+        // Find guide role
+        $guideRole = Role::where([
+            ['is_guide', '=', 1],
+            ['is_admin', '=', 0],
+            ['is_moder', '=', 0]
+        ])->first();
+
+        if( !$guideRole || !$guideRole?->id ) {
+            return response([
+                'status' => false,
+                'error' => 'Guides role not found'
+            ], 405);
+        }
+
+        // Getting guides from users table
+        $guides = User::where('role_id', $guideRole->id)->with('role')->with('type')->paginate($perPage);
+
+        // Sending 404 error if hasn't defined rows with guides role
+        if( !$guides || !$guides->isEmpty() ) {
+            return response([
+                'status' => false,
+                'error' => "Users with role \"$guideRole->name ($guideRole->id)\" is not defined"
+            ], 404);
+        }
+
+        return response([
+            'status' => true,
+            'data' => $guides
         ]);
     }
 
