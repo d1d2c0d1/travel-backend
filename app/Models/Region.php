@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
@@ -113,9 +114,20 @@ class Region extends Model
      *
      * @return HasOne
      */
-    public function country():HasOne
+    public function country(): HasOne
     {
-        return $this->hasOne(Country::class);
+        return $this->hasOne(Country::class, 'id', 'country_id');
     }
+
+    /**
+     * Relationship for getting cities
+     *
+     * @return HasMany
+     */
+    public function cities(): HasMany
+    {
+        return $this->hasMany(City::class, 'region_id', 'id')->with('areas');
+    }
+
 
 }

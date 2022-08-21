@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Observers\CityObserver;
 use App\Observers\CommentObserver;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
 
@@ -153,6 +154,16 @@ class City extends Model
     public function region():HasOne
     {
         return $this->hasOne(Region::class, 'id', 'region_id');
+    }
+
+    /**
+     * Relationship for getting areas
+     *
+     * @return HasMany
+     */
+    public function areas(): HasMany
+    {
+        return $this->hasMany(Area::class, 'city_id', 'id');
     }
 
 }

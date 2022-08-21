@@ -50,11 +50,12 @@ class LocationController extends Controller
      */
     public function regions(int $countryId = 0): array
     {
+        $regionDB = Region::with('cities')->with('country');
 
         if ($countryId <= 0) {
-            $regions = Region::all();
+            $regions = $regionDB->get();
         } else {
-            $regions = Region::where('country_id', $countryId)->get();
+            $regions = $regionDB->where('country_id', $countryId)->get();
         }
 
         return [
