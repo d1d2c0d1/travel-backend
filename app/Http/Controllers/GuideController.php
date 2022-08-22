@@ -209,8 +209,21 @@ class GuideController extends Controller
 
         // If user stay on guide role
         if( $status === 2 ) {
+            $city = $order->city;
+
             $user->role_id = 50; // Guide role - 50
+            $user->language_id = $city->country->language_id;
+            $user->country_id = $city->country_id;
+            $user->region_id = $city->region_id;
+            $user->city_id = $city->id;
             $order->accepted_user_id = MainHelper::getUserId();
+
+            $user->additional_properties = json_encode([
+                'work_experience' => $order->work_experience,
+                'excursions' => $order->excursions,
+                'about' => $order->about
+            ]);
+
         }
 
         if( $status === 1 ) {
@@ -227,7 +240,6 @@ class GuideController extends Controller
                 'dbError' => MainHelper::isAdminOrModer() ? $e->getMessage() : 'You are not admin for view detailed info!'
             ], 500);
         }
-
 
         return response([
             'status' => true,

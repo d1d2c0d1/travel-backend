@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\User\AdditionalProperties;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
@@ -25,6 +26,7 @@ use Illuminate\Support\Facades\Hash;
  * @property string $photo
  * @property Carbon $created_at
  * @property Carbon $updated_at
+ * @property string $additional_properties
  * @property-read \App\Models\Role|null $role
  * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()
@@ -102,6 +104,7 @@ class User extends Model
         'area_id',
         'language_id',
         'photo',
+        'additional_properties'
 
     ];
 
@@ -135,6 +138,7 @@ class User extends Model
         'photo' => 'string',
         'created_at' => 'datetime:Y-m-d H:i:s',
         'updated_at' => 'datetime:Y-m-d H:i:s',
+        'additional_properties' => AdditionalProperties::class
 
     ];
 

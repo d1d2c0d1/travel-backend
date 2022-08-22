@@ -143,7 +143,7 @@ class City extends Model
      */
     public function country():HasOne
     {
-        return $this->hasOne(Country::class, 'id', 'region_id');
+        return $this->hasOne(Country::class, 'id', 'country_id');
     }
 
     /**
