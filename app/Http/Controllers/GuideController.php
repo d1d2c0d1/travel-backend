@@ -228,6 +228,7 @@ class GuideController extends Controller
             ], 500);
         }
 
+
         return response([
             'status' => true,
             'data' => $order
