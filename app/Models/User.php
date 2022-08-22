@@ -163,6 +163,18 @@ class User extends Model
     }
 
     /**
+     * Generate Array from object
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        $data = parent::toArray();
+        $data['additional_properties'] = json_encode($data['additional_properties']);
+        return $data;
+    }
+
+    /**
      * Generate tokens for users
      *
      * @return string
