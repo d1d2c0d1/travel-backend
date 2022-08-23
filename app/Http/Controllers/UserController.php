@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Helpers\MainHelper;
+use App\Models\Company;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\UserType;
@@ -147,6 +148,10 @@ class UserController extends Controller
             ], 404);
         }
 
+        /**
+         * Editing data
+         */
+
         if( $request->has('name') && !empty($request->input('name')) ) {
             $user->name = (string) $request->input('name');
         }
@@ -196,10 +201,23 @@ class UserController extends Controller
             }
         }
 
+        // Set user company
+        if( $request->has('company_id') ) {
+            $companyId = (int) $request->input('company_id');
+
+            if( $companyId >= 1 ) {
+                $company = Company::find($companyId);
+
+                // if find User Type
+                if( $company && $company?->id === $companyId ) {
+                    $user->company_id = $company->id;
+                }
+            }
+        }
+
+        // Try to save it
         try {
-
             $user->save();
-
         } catch (Exception $e) {
             return response([
                 'status' => false,

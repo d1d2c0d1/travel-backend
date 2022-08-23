@@ -24,6 +24,7 @@ use Illuminate\Support\Facades\Hash;
  * @property integer $city_id
  * @property integer $area_id
  * @property integer $language_id
+ * @property integer $company_id
  * @property string $photo
  * @property integer $type_id
  * @property Carbon $created_at
@@ -105,6 +106,7 @@ class User extends Model
         'city_id',
         'area_id',
         'language_id',
+        'company_id',
         'photo',
         'additional_properties'
 
@@ -137,6 +139,7 @@ class User extends Model
         'city_id' => 'integer',
         'area_id' => 'integer',
         'language_id' => 'integer',
+        'company_id' => 'integer',
         'photo' => 'string',
         'created_at' => 'datetime:Y-m-d H:i:s',
         'updated_at' => 'datetime:Y-m-d H:i:s',
@@ -162,6 +165,16 @@ class User extends Model
     public function type(): HasOne
     {
         return $this->hasOne(UserType::class, 'id', 'type_id');
+    }
+
+    /**
+     * Relationship for getting user company
+     *
+     * @return HasOne
+     **/
+    public function company(): HasOne
+    {
+        return $this->hasOne(Company::class, 'id', 'company_id');
     }
 
     /**

@@ -62,7 +62,6 @@ use Illuminate\Support\Carbon;
 class Company extends Model
 {
 
-
     /**
      * The table associated with the model.
      *
