@@ -85,7 +85,7 @@ class UserController extends Controller
 
         // TODO: Filter users
 
-        $users = $usersDB->paginate();
+        $users = $usersDB->with('company')->with('type')->paginate();
 
         return response([
             'status' => true,
@@ -108,7 +108,7 @@ class UserController extends Controller
             ], 401);
         }
 
-        $user = User::find($id);
+        $user = User::where(['id', '=', $id])->with('company')->with('type')->first();
 
         if( !$user ) {
             return response([
@@ -263,10 +263,10 @@ class UserController extends Controller
         }
 
         // Getting guides from users table
-        $guides = User::where('role_id', $guideRole->id)->with('role')->with('type')->paginate($perPage);
+        $guides = User::where('role_id', $guideRole->id)->with('company')->with('role')->with('type')->paginate($perPage);
 
         // Sending 404 error if hasn't defined rows with guides role
-        if( !$guides || !$guides->isEmpty() ) {
+        if( !$guides || $guides->isEmpty() ) {
             return response([
                 'status' => false,
                 'error' => "Users with role \"$guideRole->name ($guideRole->id)\" is not defined"
