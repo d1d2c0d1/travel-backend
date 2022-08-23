@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Helpers\MainHelper;
 use App\Models\Role;
 use App\Models\User;
+use App\Models\UserType;
 use Cache;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
@@ -158,6 +159,11 @@ class UserController extends Controller
             $user->email = (string) $request->input('email');
         }
 
+        $phone = (string) $request->input('phone');
+        if( mb_strlen($phone) >= 2 ) {
+            $user->phone = (int) preg_replace( '/\D/', '', $phone);
+        }
+
         if( $request->has('password') && !empty($request->input('password')) ) {
             $user->password = Hash::make($request->input('email'));
         }
@@ -174,6 +180,20 @@ class UserController extends Controller
             }
 
             $user->role_id = (int) $request->input('role_id');
+        }
+
+        // Set user type
+        if( $request->has('type_id') ) {
+            $typeId = (int) $request->input('type_id');
+
+            if( $typeId >= 1 ) {
+                $type = UserType::find($typeId);
+
+                // if find User Type
+                if( $type && $type?->id === $typeId ) {
+                    $user->type_id = $type->id;
+                }
+            }
         }
 
         try {

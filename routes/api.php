@@ -144,17 +144,17 @@ Route::prefix('user')->middleware('api.static.auth')->group(function() {
     Route::post('auth', [AuthorizationController::class, 'auth']);
     Route::post('registration', [AuthorizationController::class, 'registration']);
     Route::get('guides', [UserController::class, 'guides'])->name('user.guides');
-});
 
-/**
- * User routes
- * @private
- */
-Route::prefix('user')->middleware('api.static.auth')->middleware('api.user.auth')->group(function () {
-    Route::get('data', [UserController::class, 'index']);
-    Route::post('filter', [UserController::class, 'filter']);
-    Route::post('update/{id}', [UserController::class, 'update']);
-    Route::get('{id}', [UserController::class, 'single']);
+    /**
+     * @private
+     */
+    Route::middleware('api.user.auth')->group(function () {
+        Route::get('data', [UserController::class, 'index']);
+        Route::post('filter', [UserController::class, 'filter']);
+        Route::post('update/{id}', [UserController::class, 'update']);
+        Route::get('{id}', [UserController::class, 'single']);
+    });
+
 });
 
 /**
@@ -168,15 +168,15 @@ Route::prefix('location')->middleware('api.static.auth')->group(function() {
     Route::get('cities', [LocationController::class, 'cities'])->name('location.cities');
     Route::get('cities/search', [LocationController::class, 'searchCity'])->name('location.search.cities');
     Route::get('areas', [LocationController::class, 'areas'])->name('location.areas');
-});
 
-/**
- * Location private routes
- * @private
- */
-Route::prefix('location')->middleware('api.static.auth')->middleware('api.user.auth')->middleware('api.is.moder')->group(function() {
-    Route::put('city/{id}', [LocationController::class, 'updateCity'])->name('location.city.update');
-    Route::post('city', [LocationController::class, 'createCity'])->name('location.city.create');
+    /**
+     * Location private routes
+     * @private
+     */
+    Route::middleware('api.user.auth')->middleware('api.is.moder')->group(function() {
+        Route::put('city/{id}', [LocationController::class, 'updateCity'])->name('location.city.update');
+        Route::post('city', [LocationController::class, 'createCity'])->name('location.city.create');
+    });
 });
 
 /**

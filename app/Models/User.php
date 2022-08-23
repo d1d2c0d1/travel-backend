@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Hash;
  * @property integer $role_id
  * @property string $name
  * @property string $email
+ * @property integer $phone
  * @property string $password
  * @property string $remember_token
  * @property integer $country_id
@@ -24,6 +25,7 @@ use Illuminate\Support\Facades\Hash;
  * @property integer $area_id
  * @property integer $language_id
  * @property string $photo
+ * @property integer $type_id
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * @property string $additional_properties

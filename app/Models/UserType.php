@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class UserType extends Model
 {
@@ -50,6 +51,7 @@ class UserType extends Model
     protected $fillable = [
         'name',
         'description',
+        'is_company'
     ];
 
     /**
@@ -70,9 +72,20 @@ class UserType extends Model
         'id' => 'integer',
         'name' => 'string',
         'description' => 'string',
+        'is_company' => 'boolean',
         'created_at' => 'datetime:Y-m-d H:i:s',
         'updated_at' => 'datetime:Y-m-d H:i:s',
     ];
+
+    /**
+     * Relationship for getting areas
+     *
+     * @return HasMany
+     */
+    public function users(): HasMany
+    {
+        return $this->hasMany(User::class, 'type_id', 'id');
+    }
 
 }
 
