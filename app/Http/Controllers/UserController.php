@@ -242,6 +242,7 @@ class UserController extends Controller
     {
         // Getting from request count rows per page
         $perPage = (int) $request->input('per_page');
+        $cityId = (int) $request->input('city_id');
 
         // Set default value for count rows of per page
         if( $perPage <= 0 ) {
@@ -263,7 +264,13 @@ class UserController extends Controller
         }
 
         // Getting guides from users table
-        $guides = User::where('role_id', $guideRole->id)->with('company')->with('role')->with('type')->paginate($perPage);
+        $guidesDB = User::where('role_id', $guideRole->id);
+
+        if( $cityId >= 1 ) {
+            $guidesDB->where('city_id', '=', $cityId);
+        }
+
+        $guides = $guidesDB->with('company')->with('role')->with('type')->paginate($perPage);
 
         // Sending 404 error if hasn't defined rows with guides role
         if( !$guides || $guides->isEmpty() ) {
