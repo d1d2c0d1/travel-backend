@@ -144,6 +144,7 @@ Route::prefix('user')->middleware('api.static.auth')->group(function() {
     Route::post('auth', [AuthorizationController::class, 'auth']);
     Route::post('registration', [AuthorizationController::class, 'registration']);
     Route::get('guides', [UserController::class, 'guides'])->name('user.guides');
+    Route::get('{id}', [UserController::class, 'single']);
 
     /**
      * @private
@@ -152,7 +153,6 @@ Route::prefix('user')->middleware('api.static.auth')->group(function() {
         Route::get('data', [UserController::class, 'index']);
         Route::post('filter', [UserController::class, 'filter']);
         Route::post('update/{id}', [UserController::class, 'update']);
-        Route::get('{id}', [UserController::class, 'single']);
     });
 
 });
