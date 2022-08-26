@@ -215,6 +215,11 @@ class UserController extends Controller
             }
         }
 
+        if( $request->has('additional_properties') ) {
+            $properties = (array) $request->input('additional_properties');
+            $user->additional_properties = json_encode($properties);
+        }
+
         // Try to save it
         try {
             $user->save();
