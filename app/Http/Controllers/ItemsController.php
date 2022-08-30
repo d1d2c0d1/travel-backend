@@ -397,7 +397,7 @@ class ItemsController extends Controller
         return response([
             'status' => true,
             'items' => $items,
-            'filter' => $this->prepareFilter($itemsID)
+            'filter' => $this->prepareFilter($itemsID, $typeId)
         ], $status);
     }
 
@@ -407,7 +407,7 @@ class ItemsController extends Controller
      * @param $items
      * @return array
      */
-    public function prepareFilter($items): array
+    public function prepareFilter($items, int $typeId): array
     {
         $ids = [];
         $cityIds = [];
@@ -422,8 +422,18 @@ class ItemsController extends Controller
         $cityIds = array_values(array_unique($cityIds));
         $cities = City::select(['id', 'name', 'code'])->whereIn('id', $cityIds)->get();
 
-        $properties = Property::all();
-        $categories = CardCategory::all();
+        if( $typeId >= 1 ) {
+
+            // If selected cards type
+            $properties = Property::where('type_id', '=', $typeId);
+            $categories = CardCategory::where('type_id', '=', $typeId);
+        } else {
+
+            // If not selected type
+            $properties = Property::all();
+            $categories = CardCategory::all();
+        }
+
         $tags = CardTag::all();
 
         $filter = [
@@ -461,7 +471,7 @@ class ItemsController extends Controller
                     'items' => $tags
                 ],
                 'properties' => [
-                    'type' => 'checkbox',
+                    'type' => 'properties',
                     'valueType' => 'any',
                     'items' => $properties
                 ],
