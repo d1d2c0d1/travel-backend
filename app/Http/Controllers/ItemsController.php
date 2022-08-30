@@ -425,13 +425,15 @@ class ItemsController extends Controller
         if( $typeId >= 1 ) {
 
             // If selected cards type
-            $properties = Property::where('type_id', '=', $typeId);
-            $categories = CardCategory::where('type_id', '=', $typeId);
+            $properties = Property::where('type_id', $typeId)->get();
+            $categories = CardCategory::where('type_id', $typeId)->get();
+
         } else {
 
             // If not selected type
             $properties = Property::all();
             $categories = CardCategory::all();
+
         }
 
         $tags = CardTag::all();
