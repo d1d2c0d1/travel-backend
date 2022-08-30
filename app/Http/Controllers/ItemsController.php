@@ -390,9 +390,9 @@ class ItemsController extends Controller
         $status = 200;
 
         // Set status Not Found
-        if( $items->isEmpty() ) {
-            $status = 404;
-        }
+//        if( $items->isEmpty() ) {
+//            $status = 404;
+//        }
 
         return response([
             'status' => true,
