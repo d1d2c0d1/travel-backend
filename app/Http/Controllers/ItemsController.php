@@ -268,7 +268,7 @@ class ItemsController extends Controller
         }
 
         // Search by item title
-        if( mb_strlen($name) >= 3 ) {
+        if( mb_strlen($name) >= 2 ) {
             $itemsDB->where('name', 'like', "%{$name}%");
         }
 

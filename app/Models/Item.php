@@ -218,7 +218,7 @@ class Item extends Model
         }
 
         // NAME
-        if( mb_strlen($this->name) <= 8 ) {
+        if( mb_strlen($this->name) <= 2 ) {
             $errors[] = MainHelper::getErrorItem(412, 'Field name is empty or too short. Min: 8 symbols');
         }
 
