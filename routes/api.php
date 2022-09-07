@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\ServerCreated;
 use App\Http\Controllers\AdditionalController;
 use App\Http\Controllers\AuthorizationController;
 use App\Http\Controllers\BlogController;
@@ -19,6 +20,7 @@ use App\Http\Controllers\ReviewsController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\SubscribeController;
 use App\Http\Controllers\UserController;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -40,6 +42,17 @@ Route::get('/test', function(Request $request) {
     return response([
         'status' => true,
         'message' => 'API is successfull working'
+    ]);
+});
+
+/**
+ * Testing socket route
+ */
+Route::get('/socket/test', function(Request $request) {
+    return response([
+        'status' => true,
+        'message' => 'API is successfull working',
+        'event' => broadcast(new ServerCreated(User::find(2)))
     ]);
 });
 
@@ -156,6 +169,8 @@ Route::prefix('user')->middleware('api.static.auth')->group(function() {
 
     Route::get('{id}', [UserController::class, 'single']);
 });
+
+Route::post('broadcasting/auth', [AuthorizationController::class, 'broadcastingAuthorize'])->name('broadcasting.authorization');
 
 /**
  * Location routes

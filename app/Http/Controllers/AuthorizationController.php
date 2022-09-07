@@ -72,6 +72,39 @@ class AuthorizationController extends Controller
     }
 
     /**
+     * Route for Authorize users in WebSockets
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function broadcastingAuthorize(Request $request): Response
+    {
+
+        $token = (string) $request->input('token');
+        $socketId = $request->input('socket_id');
+        $channelName = $request->input('channel_name');
+
+        try {
+            $data = json_decode(Redis::get("user:auth:{$token}"));
+        } catch (Exception $e) {
+            return response([
+                'status' => false,
+                'error' => 'User token not found!',
+                'exception' => [
+                    'error' => $e->getMessage()
+                ]
+            ], 403);
+        }
+
+        $user = User::find($data?->id);
+
+        return response([
+            'status' => true,
+            'user' => $user
+        ]);
+    }
+
+    /**
      * Registration account
      *
      * @param Request $request
