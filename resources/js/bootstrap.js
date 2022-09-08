@@ -16,34 +16,30 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
  * allows your team to easily build robust real-time web applications.
  */
 
-import Echo from 'laravel-echo';
-import Pusher from "pusher-js";
+window.createClient = (url) => {
 
-window.Pusher = Pusher;
+    if( !url || !url.length || (url.length && url.length <= 0) ) {
+        url = 'ws://ws.u-gid.com:9001';
+    }
 
-window.Echo = new Echo({
-    broadcaster: 'pusher',
-    key: process.env.MIX_PUSHER_APP_KEY,
-    cluster: process.env.MIX_PUSHER_APP_CLUSTER,
-    forceTLS: true,
-    authorizer: (channel, options) => {
-        return {
-            authorize: (socketId, callback) => {
+    let client = {};
+    client.ws = new WebSocket(url);
 
-                const userToken = window.localStorage.getItem('user-token');
+    client.ws.onopen = function () {
+        console.log('подключился');
+    }
 
-                axios.post('/api/broadcasting/auth', {
-                    socket_id: socketId,
-                    channel_name: channel.name,
-                    token: userToken
-                })
-                .then(response => {
-                    callback(false, response.data);
-                })
-                .catch(error => {
-                    callback(true, error);
-                });
-            }
-        };
-    },
-});
+    client.ws.onmessage = function (message) {
+        console.log('Message: %s', message.data);
+    }
+
+    client.echo = (value) => {
+        client.ws.send(JSON.stringify({action: 'echo', data: value.toString()}));
+    }
+
+    client.ping = () => {
+        client.ws.send(JSON.stringify({action: 'ping'}));
+    }
+
+    return client;
+}

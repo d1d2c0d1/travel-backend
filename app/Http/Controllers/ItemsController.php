@@ -365,6 +365,22 @@ class ItemsController extends Controller
             }
         }
 
+        // Filtering by price
+        if( $request->has('price') ) {
+            $price = $request->input('price');
+
+            if( isset($price['from']) && $price['from'] >= 10 && isset($price['to']) && $price['to'] >= 10 && $price['from'] < $price['to']) {
+                $itemsDB->where([
+                    ['price', '>=', $price['from']],
+                    ['price', '<=', $price['to']]
+                ]);
+            }
+
+            if( (int) $price >= 10 ) {
+                $itemsDB->where('price', '=', (int) $price);
+            }
+        }
+
         // Getting IDS for filters
         $itemsDBClone = $itemsDB->clone();
 
@@ -419,8 +435,7 @@ class ItemsController extends Controller
         }
 
         // Clear arrays from repeat and not normal indexes
-        $cityIds = array_values(array_unique($cityIds));
-        $cities = City::select(['id', 'name', 'code'])->whereIn('id', $cityIds)->get();
+        $cities = City::all();
 
         if( $typeId >= 1 ) {
 
