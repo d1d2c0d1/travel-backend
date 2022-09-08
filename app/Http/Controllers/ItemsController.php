@@ -309,6 +309,7 @@ class ItemsController extends Controller
 
             if( $type?->id >= 1 ) {
                 $itemsDB->where('type_id', '=', $type->id);
+                $typeId = $type->id;
             }
         }
 
@@ -412,7 +413,7 @@ class ItemsController extends Controller
 
         return response([
             'status' => true,
-            'items' => $items,
+//            'items' => $items,
             'filter' => $this->prepareFilter($itemsID, $typeId)
         ], $status);
     }
