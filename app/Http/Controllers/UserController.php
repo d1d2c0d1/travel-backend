@@ -108,7 +108,7 @@ class UserController extends Controller
             ], 401);
         }
 
-        $user = User::where(['id', '=', $id])->with('company')->with('type')->first();
+        $user = User::where('id', '=', $id)->with('company')->with('type')->first();
 
         if( !$user ) {
             return response([
