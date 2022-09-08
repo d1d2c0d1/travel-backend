@@ -413,7 +413,7 @@ class ItemsController extends Controller
 
         return response([
             'status' => true,
-//            'items' => $items,
+            'items' => $items,
             'filter' => $this->prepareFilter($itemsID, $typeId)
         ], $status);
     }
