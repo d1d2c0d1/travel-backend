@@ -8,6 +8,7 @@ use App\Models\CardTag;
 use App\Models\Category;
 use App\Models\City;
 use App\Models\Item;
+use App\Models\ItemProperty;
 use App\Models\ItemType;
 use App\Models\Property;
 use Exception;
@@ -407,9 +408,9 @@ class ItemsController extends Controller
         $status = 200;
 
         // Set status Not Found
-//        if( $items->isEmpty() ) {
-//            $status = 404;
-//        }
+        // if( $items->isEmpty() ) {
+        //    $status = 404;
+        // }
 
         return response([
             'status' => true,
@@ -422,6 +423,7 @@ class ItemsController extends Controller
      * Prepare IDs Array
      *
      * @param $items
+     * @param int $typeId
      * @return array
      */
     public function prepareFilter($items, int $typeId): array
@@ -452,9 +454,22 @@ class ItemsController extends Controller
 
         }
 
+        foreach ($properties as $key => $property) {
+            $values = [];
+            $itemProperties = ItemProperty::select(['property_id', 'value'])->where('property_id', '=', $property->id)->groupBy('property_id', 'value')->get();
+
+            foreach ($itemProperties as $itemProperty) {
+                $values[] = $itemProperty->value;
+            }
+
+            $property->values = $values;
+
+            $properties[$key] = $property;
+        }
+
         $tags = CardTag::all();
 
-        $filter = [
+        return [
             'fields' => [
                 'title' => [
                     'type' => 'input',
@@ -501,8 +516,6 @@ class ItemsController extends Controller
                 ]
             ]
         ];
-
-        return $filter;
     }
 
     /**
