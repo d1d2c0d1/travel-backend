@@ -284,3 +284,13 @@ Route::prefix('guides')->middleware('api.static.auth')->group(function() {
     });
 
 });
+
+/**
+ * Guide routes
+ * @public
+ */
+Route::prefix('payment')->middleware('api.static.auth')->group(function() {
+
+    Route::post('check', )
+
+});
