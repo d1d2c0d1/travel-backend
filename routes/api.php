@@ -291,6 +291,6 @@ Route::prefix('guides')->middleware('api.static.auth')->group(function() {
  */
 Route::prefix('payment')->middleware('api.static.auth')->group(function() {
 
-    Route::post('check', )
+//    Route::post('check', )
 
 });
