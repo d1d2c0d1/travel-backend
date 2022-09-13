@@ -13,6 +13,7 @@ use App\Http\Controllers\ItemTypeController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\MediaController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PostsController;
 use App\Http\Controllers\PromotionsController;
 use App\Http\Controllers\PropertiesController;
@@ -291,6 +292,10 @@ Route::prefix('guides')->middleware('api.static.auth')->group(function() {
  */
 Route::prefix('payment')->middleware('api.static.auth')->group(function() {
 
-//    Route::post('check', )
+    Route::post('check', [PaymentController::class, 'check'])->name('payments.check');
+    Route::post('pay', [PaymentController::class, 'pay'])->name('payments.pay');
+    Route::post('fail', [PaymentController::class, 'fail'])->name('payments.fail');
+    Route::post('confirm', [PaymentController::class, 'confirm'])->name('payments.confirm');
+    Route::post('refund', [PaymentController::class, 'refund'])->name('payments.refund');
 
 });

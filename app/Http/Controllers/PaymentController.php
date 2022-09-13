@@ -22,4 +22,60 @@ class PaymentController extends Controller
         ]);
     }
 
+    /**
+     * Payment accepted
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function pay(Request $request): Response
+    {
+
+        return response([
+            'code' => 0
+        ]);
+    }
+
+    /**
+     * Payment failed
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function fail(Request $request): Response
+    {
+
+        return response([
+            'code' => 0
+        ]);
+    }
+
+    /**
+     * Payment confirmed
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function confirm(Request $request): Response
+    {
+
+        return response([
+            'code' => 0
+        ]);
+    }
+
+    /**
+     * Payment refunded
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function refund(Request $request): Response
+    {
+
+        return response([
+            'code' => 0
+        ]);
+    }
+
 }
