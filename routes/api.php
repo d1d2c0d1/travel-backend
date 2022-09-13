@@ -290,7 +290,7 @@ Route::prefix('guides')->middleware('api.static.auth')->group(function() {
  * Guide routes
  * @public
  */
-Route::prefix('payment')->middleware('api.static.auth')->group(function() {
+Route::prefix('payment')->group(function() {
 
     Route::post('check', [PaymentController::class, 'check'])->name('payments.check');
     Route::post('pay', [PaymentController::class, 'pay'])->name('payments.pay');
