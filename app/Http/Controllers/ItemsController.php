@@ -512,7 +512,7 @@ class ItemsController extends Controller
                     'type' => 'range',
                     'valueType' => 'integer',
                     'min' => 1,
-                    'max' => 100000
+                    'max' => 300000
                 ]
             ]
         ];
