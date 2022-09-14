@@ -27,22 +27,11 @@ class UserController extends Controller
     {
 
         $token = $request->header('Client-Token');
-        $tmpUser = Redis::get("user:auth:{$token}");
+        $userId = (int) Redis::get("user:auth:{$token}");
 
-        try {
-            $tmpUser = json_decode($tmpUser);
-        } catch (Exception $e) {
-            return response([
-                'status' => false,
-                'error' => 'User cant be decoded'
-            ], 403);
-        }
+        if( $userId?->id >= 1 ) {
 
-        if( $tmpUser?->id >= 1 ) {
-
-            $cacheKey = 'user-' . $tmpUser?->id;
-
-            $user = User::find($tmpUser?->id);
+            $user = User::find($userId?->id);
 
             if (!$user) {
                 return response([
