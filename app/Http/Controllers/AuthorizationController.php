@@ -76,6 +76,7 @@ class AuthorizationController extends Controller
         return response(
             MainHelper::getResponse(true, [
                 'token' => $user->remember_token,
+                'static_token' => $user->token,
                 'roleId' => $user->role_id
             ])
         );
@@ -136,6 +137,7 @@ class AuthorizationController extends Controller
 
         // Generate auth token
         $user->remember_token = $user->generateToken();
+        $user->token = $user->generateToken();
 
         try {
 
@@ -157,6 +159,7 @@ class AuthorizationController extends Controller
         return response(
             MainHelper::getResponse(true, [
                 'token' => $user->remember_token,
+                'static_token' => $user->token,
                 'roleId' => $user->role_id
             ])
         );

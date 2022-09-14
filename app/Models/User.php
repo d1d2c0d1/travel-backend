@@ -108,7 +108,8 @@ class User extends Model
         'language_id',
         'company_id',
         'photo',
-        'additional_properties'
+        'additional_properties',
+        'token',
 
     ];
 
@@ -141,9 +142,10 @@ class User extends Model
         'language_id' => 'integer',
         'company_id' => 'integer',
         'photo' => 'string',
+        'token' => 'string',
+        'additional_properties' => AdditionalProperties::class,
         'created_at' => 'datetime:Y-m-d H:i:s',
         'updated_at' => 'datetime:Y-m-d H:i:s',
-        'additional_properties' => AdditionalProperties::class
 
     ];
 
