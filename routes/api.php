@@ -172,8 +172,6 @@ Route::prefix('user')->middleware('api.static.auth')->group(function() {
     Route::get('{id}', [UserController::class, 'single']);
 });
 
-Route::post('broadcasting/auth', [AuthorizationController::class, 'broadcastingAuthorize'])->name('broadcasting.authorization');
-
 /**
  * Location routes
  */

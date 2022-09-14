@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Http\Helpers\MainHelper;
+use App\Models\User;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redis;
@@ -28,25 +29,20 @@ class APIAuth
             );
         }
 
-        $user = Redis::get("user:auth:{$token}");
+        $userId = (int) Redis::get("user:auth:{$token}");
 
-        if( strlen($user) >= 32 && stristr($user, '{') ) {
-            $user = json_decode($user);
-        }
-
-        if( !is_object($user) || (is_object($user) && !isset($user->id)) ) {
-            return response(
-                MainHelper::getErrorResponse([
-                    MainHelper::getErrorItem(404, 'Client authorization token has not defined')
-                ])
-            );
+        if( $userId <= 0 ) {
+            return response([
+                'status' => false,
+                'error' => 'You are not authorization!'
+            ], 403);
         }
 
         if( MainHelper::getUserId() <= 0 ) {
             return response(
                 MainHelper::getErrorResponse([
                     MainHelper::getErrorItem(503, 'User not defined. Authorization is failed!')
-                ])
+                ]), 403
             );
         }
 

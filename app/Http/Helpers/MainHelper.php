@@ -156,24 +156,18 @@ class MainHelper
             return $userData;
         }
 
-        $user = Redis::get("user:auth:{$token}");
+        $userId = (int) Redis::get("user:auth:{$token}");
 
-        if( strlen($user) >= 32 && stristr($user, '{') ) {
-            $user = json_decode($user);
+        if( $userId >= 1 ) {
+            $user = User::find($userId);
         }
 
-        if( !is_object($user) || (is_object($user) && !isset($user->id)) ) {
+        if( !$user || ($user && !$user?->id) ) {
             return false;
         }
 
-        $userData = User::find((int) $user->id);
-
-        if( !$userData || !$userData?->id ) {
-            unset($userData);
-            return false;
-        }
-
-        return $userData;
+        $userData = $user;
+        return $user;
     }
 
     /**

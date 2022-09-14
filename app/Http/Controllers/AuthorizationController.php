@@ -60,48 +60,25 @@ class AuthorizationController extends Controller
             );
         }
 
-        $token = $user->generateToken();
-        Redis::set("user:auth:{$token}", json_encode($user->toArray()));
-
-        return response(
-            MainHelper::getResponse(true, [
-                'token' => $token,
-                'roleId' => $user->role_id
-            ])
-        );
-    }
-
-    /**
-     * Route for Authorize users in WebSockets
-     *
-     * @param Request $request
-     * @return Response
-     */
-    public function broadcastingAuthorize(Request $request): Response
-    {
-
-        $token = (string) $request->input('token');
-        $socketId = $request->input('socket_id');
-        $channelName = $request->input('channel_name');
+        $user->remember_token = $user->generateToken();
 
         try {
-            $data = json_decode(Redis::get("user:auth:{$token}"));
+            $user->save();
         } catch (Exception $e) {
             return response([
                 'status' => false,
-                'error' => 'User token not found!',
-                'exception' => [
-                    'error' => $e->getMessage()
-                ]
-            ], 403);
+                'error' => $e->getMessage()
+            ], 500);
         }
 
-        $user = User::find($data?->id);
+        Redis::set("user:auth:{$user->remember_token}", $user->id);
 
-        return response([
-            'status' => true,
-            'user' => $user
-        ]);
+        return response(
+            MainHelper::getResponse(true, [
+                'token' => $user->remember_token,
+                'roleId' => $user->role_id
+            ])
+        );
     }
 
     /**
@@ -157,6 +134,9 @@ class AuthorizationController extends Controller
         $user->region_id = 77; // Москва и МО
         $user->city_id = 50; // Москва
 
+        // Generate auth token
+        $user->remember_token = $user->generateToken();
+
         try {
 
             // Save user
@@ -172,13 +152,11 @@ class AuthorizationController extends Controller
             );
         }
 
-        // Generate auth token
-        $token = $user->generateToken();
-        Redis::set("user:auth:{$token}", json_encode($user->toArray()));
+        Redis::set("user:auth:{$user->remember_token}", $user->id);
 
         return response(
             MainHelper::getResponse(true, [
-                'token' => $token,
+                'token' => $user->remember_token,
                 'roleId' => $user->role_id
             ])
         );

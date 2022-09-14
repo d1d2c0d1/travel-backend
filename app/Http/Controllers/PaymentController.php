@@ -23,7 +23,7 @@ class PaymentController extends Controller
 
         $paymentData = [
             'transaction_id' => (int) $request->input('TransactionId'),
-            'status' => (int) $request->input('Amount'),
+            'status' => 1,
             'invoice_id' => (int) $request->input('InvoiceId'),
             'account_id' => (int) $request->input('AccountId'),
             'amount' => (int) $request->input('Amount'),
