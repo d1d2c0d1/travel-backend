@@ -29,9 +29,9 @@ class UserController extends Controller
         $token = $request->header('Client-Token');
         $userId = (int) Redis::get("user:auth:{$token}");
 
-        if( $userId?->id >= 1 ) {
+        if( $userId >= 1 ) {
 
-            $user = User::find($userId?->id);
+            $user = User::find($userId);
 
             if (!$user) {
                 return response([
