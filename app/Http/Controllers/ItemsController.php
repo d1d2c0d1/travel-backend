@@ -367,6 +367,22 @@ class ItemsController extends Controller
             }
         }
 
+        // Filter by properties
+        if( $request->has('properties') ) {
+            $properties = (array) $request->input('properties');
+
+            $itemsDB->whereHas('properties', function ($query) use ($properties) {
+                $query->where(function($query) use ($properties) {
+                    foreach ($properties as $propertyId => $propertyValue) {
+                        $query->orWhere([
+                            ['property_id', '=', $propertyId],
+                            ['value', '=', $propertyValue]
+                        ]);
+                    }
+                });
+            });
+        }
+
         // Getting IDS for filters
         $itemsDBClone = $itemsDB->clone();
 
