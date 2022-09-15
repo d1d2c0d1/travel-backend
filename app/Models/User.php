@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Hash;
  * @property integer $phone
  * @property string $password
  * @property string $remember_token
+ * @property string $token
  * @property integer $country_id
  * @property integer $region_id
  * @property integer $city_id

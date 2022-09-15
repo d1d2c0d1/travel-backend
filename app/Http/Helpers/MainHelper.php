@@ -6,6 +6,7 @@ use App\Models\Role;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Redis;
 
 class MainHelper
@@ -258,5 +259,24 @@ class MainHelper
             'error' => 'Error in database',
             'database_error' => $e->getMessage()
         ], 500);
+    }
+
+    /**
+     * Sending action to client from websocket
+     *
+     * @param string $action
+     * @param array $data
+     * @return void
+     */
+    public static function sendAction(string $action, array $data): void
+    {
+        $url = config('websockets.server_url');
+
+        $response = Http::post($url . '/api/action', [
+            'action' => $action,
+            'data' => $data,
+            'token' => self::getUser()->token
+        ]);
+
     }
 }
