@@ -112,27 +112,10 @@ class ItemsController extends Controller
 
         // Save properties
         $properties = $request->input('properties');
+        $itemProperties = [];
 
         if( is_array($properties) ) {
-            foreach ($properties as $property) {
-                if (!isset($property['property_id']) || !isset($property['value'])) {
-                    continue;
-                }
-
-                if (empty($property['property_id']) || $property['property_id'] <= 0) {
-                    continue;
-                }
-
-                try {
-                    $item->properties()->attach($property['property_id'], [
-                        'created_user_id' => MainHelper::getUserId(),
-                        'value' => $property['value']
-                    ]);
-                } catch (Exception $e) {
-                    $itemProperties[$property['property_id'] . '_error'] = $e->getMessage();
-                }
-
-            }
+            $itemProperties = $item->attachProperties($properties);
         }
 
         // Create tags
@@ -163,7 +146,8 @@ class ItemsController extends Controller
                 'item' => $item,
                 'properties' => $item->properties,
                 'tags' => $item->tags,
-                'categories' => $item->categories
+                'categories' => $item->categories,
+                'itemProperties' => $itemProperties
             ]
         ]);
     }
@@ -609,7 +593,7 @@ class ItemsController extends Controller
             ], 401);
         }
 
-        $item = Item::find($id);
+        $item = Item::where('id', '=', $id)->with('properties')->first();
 
         if( !$item || !$item?->id ) {
             return response([
@@ -676,6 +660,13 @@ class ItemsController extends Controller
         // Set images
         if( $request->has('images') ) {
             $item->images = (array) $request->input('images');
+        }
+
+        // Set properties
+        $properties = $request->input('properties');
+
+        if( is_array($properties) ) {
+            $item->attachProperties($properties);
         }
 
         // Save item

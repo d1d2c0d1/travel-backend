@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Http\Helpers\MainHelper;
 use datetime;
 use Eloquent;
+use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -344,5 +345,34 @@ class Item extends Model
         $favorite = $this->favorites()->where('user_id', MainHelper::getUserId())->first();
 
         return $favorite?->id >= 1;
+    }
+
+    public function attachProperties(array $properties): array
+    {
+        $itemProperties = [];
+        $syncProperties = [];
+
+        foreach ($properties as $property) {
+            if (!isset($property['property_id']) || !isset($property['value'])) {
+                continue;
+            }
+
+            if (empty($property['property_id']) || $property['property_id'] <= 0) {
+                continue;
+            }
+
+            $syncProperties[$property['property_id']] = [
+                'created_user_id' => MainHelper::getUserId(),
+                'value' => $property['value']
+            ];
+        }
+
+        try {
+            $this->properties()->sync($syncProperties);
+        } catch (Exception $e) {
+            $itemProperties['error'] = $e->getMessage();
+        }
+
+        return $itemProperties;
     }
 }
