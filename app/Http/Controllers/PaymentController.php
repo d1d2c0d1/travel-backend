@@ -162,4 +162,18 @@ class PaymentController extends Controller
         ]);
     }
 
+    /**
+     * Payment canceled
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function cancel(Request $request): Response
+    {
+
+        return response([
+            'code' => 0
+        ]);
+    }
+
 }

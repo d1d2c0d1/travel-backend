@@ -295,5 +295,6 @@ Route::prefix('payment')->middleware('api.payment.auth')->group(function() {
     Route::post('fail', [PaymentController::class, 'fail'])->name('payments.fail');
     Route::post('confirm', [PaymentController::class, 'confirm'])->name('payments.confirm');
     Route::post('refund', [PaymentController::class, 'refund'])->name('payments.refund');
+    Route::post('cancel', [PaymentController::class, 'cancel'])->name('payments.cancel');
 
 });
