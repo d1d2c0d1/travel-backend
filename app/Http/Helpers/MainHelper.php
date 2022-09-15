@@ -268,14 +268,14 @@ class MainHelper
      * @param array $data
      * @return void
      */
-    public static function sendAction(string $action, array $data): void
+    public static function sendAction(string $action, string $token, array $data): void
     {
         $url = config('websockets.server_url');
 
         $response = Http::post($url . '/api/action', [
             'action' => $action,
             'data' => $data,
-            'token' => self::getUser()->token
+            'token' => $token
         ]);
 
     }

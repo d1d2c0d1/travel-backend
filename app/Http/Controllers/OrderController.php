@@ -41,7 +41,7 @@ class OrderController extends Controller
 
         $data = $validator->getData();
 
-        $item = Item::find((int) $data['item_id']);
+        $item = Item::where('id', '=', (int) $data['item_id'])->with('author')->first();
 
         $data['price'] = (int) ($item?->price * $data['tickets']);
         $data['status'] = 0;
@@ -60,6 +60,11 @@ class OrderController extends Controller
                 'database_error' => $e->getMessage()
             ], 500);
         }
+
+        // Send to author notification
+        MainHelper::sendAction('alert', $item->author->token, [
+            'message' => 'В вашей экскурсии появилась новая бронь'
+        ]);
 
         return response([
             'status' => true,
