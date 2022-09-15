@@ -79,6 +79,12 @@ class FavoritesController extends Controller
                 $item->favorites += 1;
             }
 
+            MainHelper::sendAction('alert', $item->author->token, [
+                'type' => 'order.favorite',
+                'item' => $item,
+                'executor' => MainHelper::getUser()
+            ]);
+
         }
 
         try {
