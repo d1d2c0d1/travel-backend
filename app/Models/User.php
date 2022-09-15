@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Hash;
  * @property integer $id
  * @property integer $role_id
  * @property string $name
+ * @property integer $sex
  * @property string $email
  * @property integer $phone
  * @property string $password
@@ -97,6 +98,7 @@ class User extends Model
 
         'role_id',
         'name',
+        'sex',
         'email',
         'phone',
         'password',
@@ -131,6 +133,7 @@ class User extends Model
         'role_id' => 'integer',
         'type_id' => 'integer',
         'name' => 'string',
+        'sex' => 'integer',
         'email' => 'string',
         'phone' => 'integer',
         'password' => 'string',

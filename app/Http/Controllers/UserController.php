@@ -139,6 +139,14 @@ class UserController extends Controller
             $user->name = (string) $request->input('name');
         }
 
+        /**
+         * 1 - male
+         * 2 - female
+         */
+        if( $request->has('sex') && !empty($request->input('sex')) ) {
+            $user->sex = (int) $request->input('sex');
+        }
+
         if( $request->has('photo') && !empty($request->input('photo')) ) {
             $user->photo = (string) $request->input('photo');
         }
