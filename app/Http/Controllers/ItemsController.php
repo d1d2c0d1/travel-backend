@@ -355,7 +355,7 @@ class ItemsController extends Controller
         if( $request->has('price') ) {
             $price = $request->input('price');
 
-            if( isset($price['from']) && $price['from'] >= 10 && isset($price['to']) && $price['to'] >= 10 && $price['from'] < $price['to']) {
+            if( isset($price['from']) && isset($price['to']) ) {
                 $itemsDB->where([
                     ['price', '>=', $price['from']],
                     ['price', '<=', $price['to']]
@@ -398,6 +398,7 @@ class ItemsController extends Controller
 
         return response([
             'status' => true,
+            'total' => $items->total(),
             'items' => $items,
             'filter' => $this->prepareFilter($itemsID, $typeId)
         ], $status);
