@@ -219,7 +219,7 @@ class PaymentController extends Controller
             $order = $payment->order;
 
             MainHelper::sendAction('alert', $item->author->token, [
-                'message' => 'В вашей экскурсии появилась новая бронь',
+                'type' => 'order.paid',
                 'item' => $item,
                 'order' => $order,
                 'executor' => MainHelper::getUser()
