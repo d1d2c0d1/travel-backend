@@ -135,6 +135,7 @@ class AuthorizationController extends Controller
         $user->region_id = 77; // Москва и МО
         $user->city_id = 50; // Москва
         $user->additional_properties = [];
+        $user->company_id = null;
 
         // Generate auth token
         $user->remember_token = $user->generateToken();
