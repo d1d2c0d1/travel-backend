@@ -144,7 +144,7 @@ class OrderController extends Controller
             $itemsIds[] = $item->id;
         }
 
-        $orders = Order::whereIn('item_id', $itemsIds)->with('item')->with('user')->get();
+        $orders = Order::whereIn('item_id', $itemsIds)->orderByDesc('id')->with('item')->with('user')->get();
 
         return response([
            'status' => true,
