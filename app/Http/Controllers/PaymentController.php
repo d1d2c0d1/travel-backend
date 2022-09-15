@@ -222,7 +222,7 @@ class PaymentController extends Controller
                 'type' => 'order.paid',
                 'item' => $item,
                 'order' => $order,
-                'executor' => MainHelper::getUser()
+                'executor' => $order->user
             ]);
 
         }
