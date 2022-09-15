@@ -41,7 +41,11 @@ class OrderController extends Controller
 
         $data = $validator->getData();
 
-        $item = Item::where('id', '=', (int) $data['item_id'])->with('author')->first();
+        $item = Item::where('id', '=', (int) $data['item_id'])
+            ->with('author')
+            ->with('city')
+            ->with('type')
+            ->first();
 
         $data['price'] = (int) ($item?->price * $data['tickets']);
         $data['status'] = 0;
