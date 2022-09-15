@@ -63,7 +63,9 @@ class OrderController extends Controller
 
         // Send to author notification
         MainHelper::sendAction('alert', $item->author->token, [
-            'message' => 'В вашей экскурсии появилась новая бронь'
+            'message' => 'В вашей экскурсии появилась новая бронь',
+            'item' => $item,
+            'order' => $order
         ]);
 
         return response([
