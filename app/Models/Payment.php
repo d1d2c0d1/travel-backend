@@ -141,12 +141,32 @@ class Payment extends Model
     ];
 
     /**
-     * Relationship for getting accepted user
+     * Relationship for getting item
      *
      * @return HasOne
      */
     public function item(): HasOne
     {
         return $this->hasOne(Item::class, 'id', 'item_id');
+    }
+
+    /**
+     * Relationship for getting order
+     *
+     * @return HasOne
+     */
+    public function order(): HasOne
+    {
+        return $this->hasOne(Order::class, 'id', 'invoice_id');
+    }
+
+    /**
+     * Relationship for getting payment user
+     *
+     * @return HasOne
+     */
+    public function user(): HasOne
+    {
+        return $this->hasOne(User::class, 'id', 'account_id');
     }
 }

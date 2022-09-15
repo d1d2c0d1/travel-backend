@@ -26,7 +26,8 @@ class addSexFieldToUsersTable extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->removeColumn('sex');
+            $table->dropIndex('users_sex_index');
+            $table->dropColumn('sex');
         });
     }
 }
