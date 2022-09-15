@@ -89,9 +89,11 @@ class OrderController extends Controller
             $sortField = (string) $request->input('sort');
             $sortType = (string) $request->input('sortType');
 
-            if( mb_strtolower($sortType) === 'asc' ) {
+            if( mb_strtolower($sortType) === 'desc' ) {
                 $ordersDB->orderByDesc($sortField);
             }
+        } else {
+            $ordersDB->orderByDesc('id');
         }
 
         // Filtering by status
