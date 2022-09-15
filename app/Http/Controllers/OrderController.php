@@ -69,7 +69,8 @@ class OrderController extends Controller
         MainHelper::sendAction('alert', $item->author->token, [
             'message' => 'В вашей экскурсии появилась новая бронь',
             'item' => $item,
-            'order' => $order
+            'order' => $order,
+            'executor' => MainHelper::getUser()
         ]);
 
         return response([
