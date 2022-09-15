@@ -90,12 +90,6 @@ class UserController extends Controller
      */
     public function single(int $id): Response
     {
-        if( !MainHelper::isAdminOrModer() ) {
-            return response([
-                'status' => false,
-                'error' => 'Permission denied'
-            ], 401);
-        }
 
         $user = User::where('id', '=', $id)->with('company')->with('type')->first();
 
