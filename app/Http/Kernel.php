@@ -59,6 +59,7 @@ class Kernel extends HttpKernel
         'api.is.guide' => \App\Http\Middleware\GuideRoute::class,
         'api.is.moder' => \App\Http\Middleware\ModerRoute::class,
         'api.is.admin' => \App\Http\Middleware\AdminRoute::class,
+        'api.payment.auth' => \App\Http\Middleware\PaymentAuth::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
         'can' => \Illuminate\Auth\Middleware\Authorize::class,

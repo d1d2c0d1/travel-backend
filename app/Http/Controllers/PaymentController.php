@@ -96,6 +96,23 @@ class PaymentController extends Controller
     public function pay(Request $request): Response
     {
 
+        $transactionId = (int) $request->input('TransactionId');
+        $invoiceId = (int) $request->input('InvoiceId');
+        $accountId = (int) $request->input('AccountId');
+
+        if( $transactionId <= 0 ) {
+            return response([
+                'status' => false,
+                'error' => 'Transaction ID cant be empty field'
+            ]);
+        }
+
+        $payment = Payment::where([
+            ['transaction_id', '=', $transactionId],
+            ['invoice_id', '=', $invoiceId],
+            ['account_id', '=', $accountId]
+        ])->first();
+
 
 
         return response([
