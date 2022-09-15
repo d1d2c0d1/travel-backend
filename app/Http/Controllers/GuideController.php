@@ -218,11 +218,12 @@ class GuideController extends Controller
             $user->city_id = $city->id;
             $order->accepted_user_id = MainHelper::getUserId();
 
-            $user->additional_properties = json_encode([
+            $user->additional_properties = [
+                'guide_order_id' => $order->id,
                 'work_experience' => $order->work_experience,
                 'excursions' => $order->excursions,
                 'about' => $order->about
-            ]);
+            ];
 
         }
 
