@@ -147,7 +147,7 @@ class Payment extends Model
      */
     public function item(): HasOne
     {
-        return $this->hasOne(Item::class, 'id', 'item_id');
+        return $this->hasOne(Item::class, 'id', 'item_id')->with('author')->with('city')->with('type');
     }
 
     /**
@@ -157,7 +157,7 @@ class Payment extends Model
      */
     public function order(): HasOne
     {
-        return $this->hasOne(Order::class, 'id', 'invoice_id');
+        return $this->hasOne(Order::class, 'id', 'invoice_id')->with('user');
     }
 
     /**

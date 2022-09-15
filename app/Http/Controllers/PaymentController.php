@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Helpers\MainHelper;
 use App\Models\Order;
 use App\Models\Payment;
 use Exception;
@@ -180,7 +181,10 @@ class PaymentController extends Controller
             ['transaction_id', '=', $transactionId],
             ['invoice_id', '=', $invoiceId],
             ['account_id', '=', $accountId]
-        ])->with('order')->with('user')->first();
+        ])  ->with('order')
+            ->with('user')
+            ->with('item')
+            ->first();
     }
 
     /**
@@ -208,6 +212,20 @@ class PaymentController extends Controller
         $payment->status = $paymentStatus;
         $payment->order->is_payment = $isPayment;
         $payment->order->is_processing = $isProcessing;
+
+        if( $isPayment ) {
+
+            $item = $payment->item;
+            $order = $payment->order;
+
+            MainHelper::sendAction('alert', $item->author->token, [
+                'message' => 'В вашей экскурсии появилась новая бронь',
+                'item' => $item,
+                'order' => $order,
+                'executor' => MainHelper::getUser()
+            ]);
+
+        }
 
         try {
             $payment->save();
