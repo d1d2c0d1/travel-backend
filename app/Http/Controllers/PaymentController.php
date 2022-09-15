@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
 use App\Models\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -18,8 +19,6 @@ class PaymentController extends Controller
      */
     public function check(Request $request): Response
     {
-
-        Log::debug('Payment Check: ' . json_encode($request));
 
         $paymentData = [
             'transaction_id' => (int) $request->input('TransactionId'),
@@ -58,7 +57,21 @@ class PaymentController extends Controller
             'token_recipient' => (string) $request->input('TokenRecipient')
         ];
 
+        // Create payment row
         $payment = new Payment($paymentData);
+
+        // 4377 7200 0157 1694
+        // Find order by payment invoice_id
+        $order = Order::find($payment->invoice_id);
+
+        if( !$order || !$order?->id ) {
+            return response([
+                'status' => false,
+                'error' => 'Order not found'
+            ]);
+        }
+
+        $payment->item_id = $order->item_id;
 
         try {
             $payment->save();
@@ -82,6 +95,8 @@ class PaymentController extends Controller
      */
     public function pay(Request $request): Response
     {
+
+
 
         return response([
             'code' => 0
