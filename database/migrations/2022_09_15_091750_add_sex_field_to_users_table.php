@@ -14,7 +14,7 @@ class addSexFieldToUsersTable extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->unsignedTinyInteger('sex')->after('name')->index()->default(1);
+            $table->unsignedTinyInteger('sex')->after('name')->default(1)->index();
         });
     }
 
