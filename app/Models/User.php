@@ -208,4 +208,28 @@ class User extends Model
         $data[] = rand(1000, 100000);
         return Hash::make(implode(':', $data));
     }
+
+    /**
+     * Replacing user photo if empty
+     *
+     * @param string $value
+     * @return string
+     */
+    public function getPhotoAttribute(string | null $value): string | null
+    {
+        // Man = /attachments/2022/09/16/3fa84698c81082d5ccf7c468c9c978f7-male-placeholder-400px.jpg
+        // Woman = /attachments/2022/09/16/2cfed755b5d44278b93d379cc94ddb64-nor__team_color_02__min-2.jpg
+        if( empty($value) || !mb_stristr($value, 'http') ) {
+            switch ($this->sex) {
+                case 0:
+                    return '/attachments/2022/09/16/fc1de181bfe47ec70488c57f769b36ef-Net-foto-5.png';
+                case 1:
+                    return '/attachments/2022/09/16/3fa84698c81082d5ccf7c468c9c978f7-male-placeholder-400px.jpg';
+                case 2:
+                    return '/attachments/2022/09/16/2cfed755b5d44278b93d379cc94ddb64-nor__team_color_02__min-2.jpg';
+            }
+        }
+
+        return $value;
+    }
 }
