@@ -117,6 +117,15 @@ class OrderController extends Controller
             }
         }
 
+        // Filtering by is_payment
+        if( $request->has('is_payment') ) {
+            if( (int) $request->input('is_payment') >= 1 ) {
+                $ordersDB->where('is_payment', 1);
+            } else {
+                $ordersDB->where('is_payment', 0);
+            }
+        }
+
         // Getting data from db and paginate that
         $orders = $ordersDB->paginate();
 
