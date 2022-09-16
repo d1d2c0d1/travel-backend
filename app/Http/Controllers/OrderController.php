@@ -199,7 +199,7 @@ class OrderController extends Controller
             ], 404);
         }
 
-        if( MainHelper::isGuide() && !MainHelper::isAdminOrModer() ) {
+        if( MainHelper::getUserId() != $order->user_id && MainHelper::isGuide() && !MainHelper::isAdminOrModer() ) {
             if ($order->item->created_user_id !== MainHelper::getUserId()) {
                 return response([
                     'status' => false,
