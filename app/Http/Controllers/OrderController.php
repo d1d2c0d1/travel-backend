@@ -198,14 +198,14 @@ class OrderController extends Controller
                     'error' => 'Only item owner can change order status'
                 ], 403);
             }
-        }
-
-        if( !MainHelper::isAdminOrModer() ) {
-            if( $order->user_id !== MainHelper::getUserId() ) {
-                return response([
-                    'status' => false,
-                    'error' => 'Only creator can canceled self order!'
-                ], 403);
+        } else {
+            if( !MainHelper::isAdminOrModer() ) {
+                if( $order->user_id !== MainHelper::getUserId() ) {
+                    return response([
+                        'status' => false,
+                        'error' => 'Only creator can canceled self order!'
+                    ], 403);
+                }
             }
         }
 
