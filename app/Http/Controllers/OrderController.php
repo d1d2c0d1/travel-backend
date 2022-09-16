@@ -89,8 +89,7 @@ class OrderController extends Controller
     {
 
         $ordersDB = Order::where([
-            ['user_id', '=', MainHelper::getUserId()],
-            ['is_payment', '=', 1]
+            ['user_id', '=', MainHelper::getUserId()]
         ])->with('item')->with('user');
 
         /**
