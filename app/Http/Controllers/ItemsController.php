@@ -244,7 +244,7 @@ class ItemsController extends Controller
         }
 
         // Search by card status (1 of 3)
-        if( MainHelper::isAdminOrModer() ) {
+        if( MainHelper::isGuide() ) {
             if( $status >= 1 ) {
                 $itemsDB->where('status', '=', $status);
             }
