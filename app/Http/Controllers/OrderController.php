@@ -190,7 +190,7 @@ class OrderController extends Controller
         }
 
         // Find order in database
-        $order = Order::with('item')->with('user')->find($id);
+        $order = Order::with('item')->with('item')->with('user')->find($id);
 
         if( $order?->id !== $id ) {
             return response([
@@ -226,6 +226,22 @@ class OrderController extends Controller
                 'status' => false,
                 'error' => 'Error with database',
                 'database_error' => $e->getMessage()
+            ]);
+        }
+
+        // Send action to user (accepted)
+        if( $order->status === 2 ) {
+            MainHelper::sendAction('alert', $order->user->token, [
+                'type' => 'order.accept',
+                'order' => $order
+            ]);
+        }
+
+        // Send action to user (canceled)
+        if( $order->status === 1 ) {
+            MainHelper::sendAction('alert', $order->user->token, [
+                'type' => 'order.cancel',
+                'order' => $order
             ]);
         }
 

@@ -20,7 +20,7 @@ class OrderStatus extends ExtendedType
 
         switch ($status) {
             case 0:
-                $this->title = 'Ожидает оплаты';
+                $this->title = 'Ожидает одобрения';
                 $this->comment = 'Бронирование только создано';
                 $this->reason = 'Клиент создал бронирование';
                 $this->color = '#00AAEE';
@@ -38,13 +38,6 @@ class OrderStatus extends ExtendedType
                 $this->comment = 'Бронирование подтверждено гидом';
                 $this->reason = 'Гид подтвердил бронирование';
                 $this->color = '#15CF74';
-                break;
-
-            case 3:
-                $this->title = 'Ожидает';
-                $this->comment = 'Бронирование оплачено и ожидает подтверждения гида';
-                $this->reason = 'Гид рассматривает бронирование';
-                $this->color = '#00C2F3';
                 break;
 
             default:
