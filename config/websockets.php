@@ -4,7 +4,7 @@ use BeyondCode\LaravelWebSockets\Dashboard\Http\Middleware\Authorize;
 
 return [
 
-    'server_url' => env('WEBSOCKET_URL', 'http://localhost:5000'),
+    'server_url' => env('WEBSOCKET_URL', 'https://ws.u-gid.com'),
 
     /*
      * Set a custom dashboard configuration
