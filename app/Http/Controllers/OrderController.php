@@ -233,7 +233,8 @@ class OrderController extends Controller
         if( $order->status === 2 ) {
             MainHelper::sendAction('alert', $order->user->token, [
                 'type' => 'order.accept',
-                'order' => $order
+                'order' => $order,
+                'executor' => MainHelper::getUser()
             ]);
         }
 
@@ -241,7 +242,8 @@ class OrderController extends Controller
         if( $order->status === 1 ) {
             MainHelper::sendAction('alert', $order->user->token, [
                 'type' => 'order.cancel',
-                'order' => $order
+                'order' => $order,
+                'executor' => MainHelper::getUser()
             ]);
         }
 
