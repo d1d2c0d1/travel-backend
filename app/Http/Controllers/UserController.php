@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Helpers\MainHelper;
+use App\Models\City;
 use App\Models\Company;
 use App\Models\Role;
 use App\Models\User;
@@ -239,6 +240,7 @@ class UserController extends Controller
         // Getting from request count rows per page
         $perPage = (int) $request->input('per_page');
         $cityId = (int) $request->input('city_id');
+        $cityCode = (string) $request->input('city_code');
 
         // Set default value for count rows of per page
         if( $perPage <= 0 ) {
@@ -264,6 +266,14 @@ class UserController extends Controller
 
         if( $cityId >= 1 ) {
             $guidesDB->where('city_id', '=', $cityId);
+        }
+
+        // Filtering by cities
+        if( mb_strlen($cityCode) >= 1 ) {
+            $city = City::where('code', '=', $cityCode)->first();
+            if( $city && $city?->id ) {
+                $guidesDB->where('city_id', '=', $city->id);
+            }
         }
 
         $guides = $guidesDB->with('company')->with('role')->with('type')->paginate($perPage);
