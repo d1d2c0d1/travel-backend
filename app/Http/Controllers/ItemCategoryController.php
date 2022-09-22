@@ -52,7 +52,7 @@ class ItemCategoryController extends Controller
             'author_id' => MainHelper::getUserId(),
             'type_id' => (int) $request->input('type_id'),
             'name' => (string) $request->input('name'),
-            'code' => '',
+            'code' => MainHelper::cyr2lat((string) $request->input('name')),
             'description' => (string) $request->input('description')
         ];
 
