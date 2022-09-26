@@ -212,13 +212,11 @@ class User extends Model
     /**
      * Replacing user photo if empty
      *
-     * @param string $value
-     * @return string
+     * @param string|null $value
+     * @return string|null
      */
     public function getPhotoAttribute(string | null $value): string | null
     {
-        // Man = /attachments/2022/09/16/3fa84698c81082d5ccf7c468c9c978f7-male-placeholder-400px.jpg
-        // Woman = /attachments/2022/09/16/2cfed755b5d44278b93d379cc94ddb64-nor__team_color_02__min-2.jpg
         if( empty($value) || !mb_stristr($value, 'attachments') ) {
             switch ($this->sex) {
                 case 0:

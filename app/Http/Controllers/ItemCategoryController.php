@@ -21,18 +21,25 @@ class ItemCategoryController extends Controller
     {
         $search = (string) $request->input('search');
         $typeId = (int) $request->input('type_id');
+        $id = (int) $request->input('id');
 
-        $res = CardCategory::where([
-            ['name', 'like', "%{$search}%"]
-        ])->orderByDesc('id');
+        $res = CardCategory::orderByDesc('id');
+
+        if( mb_strlen($search) >= 1 ) {
+            $res->where([
+                ['name', 'like', "%{$search}%"]
+            ]);
+        }
 
         if( $typeId >= 1 ) {
             $res->where('type_id', $typeId);
         }
 
-        $res->with('author');
+        if( $id >= 1 ) {
+            $res->where('id', '=', $id);
+        }
 
-        $categories = $res->get();
+        $categories = $res->with('author')->get();
 
         return response([
             'status' => true,
