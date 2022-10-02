@@ -51,6 +51,11 @@ class OrderController extends Controller
         $data['status'] = 0;
         $data['user_id'] = MainHelper::getUserId() <= 0 ? null : MainHelper::getUserId();
         $data['phone'] = (int) preg_replace('/[^0-9]/', '', $data['phone']);
+        $data['type_id'] = (int) $request->input('type_id');
+
+        if( $data['type_id'] <= 0 ) {
+            $data['type_id'] = 1;
+        }
 
         $order = new Order();
         $order->fill($data);

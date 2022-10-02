@@ -128,4 +128,14 @@ class Order extends Model
     {
         return $this->hasOne(User::class, 'id', 'user_id')->with('role');
     }
+
+    /**
+     * Relationship for getting order type
+     *
+     * @return HasOne
+     */
+    public function type(): HasOne
+    {
+        return $this->hasOne(OrderType::class, 'id', 'type_id');
+    }
 }

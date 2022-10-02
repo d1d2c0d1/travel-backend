@@ -13,6 +13,7 @@ use App\Http\Controllers\ItemTypeController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\MediaController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\OrderTypeController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PostsController;
 use App\Http\Controllers\PromotionsController;
@@ -246,6 +247,8 @@ Route::prefix('blog')->middleware('api.static.auth')->group(function() {
  */
 Route::prefix('orders')->middleware('api.static.auth')->group(function() {
     Route::post('', [OrderController::class, 'store'])->name('order.store');
+    Route::get('types', [OrderTypeController::class, 'index'])->name('order.types');
+    Route::get('type', [OrderTypeController::class, 'single'])->name('order.type');
 
     /**
      * @private (only for authorized users)
