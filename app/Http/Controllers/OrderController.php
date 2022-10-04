@@ -28,6 +28,7 @@ class OrderController extends Controller
             'phone' => 'required|string|min:10|max:32',
             'date_from' => 'required|date',
             'tickets' => 'required|min:1',
+            'type_id' => 'required|min:1|exists:App\Models\OrderType,id',
             'item_id' => 'required|exists:App\Models\Item,id'
         ]);
 

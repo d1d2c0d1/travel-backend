@@ -219,7 +219,7 @@ Route::prefix('attachment')->middleware('api.static.auth')->middleware('api.user
 
 /**
  * Posts routes
- * @private
+ * @private2
  */
 Route::prefix('blog')->middleware('api.static.auth')->middleware('api.user.auth')->middleware('api.is.moder')->group(function() {
     Route::post('', [BlogController::class, 'create'])->name('blog.create');
