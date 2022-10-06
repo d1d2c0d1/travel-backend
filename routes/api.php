@@ -107,18 +107,10 @@ Route::prefix('items')->middleware('api.static.auth')->group(function() {
  */
 Route::prefix('promotion')->middleware('api.static.auth')->middleware('api.user.auth')->middleware('api.is.guide')->group(function() {
     Route::post('', [PromotionsController::class, 'store'])->name('promotions.store');
-    Route::get('{id}', [PromotionsController::class, 'single'])->name('promotions.single');
-});
+    Route::get('{id}', [PromotionsController::class, 'single'])->where('id', '[0-9]')->name('promotions.single');
 
-/**
- * Reviews routes
- * @public
- */
-Route::prefix('reviews')->middleware('api.static.auth')->middleware('api.user.auth')->group(function () {
-
-    Route::post('', [ReviewsController::class, 'create'])->name('reviews.create');
-    Route::patch('{id}', [ReviewsController::class, 'update'])->name('reviews.update');
-
+    Route::get('positions', [PromotionsController::class, 'positions']);
+    Route::get('sub-positions', [PromotionsController::class, 'subPositions']);
 });
 
 /**
@@ -126,15 +118,18 @@ Route::prefix('reviews')->middleware('api.static.auth')->middleware('api.user.au
  * @private
  */
 Route::prefix('reviews')->middleware('api.static.auth')->group(function () {
+
     Route::get('', [ReviewsController::class, 'index'])->name('reviews.index');
 
-    /**
-     * Reviews routes
-     * @private (only for moderators)
-     */
-    Route::middleware('api.user.auth')->middleware('api.is.moder')->group(function () {
-        Route::delete('{id}', [ReviewsController::class, 'destroy'])->name('review.delete');
-        Route::patch('status/{id}/{status}', [ReviewsController::class, 'setStatus'])->name('review.set.status');
+    Route::middleware('api.user.auth')->group(function () {
+
+        Route::post('', [ReviewsController::class, 'create'])->name('reviews.create');
+        Route::patch('{id}', [ReviewsController::class, 'update'])->name('reviews.update');
+
+        Route::middleware('api.user.auth')->middleware('api.is.moder')->group(function () {
+            Route::delete('{id}', [ReviewsController::class, 'destroy'])->name('review.delete');
+            Route::patch('status/{id}/{status}', [ReviewsController::class, 'setStatus'])->name('review.set.status');
+        });
     });
 });
 

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Helpers\MainHelper;
 use App\Models\Item;
 use App\Models\Promotion;
+use App\Models\PromotionPosition;
+use App\Models\PromotionSubPosition;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -178,6 +180,37 @@ class PromotionsController extends Controller
         return response([
             'status' => true,
             'data' => []
+        ]);
+    }
+
+    /**
+     * Getting positions
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function positions(Request $request): Response
+    {
+        return response([
+            'status' => true,
+            'data' => PromotionPosition::all()
+        ]);
+    }
+
+    /**
+     * Getting subpositions
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function subPositions(Request $request): Response
+    {
+        $positionId = (int) $request->input('position_id');
+        $subPositions = PromotionSubPosition::where('position_id', '=', $positionId)->get();
+
+        return response([
+            'status' => true,
+            'data' => $subPositions
         ]);
     }
 }
