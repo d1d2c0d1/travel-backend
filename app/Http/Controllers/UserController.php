@@ -278,14 +278,6 @@ class UserController extends Controller
 
         $guides = $guidesDB->with('company')->with('role')->with('type')->paginate($perPage);
 
-        // Sending 404 error if hasn't defined rows with guides role
-        if( !$guides || $guides->isEmpty() ) {
-            return response([
-                'status' => false,
-                'error' => "Users with role \"$guideRole->name ($guideRole->id)\" is not defined"
-            ], 404);
-        }
-
         return response([
             'status' => true,
             'data' => $guides
