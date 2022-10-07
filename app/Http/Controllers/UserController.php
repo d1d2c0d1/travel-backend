@@ -279,7 +279,7 @@ class UserController extends Controller
         $guides = $guidesDB->with('company')->with('role')->with('type')->paginate($perPage);
 
         return response([
-            'status' => true,
+            'status' => $guides->isNotEmpty(),
             'data' => $guides
         ]);
     }
