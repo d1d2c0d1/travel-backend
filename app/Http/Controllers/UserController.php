@@ -284,4 +284,38 @@ class UserController extends Controller
         ]);
     }
 
+    /**
+     * Confirmed rules for user
+     *
+     * @param int $id
+     * @return Response
+     */
+    public function confirmedRules(): Response
+    {
+        $user = MainHelper::getUser();
+
+        if( !$user || !$user?->id ) {
+            return response([
+                'status' => false,
+                'error' => 'User not found'
+            ], 404);
+        }
+
+        $user->is_confirm = true;
+
+        try {
+            $user->save();
+        } catch (Exception $e) {
+            return response([
+                'status' => false,
+                'error' => 'Database error',
+                'database_error' => $e->getMessage()
+            ], 500);
+        }
+
+        return response([
+            'status' => true
+        ]);
+    }
+
 }

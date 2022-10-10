@@ -163,6 +163,7 @@ Route::prefix('user')->middleware('api.static.auth')->group(function() {
         Route::get('data', [UserController::class, 'index']);
         Route::post('filter', [UserController::class, 'filter']);
         Route::post('update/{id}', [UserController::class, 'update']);
+        Route::patch('confirm', [UserController::class, 'confirmedRules'])->name('user.confirmed');
     });
 
     Route::get('{id}', [UserController::class, 'single']);
