@@ -186,7 +186,7 @@ class OrderController extends Controller
      * @param int $status
      * @return Response
      */
-    public function setStatus(int $id, int $status = 0): Response
+    public function setStatus(int $id, int $status = 0, string $comment = null): Response
     {
         if( $id <= 0 ) {
             return response([
@@ -271,14 +271,21 @@ class OrderController extends Controller
     }
 
     /**
-     * Accepted order by gid
+     * Canceled order by gid
      *
      * @param int $id
+     * @param Request $request
      * @return Response
      */
-    public function canceled(int $id): Response
+    public function canceled(int $id, Request $request): Response
     {
-        return $this->setStatus($id, 1);
+        $comment = null;
+
+        if( $request->has('comment') ) {
+            $comment = (string) $request->input('comment');
+        }
+
+        return $this->setStatus($id, 1, $comment);
     }
 
 }
