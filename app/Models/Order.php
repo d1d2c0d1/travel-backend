@@ -73,6 +73,7 @@ class Order extends Model
         'is_payment',
         'price',
         'tickets',
+        'comment',
         'created_at',
         'updated_at'
     ];
@@ -95,6 +96,7 @@ class Order extends Model
         'phone' => 'integer',
         'date_from' => 'datetime:Y-m-d H:i:s',
         'date_to' => 'datetime:Y-m-d H:i:s',
+        'comment' => 'string',
         'created_at' => 'datetime:Y-m-d H:i:s',
         'updated_at' => 'datetime:Y-m-d H:i:s',
     ];

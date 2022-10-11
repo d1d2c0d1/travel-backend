@@ -224,6 +224,7 @@ class OrderController extends Controller
         }
 
         $order->status = $status;
+        $order->comment = $comment;
 
         try {
             $order->save();
