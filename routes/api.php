@@ -253,6 +253,7 @@ Route::prefix('orders')->middleware('api.static.auth')->group(function() {
         Route::get('', [OrderController::class, 'index'])->name('order.list');
         Route::get('guide/{id}', [OrderController::class, 'guides'])->name('order.guides.list');
         Route::patch('canceled/{id}', [OrderController::class, 'canceled'])->name('order.canceled');
+        Route::get('my', [OrderController::class, 'selfOrders'])->name('order.my');
 
         /**
          * @private (only for guide)

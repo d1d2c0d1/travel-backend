@@ -289,4 +289,50 @@ class OrderController extends Controller
         return $this->setStatus($id, 1, $comment);
     }
 
+    /**
+     * Getting authorized user orders by request
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function selfOrders(Request $request): Response
+    {
+
+        $user = MainHelper::getUser();
+
+        if( !$user || !$user?->id ) {
+            return response([
+                'status' => false,
+                'error' => 'User not authorized'
+            ], 403);
+        }
+
+        $ordersDB = Order::where('user_id', '=', $user->id)->orderByDesc('created_at');
+
+        // By Type ID
+        if( $request->has('type_id') ) {
+            $typeId = (int) $request->input('type_id');
+            $ordersDB->where('type_id', '=', $typeId);
+        }
+
+        // By Status
+        if( $request->has('status') ) {
+            $status = (int) $request->input('status');
+            $ordersDB->where('status', '=', $status);
+        }
+
+        // By Item ID
+        if( $request->has('item_id') ) {
+            $itemId = (int) $request->input('item_id');
+            $ordersDB->where('item_id', '=', $itemId);
+        }
+
+        $orders = $ordersDB->paginate();
+
+        return response([
+            'status' => true,
+            'data' => $orders
+        ]);
+    }
+
 }
