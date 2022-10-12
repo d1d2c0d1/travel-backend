@@ -63,6 +63,7 @@ class Order extends Model
     protected $fillable = [
         'user_id',
         'item_id',
+        'type_id',
         'status',
         'client_name',
         'date_from',
@@ -87,6 +88,7 @@ class Order extends Model
         'id' => 'integer',
         'user_id' => 'integer',
         'item_id' => 'integer',
+        'type_id' => 'integer',
         'status' => 'integer',
         'is_processing' => 'boolean',
         'is_payment' => 'boolean',
