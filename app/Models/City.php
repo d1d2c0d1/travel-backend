@@ -21,6 +21,8 @@ use Illuminate\Support\Carbon;
  * @property Carbon $updated_at
  * @property string $title
  * @property string $description
+ * @property string $seo_title
+ * @property string $seo_description
  * @property string $image
  * @property string $faq
  * @property-read \App\Models\Country|null $country
@@ -88,6 +90,8 @@ class City extends Model
         'country_id',
         'region_id',
         'name',
+        'seo_title',
+        'seo_description'
 
     ];
 
@@ -112,6 +116,8 @@ class City extends Model
         'region_id' => 'integer',
         'name' => 'string',
         'code' => 'string',
+        'seo_title' => 'string',
+        'seo_description' => 'string',
         'created_at' => 'datetime:Y-m-d H:i:s',
         'updated_at' => 'datetime:Y-m-d H:i:s',
 

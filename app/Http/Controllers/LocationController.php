@@ -297,7 +297,9 @@ class LocationController extends Controller
             'title' => $title,
             'description' => $description,
             'image' => $image,
-            'faq' => $faq
+            'faq' => $faq,
+            'seo_title' => (string) $request->input('seo_title'),
+            'seo_description' => (string) $request->input('seo_description')
         ];
     }
 
@@ -325,6 +327,9 @@ class LocationController extends Controller
         $city->image = $validator['image'];
         $city->faq = $validator['faq'];
         $city->code = MainHelper::cyr2lat($validator['name']);
+        $city->seo_title = $validator['seo_title'];
+        $city->seo_description = $validator['seo_description'];
+
 
         try {
             $city->save();
@@ -379,6 +384,14 @@ class LocationController extends Controller
 
         if( $city->description != $validator['description'] ) {
             $city->description = $validator['description'];
+        }
+
+        if( $city->seo_title != $validator['seo_title'] ) {
+            $city->seo_title = $validator['seo_title'];
+        }
+
+        if( $city->seo_description != $validator['seo_description'] ) {
+            $city->seo_description = $validator['seo_description'];
         }
 
         if( $city->image != $validator['image'] ) {
