@@ -150,7 +150,9 @@ class Item extends Model
         'reviews',
         'likes',
         'favorites',
-        'remarks'
+        'remarks',
+        'seo_title',
+        'seo_description'
     ];
 
     /**
@@ -185,6 +187,8 @@ class Item extends Model
         'likes' => 'integer',
         'favorites' => 'integer',
         'remarks' => 'string',
+        'seo_title' => 'string',
+        'seo_description' => 'string',
         'created_at' => 'datetime:Y-m-d H:i:s',
         'updated_at' => 'datetime:Y-m-d H:i:s',
     ];

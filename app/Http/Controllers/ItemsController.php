@@ -37,6 +37,8 @@ class ItemsController extends Controller
             'phone' => (string) $request->input('phone'),
             'address' => (string) $request->input('address'),
             'description' => (string) $request->input('description'),
+            'seo_title' => (string) $request->input('seo_title'),
+            'seo_description' => (string) $request->input('seo_description'),
             'status' => 0
         ];
 
@@ -684,6 +686,14 @@ class ItemsController extends Controller
 
         if( is_array($properties) ) {
             $item->attachProperties($properties);
+        }
+
+        if( $request->has('seo_title') ) {
+            $item->seo_title = (string) $request->input('seo_title');
+        }
+
+        if( $request->has('seo_description') ) {
+            $item->seo_description = (string) $request->input('seo_description');
         }
 
         // Save item

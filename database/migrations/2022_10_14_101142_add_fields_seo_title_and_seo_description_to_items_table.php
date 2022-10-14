@@ -14,7 +14,8 @@ class AddFieldsSeoTitleAndSeoDescriptionToItemsTable extends Migration
     public function up()
     {
         Schema::table('items', function (Blueprint $table) {
-            //
+            $table->string('seo_title')->nullable();
+            $table->text('seo_description')->nullable();
         });
     }
 
@@ -26,7 +27,8 @@ class AddFieldsSeoTitleAndSeoDescriptionToItemsTable extends Migration
     public function down()
     {
         Schema::table('items', function (Blueprint $table) {
-            //
+            $table->dropColumn('seo_title');
+            $table->dropColumn('seo_description');
         });
     }
 }
