@@ -15,6 +15,8 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property string $name
  * @property string $code
  * @property string $description
+ * @property string $seo_title
+ * @property string $seo_description
  * @property \datetime $created_at
  * @property \datetime $updated_at
  * @method static \Illuminate\Database\Eloquent\Builder|CardCategory newModelQuery()
@@ -78,7 +80,9 @@ class CardCategory extends Model
         'name',
         'code',
         'description',
-        'author_id'
+        'author_id',
+        'seo_title',
+        'seo_description'
     ];
 
     /**
@@ -104,6 +108,8 @@ class CardCategory extends Model
         'created_at' => 'datetime:Y-m-d H:i:s',
         'updated_at' => 'datetime:Y-m-d H:i:s',
         'author_id' => 'integer',
+        'seo_title' => 'string',
+        'seo_description' => 'string',
     ];
 
     /**

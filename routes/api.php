@@ -93,6 +93,8 @@ Route::prefix('items')->middleware('api.static.auth')->group(function() {
             Route::patch('accepted/{id}', [ItemsController::class, 'accepted'])->name('items.accepted');
             Route::patch('canceled/{id}', [ItemsController::class, 'canceled'])->name('items.canceled');
             Route::post('categories', [ItemCategoryController::class, 'create'])->name('items.categories.create');
+            Route::patch('category/{id}', [ItemCategoryController::class, 'update'])->name('items.categories.update');
+            Route::delete('category/{id}', [ItemCategoryController::class, 'delete'])->name('items.categories.delete');
             Route::post('properties', [PropertiesController::class, 'create'])->name('items.properties.create');
             Route::patch('remarks/{id}', [ItemsController::class, 'remarks'])->name('items.remarks.edit');
             Route::get('{type}/{action}/{itemId}/{attachmentId}', [ItemsController::class, 'connector'])->name('items.relations');

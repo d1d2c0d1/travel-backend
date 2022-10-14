@@ -60,7 +60,9 @@ class ItemCategoryController extends Controller
             'type_id' => (int) $request->input('type_id'),
             'name' => (string) $request->input('name'),
             'code' => MainHelper::cyr2lat((string) $request->input('name')),
-            'description' => (string) $request->input('description')
+            'description' => (string) $request->input('description'),
+            'seo_title' => (string) $request->input('seo_title'),
+            'seo_description' => (string) $request->input('seo_description'),
         ];
 
         $category = new CardCategory($arFields);
@@ -104,6 +106,99 @@ class ItemCategoryController extends Controller
                 ]
             ], 500);
         }
+
+        return response([
+            'status' => true,
+            'data' => $category
+        ]);
+    }
+
+    /**
+     * Update data in category
+     *
+     * @param int $id
+     * @param Request $request
+     * @return Response
+     */
+    public function update(int $id, Request $request): Response
+    {
+        if( $id <= 0 ) {
+            return response([
+                'status' => false,
+                'error' => 'ID can\'t be empty'
+            ], 401);
+        }
+
+        $category = CardCategory::find($id);
+
+        if( !$category || !$category?->id ) {
+            return response([
+                'status' => false,
+                'error' => 'Card category not found'
+            ], 404);
+        }
+
+        if( $request->has('code') ) {
+            $category->code = (string) $request->input('code');
+        }
+
+        if( $request->has('name') ) {
+            $category->name = (string) $request->input('name');
+        }
+
+        if( $request->has('description') ) {
+            $category->description = (string) $request->input('description');
+        }
+
+        if( $request->has('seo_title') ) {
+            $category->seo_title = (string) $request->input('seo_title');
+        }
+
+        if( $request->has('seo_description') ) {
+            $category->seo_description = (string) $request->input('seo_description');
+        }
+
+        try {
+            $category->save();
+        } catch (Exception $e) {
+            return response([
+                'status' => false,
+                'error' => 'Database error',
+                'database_error' => $e->getMessage()
+            ], 500);
+        }
+
+        return response([
+            'status' => true,
+            'data' => $category
+        ]);
+    }
+
+    /**
+     * Remove category
+     *
+     * @param int $id
+     * @return Response
+     */
+    public function delete(int $id): Response
+    {
+        if( $id <= 0 ) {
+            return response([
+                'status' => false,
+                'error' => 'ID can\'t be empty'
+            ], 401);
+        }
+
+        $category = CardCategory::find($id);
+
+        if( !$category || !$category?->id ) {
+            return response([
+                'status' => false,
+                'error' => 'Card category not found'
+            ], 404);
+        }
+
+        $category->delete();
 
         return response([
             'status' => true,

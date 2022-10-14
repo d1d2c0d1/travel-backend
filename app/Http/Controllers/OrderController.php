@@ -147,7 +147,7 @@ class OrderController extends Controller
      * @param int $id
      * @return Response
      */
-    public function guides(int $id): Response
+    public function guides(int $id, Request $request): Response
     {
 
         if( $id <= 0 ) {
@@ -171,7 +171,20 @@ class OrderController extends Controller
             $itemsIds[] = $item->id;
         }
 
-        $orders = Order::whereIn('item_id', $itemsIds)->orderByDesc('id')->with('item')->with('user')->get();
+        $ordersDB = Order::whereIn('item_id', $itemsIds)->orderByDesc('id');
+
+        // Filter by Is_Payment field
+        if( $request->has('is_payment') ) {
+            $isPayment = (int) $request->input('is_payment');
+
+            if( $isPayment >= 1 ) {
+                $ordersDB->where('is_payment', '=', 1);
+            } else {
+                $ordersDB->whereNull('is_payment');
+            }
+        }
+
+        $orders = $ordersDB->with('item')->with('user')->get();
 
         return response([
            'status' => true,
