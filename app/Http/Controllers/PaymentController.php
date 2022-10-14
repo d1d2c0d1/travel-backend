@@ -218,7 +218,16 @@ class PaymentController extends Controller
             $item = $payment->item;
             $order = $payment->order;
 
+            // Send action to item author (to guide)
             MainHelper::sendAction('alert', $item->author->token, [
+                'type' => 'order.paid',
+                'item' => $item,
+                'order' => $order,
+                'executor' => $order->user
+            ]);
+
+            // Send action to order author
+            MainHelper::sendAction('alert', $order->user->token, [
                 'type' => 'order.paid',
                 'item' => $item,
                 'order' => $order,
