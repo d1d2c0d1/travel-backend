@@ -213,6 +213,15 @@ class PaymentController extends Controller
         $payment->order->is_payment = $isPayment;
         $payment->order->is_processing = $isProcessing;
 
+        try {
+            $payment->save();
+        } catch (Exception $e) {
+            return response([
+                'status' => false,
+                'error' => $e->getMessage()
+            ], 500);
+        }
+
         if( $isPayment ) {
 
             $item = $payment->item;
@@ -234,15 +243,6 @@ class PaymentController extends Controller
                 'executor' => $order->user
             ]);
 
-        }
-
-        try {
-            $payment->save();
-        } catch (Exception $e) {
-            return response([
-                'status' => false,
-                'error' => $e->getMessage()
-            ], 500);
         }
 
         return true;
