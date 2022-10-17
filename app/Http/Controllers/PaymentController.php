@@ -213,6 +213,8 @@ class PaymentController extends Controller
         $payment->order->is_payment = 1;
         $payment->order->is_processing = 0;
 
+        Log::debug('Data from request: ' . json_encode($request->toArray()));
+
         try {
             $payment->save();
         } catch (Exception $e) {
