@@ -210,8 +210,8 @@ class PaymentController extends Controller
 
         // Set approved payment and order status
         $payment->status = $paymentStatus;
-        $payment->order->is_payment = $isPayment;
-        $payment->order->is_processing = $isProcessing;
+        $payment->order->is_payment = 1;
+        $payment->order->is_processing = 0;
 
         try {
             $payment->save();

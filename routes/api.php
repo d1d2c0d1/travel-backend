@@ -48,18 +48,6 @@ Route::get('/test', function(Request $request) {
 });
 
 /**
- * Testing socket route
- */
-Route::get('/socket/test', function(Request $request) {
-
-    return response([
-        'status' => true,
-        'message' => 'API is successfull working',
-        'event' => ''
-    ]);
-});
-
-/**
  * Items routes
  */
 Route::prefix('items')->middleware('api.static.auth')->group(function() {
