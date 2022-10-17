@@ -210,10 +210,8 @@ class PaymentController extends Controller
 
         // Set approved payment and order status
         $payment->status = $paymentStatus;
-        $payment->order->is_payment = 1;
-        $payment->order->is_processing = 0;
-
-        Log::debug('Data from request: ' . json_encode($request->toArray()));
+        $payment->order->is_payment = $isPayment ? 1 : 0;
+        $payment->order->is_processing = $isProcessing ? 1 : 0;
 
         try {
             $payment->save();
