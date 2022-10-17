@@ -215,6 +215,7 @@ class PaymentController extends Controller
 
         try {
             $payment->save();
+            $payment->order->save();
         } catch (Exception $e) {
             return response([
                 'status' => false,
