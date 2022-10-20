@@ -164,7 +164,14 @@ class OrderController extends Controller
             ]);
         }
 
-        $items = Item::where('created_user_id', $id)->get();
+        $itemsDB = Item::where('created_user_id', $id);
+
+        // Filter by status
+        if( $request->has('item_status') ) {
+            $itemsDB->where('status', (int) $request->input('item_status'));
+        }
+
+        $items = $itemsDB->get();
         $itemsIds = [];
 
         foreach ($items as $item) {
@@ -182,6 +189,11 @@ class OrderController extends Controller
             } else {
                 $ordersDB->whereNull('is_payment');
             }
+        }
+
+        // Filter by Status field
+        if( $request->has('status') ) {
+            $ordersDB->where('status', '=', (int) $request->input('status'));
         }
 
         $orders = $ordersDB->with('item')->with('user')->get();
