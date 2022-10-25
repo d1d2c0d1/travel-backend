@@ -183,4 +183,14 @@ class CardCategory extends Model
     {
         return $this->hasOne(User::class, 'id', 'author_id')->with('role');
     }
+
+    /**
+     * Relationship for getting author (user row)
+     *
+     * @return HasOne
+     */
+    public function type(): HasOne
+    {
+        return $this->hasOne( ItemType::class, 'id', 'type_id');
+    }
 }

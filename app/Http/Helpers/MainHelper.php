@@ -265,6 +265,7 @@ class MainHelper
      * Sending action to client from websocket
      *
      * @param string $action
+     * @param string $token
      * @param array $data
      * @return void
      */
@@ -278,5 +279,35 @@ class MainHelper
             'token' => $token
         ]);
 
+    }
+
+    /**
+     * Replace variables in template from values array
+     *
+     * @param string $template
+     * @param array $values
+     * @return string
+     */
+    public static function replaceTemplate(string $template, array $values = []): string
+    {
+        $resultString = $template;
+
+        foreach ($values as $key => $value) {
+            $resultString = str_replace("{{$key}}", $value, $resultString);
+        }
+
+        return $resultString;
+    }
+
+    /**
+     * Clear string from template variables
+     *
+     * @param string $template
+     * @return string
+     */
+    public static function clearTemplate(string $template): string
+    {
+        $result = preg_replace("/\{(.*)\}/i", '', $template);
+        return preg_replace("/\s+/i", ' ', $result);
     }
 }

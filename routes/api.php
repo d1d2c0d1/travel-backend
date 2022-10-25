@@ -20,6 +20,7 @@ use App\Http\Controllers\PromotionsController;
 use App\Http\Controllers\PropertiesController;
 use App\Http\Controllers\ReviewsController;
 use App\Http\Controllers\RolesController;
+use App\Http\Controllers\SEOController;
 use App\Http\Controllers\SubscribeController;
 use App\Http\Controllers\UserController;
 use App\Models\User;
@@ -286,5 +287,15 @@ Route::prefix('payment')->middleware('api.payment.auth')->group(function() {
     Route::post('confirm', [PaymentController::class, 'confirm'])->name('payments.confirm');
     Route::post('refund', [PaymentController::class, 'refund'])->name('payments.refund');
     Route::post('cancel', [PaymentController::class, 'cancel'])->name('payments.cancel');
+
+});
+
+/**
+ * SEO Routes
+ * @public
+ */
+Route::prefix('seo')->middleware('api.static.auth')->group(function() {
+
+    Route::post('filter', [SEOController::class, 'filterData'])->name('seo.filter');
 
 });
