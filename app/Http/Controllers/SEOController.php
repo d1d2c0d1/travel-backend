@@ -31,7 +31,12 @@ class SEOController extends Controller
         $categorieIds = (array) $request->input('categories');
         $cityId = (int) $request->input('city_id');
 
-        $city = City::where('id', $cityId)->with('country')->with('region')->first();
+        if( $request->has('city_code') ) {
+            $cityCode = (string) $request->input('city_code');
+            $city = City::where('code', $cityCode)->with('country')->with('region')->first();
+        } else {
+            $city = City::where('id', $cityId)->with('country')->with('region')->first();
+        }
 
         if( !$city ) {
             return response([
