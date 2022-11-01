@@ -16,7 +16,7 @@ class ItemTypeController extends Controller
     {
         return response([
             'status' => true,
-            'data' => ItemType::all()
+            'data' => ItemType::where('is_active', '=', 1)->get()
         ], 200);
     }
 }
