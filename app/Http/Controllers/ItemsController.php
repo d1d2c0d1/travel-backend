@@ -14,6 +14,7 @@ use App\Models\Property;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Collection;
 
 class ItemsController extends Controller
 {
@@ -409,7 +410,6 @@ class ItemsController extends Controller
 
         return response([
             'status' => true,
-            'tags' => $this->prepareFilterTags($itemsID, $typeId),
             'total' => $items->total(),
             'items' => $items,
             'filter' => $this->prepareFilter($itemsID, $typeId)
@@ -423,7 +423,7 @@ class ItemsController extends Controller
      * @param int $typeId
      * @return array
      */
-    public function prepareFilterTags($items, int $typeId): array
+    public function prepareFilterTags($items, int $typeId): Collection
     {
         $ids = [];
 
@@ -440,10 +440,7 @@ class ItemsController extends Controller
             });
         }
 
-        return [
-            'status' => true,
-            'tags' => $tagsDB->get()
-        ];
+        return $tagsDB->get();
     }
 
     /**
@@ -494,7 +491,7 @@ class ItemsController extends Controller
             $properties[$key] = $property;
         }
 
-        $tags = CardTag::all();
+        $tags = $this->prepareFilterTags($items, $typeId);
 
         return [
             'fields' => [
