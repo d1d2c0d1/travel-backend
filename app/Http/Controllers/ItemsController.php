@@ -407,19 +407,45 @@ class ItemsController extends Controller
         // Getting data with paginate object
         $items = $itemsDB->paginate();
 
-        $status = 200;
-
-        // Set status Not Found
-        // if( $items->isEmpty() ) {
-        //    $status = 404;
-        // }
-
         return response([
             'status' => true,
+            'tags' => $this->prepareFilterTags($itemsID, $typeId),
             'total' => $items->total(),
             'items' => $items,
             'filter' => $this->prepareFilter($itemsID, $typeId)
-        ], $status);
+        ], 200);
+    }
+
+    /**
+     * Prepare tags for filter
+     *
+     * @param $items
+     * @param int $typeId
+     * @return array
+     */
+    public function prepareFilterTags($items, int $typeId): array
+    {
+        $ids = [];
+
+        foreach ($items as $item) {
+            $ids[] = $item->id;
+        }
+
+
+        $tagsDB = CardTag::orderByDesc('created_at');
+
+        if( !empty($ids) ) {
+            $tagsDB->whereHas('items', function ($query) use ($ids) {
+                return $query->whereIn('items.id', $ids);
+            });
+        }
+
+
+
+        return [
+            'status' => true,
+            'tags' => $tagsDB->get()
+        ];
     }
 
     /**

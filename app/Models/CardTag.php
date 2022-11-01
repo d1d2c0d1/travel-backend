@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  * App\Models\ItemTag
@@ -109,4 +111,24 @@ class CardTag extends Model
         'created_at' => 'datetime:Y-m-d H:i:s',
         'updated_at' => 'datetime:Y-m-d H:i:s'
     ];
+
+    /**
+     * Relationship for getting items
+     *
+     * @return BelongsToMany
+     */
+    public function items(): BelongsToMany
+    {
+        return $this->belongsToMany(Item::class, 'item_tag', 'tag_id', 'item_id')->as('items');
+    }
+
+    /**
+     * Relationship for getting users
+     *
+     * @return BelongsToMany
+     */
+    public function users(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'item_tag', 'tag_id', 'user_id')->as('items');
+    }
 }
