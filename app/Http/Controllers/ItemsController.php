@@ -440,8 +440,6 @@ class ItemsController extends Controller
             });
         }
 
-
-
         return [
             'status' => true,
             'tags' => $tagsDB->get()
