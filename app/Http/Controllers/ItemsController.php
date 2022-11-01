@@ -454,7 +454,7 @@ class ItemsController extends Controller
     {
         $ids = [];
         $cityIds = [];
-        $types = ItemType::all();
+        $types = ItemType::where('is_active', '=', 1)->get();
 
         foreach ($items as $item) {
             $ids[] = $item->id;

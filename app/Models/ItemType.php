@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Eloquent;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -11,13 +12,14 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $id
  * @property string $name
  * @property string $code
+ * @property int $is_active
  * @method static \Illuminate\Database\Eloquent\Builder|ItemType newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ItemType newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ItemType query()
  * @method static \Illuminate\Database\Eloquent\Builder|ItemType whereCode($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ItemType whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ItemType whereName($value)
- * @mixin \Eloquent
+ * @mixin Eloquent
  */
 class ItemType extends Model
 {
@@ -65,7 +67,8 @@ class ItemType extends Model
      */
     protected $fillable = [
         'name',
-        'code'
+        'code',
+        'is_active'
     ];
 
     /**
@@ -76,6 +79,7 @@ class ItemType extends Model
     protected $casts = [
         'id' => 'integer',
         'name' => 'string',
-        'code' => 'string'
+        'code' => 'string',
+        'is_active' => 'boolean'
     ];
 }
