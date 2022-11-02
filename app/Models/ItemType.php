@@ -80,6 +80,6 @@ class ItemType extends Model
         'id' => 'integer',
         'name' => 'string',
         'code' => 'string',
-        'is_active' => 'boolean'
+        'is_active' => 'integer'
     ];
 }
