@@ -22,6 +22,7 @@ use App\Http\Controllers\ReviewsController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\SEOController;
 use App\Http\Controllers\SubscribeController;
+use App\Http\Controllers\TestTasksController;
 use App\Http\Controllers\UserController;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -298,4 +299,11 @@ Route::prefix('seo')->middleware('api.static.auth')->group(function() {
 
     Route::post('filter', [SEOController::class, 'filterData'])->name('seo.filter');
 
+});
+
+/**
+ * Testing routes
+ */
+Route::prefix('test')->group(function () {
+    Route::post('task', [TestTasksController::class, 'createTask'])->name('test.task.create');
 });
