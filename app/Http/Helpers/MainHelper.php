@@ -150,7 +150,6 @@ class MainHelper
         if( strlen($token) <= 32 ) {
             return false;
         }
-
         global $userData;
 
         if( $userData instanceof User ) {

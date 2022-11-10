@@ -45,7 +45,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/test', function(Request $request) {
     return response([
         'status' => true,
-        'message' => 'API is successfull working'
+        'message' => 'API is successfull working',
     ]);
 });
 
@@ -144,6 +144,7 @@ Route::prefix('additional')->middleware('api.static.auth')->group(function() {
  * User routes
  */
 Route::prefix('user')->middleware('api.static.auth')->group(function() {
+    Route::post('is-auth', [AuthorizationController::class, 'test']);
     Route::post('auth', [AuthorizationController::class, 'auth']);
     Route::post('registration', [AuthorizationController::class, 'registration']);
     Route::get('guides', [UserController::class, 'guides'])->name('user.guides');
@@ -296,9 +297,7 @@ Route::prefix('payment')->middleware('api.payment.auth')->group(function() {
  * @public
  */
 Route::prefix('seo')->middleware('api.static.auth')->group(function() {
-
     Route::post('filter', [SEOController::class, 'filterData'])->name('seo.filter');
-
 });
 
 /**
