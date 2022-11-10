@@ -22,10 +22,10 @@ class AuthorizationController extends Controller
      */
     public function auth(Request $request): Response
     {
-        $email = (string) $request->json('email');
-        $password = (string) $request->json('password');
+        $email = (string)$request->json('email');
+        $password = (string)$request->json('password');
 
-        if( mb_strlen($email) <= 8 || mb_strlen($password) <= 6 || !str_contains($email, '@')) {
+        if (mb_strlen($email) <= 8 || mb_strlen($password) <= 6 || !str_contains($email, '@')) {
             return response(
                 MainHelper::getErrorResponse([
                     MainHelper::getErrorItem(403, 'Empty login or password fields')
@@ -39,7 +39,7 @@ class AuthorizationController extends Controller
             ['email', '=', $email]
         ])->get();
 
-        if( $users->isEmpty() ) {
+        if ($users->isEmpty()) {
             return response(
                 MainHelper::getErrorResponse([
                     MainHelper::getErrorItem(406, 'Email not defined in our database')
@@ -51,7 +51,7 @@ class AuthorizationController extends Controller
         /** @var User $user */
         $user = $users[0];
 
-        if( !Hash::check($password, $user->password) ) {
+        if (!Hash::check($password, $user->password)) {
             return response(
                 MainHelper::getErrorResponse([
                     MainHelper::getErrorItem(409, 'Email or password incorrected')
@@ -90,10 +90,10 @@ class AuthorizationController extends Controller
      */
     public function registration(Request $request): Response
     {
-        $email = (string) $request->json('email');
-        $password = (string) $request->json('password');
+        $email = (string)$request->json('email');
+        $password = (string)$request->json('password');
 
-        if( mb_strlen($email) <= 8 || mb_strlen($password) <= 6 || !str_contains($email, '@')) {
+        if (mb_strlen($email) <= 8 || mb_strlen($password) <= 6 || !str_contains($email, '@')) {
             return response(
                 MainHelper::getErrorResponse([
                     MainHelper::getErrorItem(403, 'Empty login or password fields')
@@ -107,7 +107,7 @@ class AuthorizationController extends Controller
             ['email', '=', $email]
         ])->get();
 
-        if( !$users->isEmpty() ) {
+        if (!$users->isEmpty()) {
             return response(
                 MainHelper::getErrorResponse([
                     MainHelper::getErrorItem(405, 'User with this email has in service')
@@ -121,8 +121,8 @@ class AuthorizationController extends Controller
         ])->get();
 
         $defaultRole = 0;
-        if( !$roles->isEmpty() ) {
-            $defaultRole = (int) $roles[0]->id;
+        if (!$roles->isEmpty()) {
+            $defaultRole = (int)$roles[0]->id;
         }
 
         $user = new User();
@@ -165,5 +165,19 @@ class AuthorizationController extends Controller
                 'roleId' => $user->role_id
             ])
         );
+    }
+
+    /**
+     * Testing is auth user.
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function test(Request $request): Response
+    {
+        if (MainHelper::getUserId() >= 1) {
+            return response(['status' => true, 'data' => MainHelper::getUser()], 200);
+        }
+        return response(['status' => false], 403);
     }
 }
