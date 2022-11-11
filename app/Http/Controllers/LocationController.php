@@ -423,18 +423,18 @@ class LocationController extends Controller
 
     public function cityType(Request $request): Response
     {
-        $regionID = $request->region_id ?? null;
-        $countyId = $request->county_id ?? null;
-        $cityId = $request->city_id ?? null;
-        $type = ItemType::query()->where('is_active', 1);
-        if ($request->type_id) {
+        $regionID = (int)$request->input('region_id');
+        $countyId = (int)$request->input('county_id');
+        $cityId = (int) $request->input('county_id');
+        $type = ItemType::where('is_active', 1);
+        if ($request->has('type_id')) {
             $type = $type->where('id', $request->type_id);
         }
         $types = $type->get();
-        if (count($types) < 1) {
+        if ($types->isEmpty()) {
             return response([
                 'status' => false,
-                'message' => 'Type not found'
+                'error' => 'Type not found'
             ], 404);
         }
         $data = [];
