@@ -80,7 +80,9 @@ class Property extends Model
         'code',
         'type_id',
         'default',
-        'user_id'
+        'user_id',
+        'values',
+        'is_select'
     ];
 
     /**
@@ -96,7 +98,9 @@ class Property extends Model
         'default' => 'string',
         'user_id' => 'integer',
         'created_at' => 'datetime:Y-m-d H:i:s',
-        'updated_at' => 'datetime:Y-m-d H:i:s'
+        'updated_at' => 'datetime:Y-m-d H:i:s',
+        'values' => 'json',
+        'is_select' => 'boolean'
     ];
 
     /**
