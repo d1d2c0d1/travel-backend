@@ -425,12 +425,12 @@ class LocationController extends Controller
     {
         $regionID = (int)$request->input('region_id');
         $countyId = (int)$request->input('county_id');
-        $cityId = (int) $request->input('county_id');
-        $type = ItemType::where('is_active', 1);
-        if ($request->has('type_id')) {
-            $type = $type->where('id', $request->type_id);
-        }
-        $types = $type->get();
+        $cityId = (int)$request->input('county_id');
+        $typeId = (int)$request->input('type_id');
+        $types = ItemType::select('id', 'name')
+            ->where('is_active', 1)
+            ->when($request->has('type_id'), fn($query) => $query->where('id', $typeId))
+            ->get();
         if ($types->isEmpty()) {
             return response([
                 'status' => false,
@@ -439,30 +439,28 @@ class LocationController extends Controller
         }
         $data = [];
         foreach ($types as $type) {
-            $keyCache = "locations.city.type-region/{$regionID}-city/{$cityId}-country/{$countyId}";
-            $keyTag = "locations.city.tag.type-{$type->id}";
-            $cache = Cache::get($keyTag, []);
-            $cache[$keyCache] = $keyCache;
-            Cache::put($keyTag, $cache);
-            $data[] = Cache::remember($keyCache, 86400, function () use ($type, $regionID, $countyId, $cityId) {
-                $items = Item::query()
-                    ->where('type_id', $type->id);
-                if ($regionID) {
-                    $items = $items->where('region_id', $regionID);
+                // в данном случае куэри нужен что бы если нижние условие
+                // не сработает, гет ошибку не выдал
+                $cities = City::query()
+                    ->select('id', 'name', 'image')
+                    ->when($cityId, fn($query) => $query->where('id', $cityId))
+                    ->get();
+                foreach ($cities as $city) {
+                    $countItem = Item::where('type_id', $type->id)
+                        ->where('city_id', $cityId)
+                        ->when($regionID, fn($query) => $query->where('region_id', $regionID))
+                        ->when($countyId, fn($query) => $query->where('county_id', $countyId))
+                        ->count();
+                    $item = [
+                        'total' => $countItem,
+                        'min_rating' => 0.0,
+                        'max_rating' => 5.0,
+                    ];
+                    $city->items = (object)$item;
                 }
-                if ($countyId) {
-                    $items = $items->where('country_id', $countyId);
-                }
-                if ($cityId) {
-                    $items = $items->where('city_id', $cityId);
-                }
-                $items->count();
-                $type->countCity = $items->count();
-                return $type->toArray();
-            });
+                $type->cities = $cities;
+                return $type;
         }
-
-
         return response([
             'status' => true,
             'data' => $data
