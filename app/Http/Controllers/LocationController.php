@@ -439,7 +439,7 @@ class LocationController extends Controller
         }
         $data = [];
         foreach ($types as $type) {
-            $keyCache = "locations.city.type-region/{$regionID}-city/{$cityId}";
+            $keyCache = "locations.city.type-region/{$regionID}-city/{$cityId}-country/{$countyId}";
             $keyTag = "locations.city.tag.type-{$type->id}";
             $cache = Cache::get($keyTag, []);
             $cache[$keyCache] = $keyCache;
