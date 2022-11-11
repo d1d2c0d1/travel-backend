@@ -437,7 +437,6 @@ class LocationController extends Controller
                 'error' => 'Type not found'
             ], 404);
         }
-        $data = [];
         foreach ($types as $type) {
                 // в данном случае куэри нужен что бы если нижние условие
                 // не сработает, гет ошибку не выдал
@@ -447,9 +446,9 @@ class LocationController extends Controller
                     ->get();
                 foreach ($cities as $city) {
                     $countItem = Item::where('type_id', $type->id)
-                        ->where('city_id', $cityId)
+                        ->where('city_id', $city->id)
                         ->when($regionID, fn($query) => $query->where('region_id', $regionID))
-                        ->when($countyId, fn($query) => $query->where('county_id', $countyId))
+                        ->when($countyId, fn($query) => $query->where('country_id', $countyId))
                         ->count();
                     $item = [
                         'total' => $countItem,
@@ -459,11 +458,10 @@ class LocationController extends Controller
                     $city->items = (object)$item;
                 }
                 $type->cities = $cities;
-                return $type;
         }
         return response([
             'status' => true,
-            'data' => $data
+            'data' => $types
         ]);
     }
 }
