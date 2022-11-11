@@ -442,7 +442,6 @@ class LocationController extends Controller
             $keyCache = "locations.city.type-region/{$regionID}-city/{$cityId}";
             $keyTag = "locations.city.tag.type-{$type->id}";
             $cache = Cache::get($keyTag, []);
-            $return[] = $cache;
             $cache[$keyCache] = $keyCache;
             Cache::put($keyTag, $cache);
             $data[] = Cache::remember($keyCache, 86400, function () use ($type, $regionID, $countyId, $cityId) {

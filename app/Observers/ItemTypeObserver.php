@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Models\ItemType;
 use Illuminate\Support\Facades\Cache;
 
 class ItemTypeObserver
@@ -12,9 +13,16 @@ class ItemTypeObserver
      * @param City $city
      * @return void
      */
-    public function create(City $city): void
+    public function deleted(ItemType $type): void
     {
-        Cache::forget("locations.cities-{$city->country_id}-{$city->region_id}");
+        $keyTag = "locations.city.tag.type-{$type->id}";
+        $cache = Cache::pull($keyTag);
+        if (!$cache) {
+            return;
+        }
+        foreach ($cache as $key=>$value) {
+            Cache::forget($value);
+        }
     }
 
 }
