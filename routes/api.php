@@ -179,6 +179,7 @@ Route::prefix('location')->middleware('api.static.auth')->group(function() {
      * @private
      */
     Route::middleware('api.user.auth')->middleware('api.is.moder')->group(function() {
+        Route::post('city/type', [LocationController::class, 'cityType'])->name('location.city.type');
         Route::put('city/{id}', [LocationController::class, 'updateCity'])->name('location.city.update');
         Route::post('city', [LocationController::class, 'createCity'])->name('location.city.create');
     });
