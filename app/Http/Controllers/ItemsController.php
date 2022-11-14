@@ -458,6 +458,7 @@ class ItemsController extends Controller
             $ids[] = $item->id;
             $cityIds[] = $item->city_id;
         }
+        $minPrice = 0;
         $maxPrice = Item::whereIn('id', $ids)->max('price');
 
         // Clear arrays from repeat and not normal indexes
