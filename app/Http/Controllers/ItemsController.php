@@ -31,31 +31,31 @@ class ItemsController extends Controller
         $arFields = [
             'created_user_id' => MainHelper::getUserId(),
             'owner_user_id' => MainHelper::getUserId(),
-            'name' => (string) $request->input('name'),
-            'city_id' => (int) $request->input('city_id'),
-            'type_id' => (int) $request->input('type_id'),
-            'price' => (int) $request->input('price'),
-            'phone' => (string) $request->input('phone'),
-            'address' => (string) $request->input('address'),
-            'description' => (string) $request->input('description'),
-            'seo_title' => (string) $request->input('seo_title'),
-            'seo_description' => (string) $request->input('seo_description'),
+            'name' => (string)$request->input('name'),
+            'city_id' => (int)$request->input('city_id'),
+            'type_id' => (int)$request->input('type_id'),
+            'price' => (int)$request->input('price'),
+            'phone' => (string)$request->input('phone'),
+            'address' => (string)$request->input('address'),
+            'description' => (string)$request->input('description'),
+            'seo_title' => (string)$request->input('seo_title'),
+            'seo_description' => (string)$request->input('seo_description'),
             'status' => 0
         ];
 
-        if( $request->has('area_id') ) {
-            $arFields['area_id'] = (int) $request->input('area_id');
+        if ($request->has('area_id')) {
+            $arFields['area_id'] = (int)$request->input('area_id');
         }
 
         // Set status accepted
-        if( MainHelper::isAdminOrModer() ) {
+        if (MainHelper::isAdminOrModer()) {
             $arFields['status'] = 2;
         }
 
         // Getting city from database
         $city = City::find($arFields['city_id']);
 
-        if( !$city || !$city?->id ) {
+        if (!$city || !$city?->id) {
             return response([
                 'status' => false,
                 'error' => 'Field city_id is incorrect and not found in database'
@@ -67,9 +67,9 @@ class ItemsController extends Controller
         $arFields['code'] = MainHelper::cyr2lat($city->name . '-' . $arFields['name']);
 
         // Getting images
-        $images = (array) $request->input('images');
+        $images = (array)$request->input('images');
 
-        if( empty($images) ) {
+        if (empty($images)) {
             return response([
                 'status' => false,
                 'error' => 'Feild images is empty'
@@ -79,13 +79,13 @@ class ItemsController extends Controller
         $arFields['images'] = $images;
 
         // Formatting phone and convert to integer
-        $arFields['phone'] = (int) preg_replace('/[^0-9]/', '', $arFields['phone']);
+        $arFields['phone'] = (int)preg_replace('/[^0-9]/', '', $arFields['phone']);
 
         // Create Item
         $item = new Item($arFields);
         $validator = $item->validate();
 
-        if( $validator['status'] === false ) {
+        if ($validator['status'] === false) {
             return response([
                 'status' => false,
                 'error' => 'Bad credentials',
@@ -96,7 +96,7 @@ class ItemsController extends Controller
         try {
             $item->save();
         } catch (Exception $e) {
-            if( (int) $e->getCode() === 23000 ) {
+            if ((int)$e->getCode() === 23000) {
 
                 return response([
                     'status' => false,
@@ -108,7 +108,7 @@ class ItemsController extends Controller
                     'status' => false,
                     'error' => 'Error in database',
                     'dbError' => $e->getMessage(),
-                    'dbErrorCode' => (int) $e->getCode()
+                    'dbErrorCode' => (int)$e->getCode()
                 ], 500);
             }
         }
@@ -117,14 +117,14 @@ class ItemsController extends Controller
         $properties = $request->input('properties');
         $itemProperties = [];
 
-        if( is_array($properties) ) {
+        if (is_array($properties)) {
             $itemProperties = $item->attachProperties($properties);
         }
 
         // Create tags
-        $tags = (array) $request->input('tags');
+        $tags = (array)$request->input('tags');
 
-        if( is_array($tags) ) {
+        if (is_array($tags)) {
             foreach ($tags as $tagId) {
                 $item->tags()->attach((int)$tagId, [
                     'user_id' => MainHelper::getUserId()
@@ -133,9 +133,9 @@ class ItemsController extends Controller
         }
 
         // Create categories
-        $categories = (array) $request->input('categories');
+        $categories = (array)$request->input('categories');
 
-        if( is_array($categories) ) {
+        if (is_array($categories)) {
             foreach ($categories as $categoryId) {
                 $item->categories()->attach((int)$categoryId, [
                     'user_id' => MainHelper::getUserId()
@@ -164,14 +164,14 @@ class ItemsController extends Controller
      */
     public function delete(int $id, Request $request): Response
     {
-        if( !$id || $id <= 0 ) {
+        if (!$id || $id <= 0) {
             return response([
                 'status' => false,
                 'error' => 'ID can\'t be empty!'
             ]);
         }
 
-        if( !MainHelper::isGuide() ) {
+        if (!MainHelper::isGuide()) {
             return response([
                 'status' => false,
                 'error' => 'Permission denied'
@@ -180,15 +180,15 @@ class ItemsController extends Controller
 
         $item = Item::find($id);
 
-        if( !$item || !$item?->id || $item?->id <= 0 ) {
+        if (!$item || !$item?->id || $item?->id <= 0) {
             return response([
                 'status' => false,
                 'error' => 'Row with id:' . $id . ' not found!'
             ]);
         }
 
-        if( MainHelper::getUserRole()?->is_guide && !MainHelper::isAdminOrModer() ) {
-            if( $item->created_user_id !== MainHelper::getUserId() ) {
+        if (MainHelper::getUserRole()?->is_guide && !MainHelper::isAdminOrModer()) {
+            if ($item->created_user_id !== MainHelper::getUserId()) {
                 return response([
                     'status' => false,
                     'error' => 'Only self items can be deleted!'
@@ -224,31 +224,31 @@ class ItemsController extends Controller
 
         // TODO: Need to be refactoring to array
         // Getting data for filter
-        $typeId = (int) $request->input('type_id');
-        $status = (int) $request->input('status');
-        $id = (int) $request->input('id');
-        $cityId = (int) $request->input('city_id');
-        $cityCode = (string) $request->input('city_code');
-        $typeCode = (string) $request->input('type_code');
-        $itemCode = (string) $request->input('code');
-        $name = (string) $request->input('name');
-        $authorID = (int) $request->input('author_id');
-        $acceptedID = (int) $request->input('accepted_user_id');
-        $editedID = (int) $request->input('edit_user_id');
+        $typeId = (int)$request->input('type_id');
+        $status = (int)$request->input('status');
+        $id = (int)$request->input('id');
+        $cityId = (int)$request->input('city_id');
+        $cityCode = (string)$request->input('city_code');
+        $typeCode = (string)$request->input('type_code');
+        $itemCode = (string)$request->input('code');
+        $name = (string)$request->input('name');
+        $authorID = (int)$request->input('author_id');
+        $acceptedID = (int)$request->input('accepted_user_id');
+        $editedID = (int)$request->input('edit_user_id');
 
         // Search by ID
-        if( $id >= 1 ) {
+        if ($id >= 1) {
             $itemsDB->where('id', '=', $id);
         }
 
         // Search by card type
-        if( $typeId >= 1 ) {
+        if ($typeId >= 1) {
             $itemsDB->where('type_id', '=', $typeId);
         }
 
         // Search by card status (1 of 3)
-        if( MainHelper::isGuide() ) {
-            if( $status >= 1 ) {
+        if (MainHelper::isGuide()) {
+            if ($status >= 1) {
                 $itemsDB->where('status', '=', $status);
             }
         } else {
@@ -256,30 +256,30 @@ class ItemsController extends Controller
         }
 
         // Search by item title
-        if( mb_strlen($name) >= 2 ) {
+        if (mb_strlen($name) >= 2) {
             $itemsDB->where('name', 'like', "%{$name}%");
         }
 
         // Search by author
-        if( $authorID >= 1 ) {
+        if ($authorID >= 1) {
             $itemsDB->where('created_user_id', '=', $authorID);
         }
 
         // Search by accepted user
-        if( $acceptedID >= 1 ) {
+        if ($acceptedID >= 1) {
             $itemsDB->where('accepted_user_id', '=', $acceptedID);
         }
 
         // Search by edited user
-        if( $editedID >= 1 ) {
+        if ($editedID >= 1) {
             $itemsDB->where('edit_user_id', '=', $editedID);
         }
 
         // Find by City Code
-        if( mb_strlen($cityCode) >= 1 ) {
+        if (mb_strlen($cityCode) >= 1) {
             $city = City::select('id')->where('code', '=', $cityCode)->first();
 
-            if( $city?->id >= 1 ) {
+            if ($city?->id >= 1) {
                 $itemsDB->where('city_id', '=', $city->id);
             } else {
                 $itemsDB->where('city_id', '=', 0); // For getting all cards
@@ -287,37 +287,37 @@ class ItemsController extends Controller
         }
 
         // Search by code
-        if( mb_strlen($itemCode) >= 1 ) {
+        if (mb_strlen($itemCode) >= 1) {
             $itemsDB->where('code', '=', $itemCode);
         }
 
         // Find by Type Code
-        if( mb_strlen($typeCode) >= 1 ) {
+        if (mb_strlen($typeCode) >= 1) {
             $type = ItemType::select('id')->where('code', '=', $typeCode)->first();
 
-            if( $type?->id >= 1 ) {
+            if ($type?->id >= 1) {
                 $itemsDB->where('type_id', '=', $type->id);
                 $typeId = $type->id;
             }
         }
 
         // Search by city identify
-        if( $cityId >= 1 ) {
+        if ($cityId >= 1) {
             $itemsDB->where('city_id', '=', $cityId);
         }
 
         // Filter by created_at
-        if( $request->has('created_at') ) {
-            $createdAts = (array) $request->input('created_at');
+        if ($request->has('created_at')) {
+            $createdAts = (array)$request->input('created_at');
 
-            if( !empty($createdAts) ) {
-                $startPeriod = (int) strtotime($createdAts[0]);
-                $endPeriod = (int) strtotime($createdAts[1] ?? null);
+            if (!empty($createdAts)) {
+                $startPeriod = (int)strtotime($createdAts[0]);
+                $endPeriod = (int)strtotime($createdAts[1] ?? null);
 
-                if( $startPeriod >= 15000 ) {
+                if ($startPeriod >= 15000) {
                     $itemsDB->where('created_at', '>=', date('Y-m-d H:i:s', $startPeriod));
 
-                    if($endPeriod >= 15000) {
+                    if ($endPeriod >= 15000) {
                         $itemsDB->where('created_at', '<=', date('Y-m-d H:i:s', $endPeriod));
                     }
                 }
@@ -325,12 +325,12 @@ class ItemsController extends Controller
         }
 
         // Filtering by categories
-        if( $request->has('categories') ) {
-            $categories = (array) $request->input('categories');
+        if ($request->has('categories')) {
+            $categories = (array)$request->input('categories');
 
-            if( !empty($categories) ) {
+            if (!empty($categories)) {
                 $itemsDB->whereHas('categories', function ($query) use ($categories) {
-                    $query->where(function($query) use ($categories) {
+                    $query->where(function ($query) use ($categories) {
                         foreach ($categories as $categoryId) {
                             $query->orWhere('category_id', $categoryId);
                         }
@@ -340,12 +340,12 @@ class ItemsController extends Controller
         }
 
         // Filtering by tags
-        if( $request->has('tags') ) {
-            $tags = (array) $request->input('tags');
+        if ($request->has('tags')) {
+            $tags = (array)$request->input('tags');
 
-            if( !empty($tags) ) {
+            if (!empty($tags)) {
                 $itemsDB->whereHas('tags', function ($query) use ($tags) {
-                    $query->where(function($query) use ($tags) {
+                    $query->where(function ($query) use ($tags) {
                         foreach ($tags as $tagId) {
                             $query->orWhere('tag_id', $tagId);
                         }
@@ -355,27 +355,27 @@ class ItemsController extends Controller
         }
 
         // Filtering by price
-        if( $request->has('price') ) {
+        if ($request->has('price')) {
             $price = $request->input('price');
 
-            if( isset($price['from']) && isset($price['to']) ) {
+            if (isset($price['from']) && isset($price['to'])) {
                 $itemsDB->where([
                     ['price', '>=', $price['from']],
                     ['price', '<=', $price['to']]
                 ]);
             }
 
-            if( (int) $price >= 10 ) {
-                $itemsDB->where('price', '=', (int) $price);
+            if ((int)$price >= 10) {
+                $itemsDB->where('price', '=', (int)$price);
             }
         }
 
         // Filter by properties
-        if( $request->has('properties') ) {
-            $properties = (array) $request->input('properties');
+        if ($request->has('properties')) {
+            $properties = (array)$request->input('properties');
 
             $itemsDB->whereHas('properties', function ($query) use ($properties) {
-                $query->where(function($query) use ($properties) {
+                $query->where(function ($query) use ($properties) {
                     foreach ($properties as $propertyId => $propertyValue) {
                         $query->orWhere([
                             ['property_id', '=', $propertyId],
@@ -390,7 +390,7 @@ class ItemsController extends Controller
         $itemsDBClone = $itemsDB->clone();
 
         // Requesting data by relationships
-        if( $request->input('short') !== true ) {
+        if ($request->input('short') !== true) {
             $itemsDB
                 ->with('categories')
                 ->with('tags')
@@ -403,11 +403,10 @@ class ItemsController extends Controller
         }
 
         // Getting filter data
-        $itemsID = $itemsDBClone->select(['id', 'city_id', 'type_id'])->get();
+        $itemsID = $itemsDBClone->select(['id', 'price', 'city_id', 'type_id'])->get();
 
         // Getting data with paginate object
         $items = $itemsDB->paginate();
-
         return response([
             'status' => true,
             'total' => $items->total(),
@@ -434,7 +433,7 @@ class ItemsController extends Controller
 
         $tagsDB = CardTag::orderByDesc('created_at');
 
-        if( !empty($ids) ) {
+        if (!empty($ids)) {
             $tagsDB->whereHas('items', function ($query) use ($ids) {
                 return $query->whereIn('items.id', $ids);
             });
@@ -455,8 +454,12 @@ class ItemsController extends Controller
         $ids = [];
         $cityIds = [];
         $types = ItemType::where('is_active', '=', 1)->get();
-
+        $minPrice = 0;
+        $maxPrice = null;
         foreach ($items as $item) {
+            if (is_null($maxPrice) || $maxPrice < $item->price) {
+                $maxPrice = $item->price;
+            }
             $ids[] = $item->id;
             $cityIds[] = $item->city_id;
         }
@@ -464,7 +467,7 @@ class ItemsController extends Controller
         // Clear arrays from repeat and not normal indexes
         $cities = City::all();
 
-        if( $typeId >= 1 ) {
+        if ($typeId >= 1) {
 
             // If selected cards type
             $properties = Property::where('type_id', $typeId)->get();
@@ -492,7 +495,7 @@ class ItemsController extends Controller
         }
 
         $tags = $this->prepareFilterTags($items, $typeId);
-
+        // из ids мы берем минимальную и максимальную цену и запихиваем ее в price
         return [
             'fields' => [
                 'title' => [
@@ -535,8 +538,8 @@ class ItemsController extends Controller
                 'price' => [
                     'type' => 'range',
                     'valueType' => 'integer',
-                    'min' => 1,
-                    'max' => 300000
+                    'min' => $minPrice,
+                    'max' => $maxPrice
                 ]
             ]
         ];
@@ -553,14 +556,14 @@ class ItemsController extends Controller
     {
         $item = Item::select(['id', 'status'])->find($id);
 
-        if( $item?->id !== $id ) {
+        if ($item?->id !== $id) {
             return response([
                 'status' => false,
                 'error' => "Item with ID: {$id} not found"
             ], 404);
         }
 
-        if( $item->status !== $status ) {
+        if ($item->status !== $status) {
             $item->status = $status;
 
             try {
@@ -619,14 +622,14 @@ class ItemsController extends Controller
     public function update(int $id, Request $request): Response
     {
 
-        if( $id <= 0 ) {
+        if ($id <= 0) {
             return response([
-               'status' => false,
-               'error' => 'ID cant be empty!'
+                'status' => false,
+                'error' => 'ID cant be empty!'
             ], 405);
         }
 
-        if( !MainHelper::isGuide() ) {
+        if (!MainHelper::isGuide()) {
             return response([
                 'status' => false,
                 'error' => 'Permission denied'
@@ -635,7 +638,7 @@ class ItemsController extends Controller
 
         $item = Item::where('id', '=', $id)->with('properties')->first();
 
-        if( !$item || !$item?->id ) {
+        if (!$item || !$item?->id) {
             return response([
                 'status' => false,
                 'error' => 'Item with id:' . $id . ' not found'
@@ -643,8 +646,8 @@ class ItemsController extends Controller
         }
 
         // If guide send request
-        if( !MainHelper::isAdminOrModer() ) {
-            if( $item->created_user_id !== MainHelper::getUserId() ) {
+        if (!MainHelper::isAdminOrModer()) {
+            if ($item->created_user_id !== MainHelper::getUserId()) {
                 return response([
                     'status' => false,
                     'error' => 'Requested user not owner for item'
@@ -653,68 +656,68 @@ class ItemsController extends Controller
         }
 
         // Set name
-        if( $request->has('name') ) {
+        if ($request->has('name')) {
             $item->name = $request->input('name');
         }
 
         // Set status
-        if( $request->has('status') ) {
-            $item->status = (int) $request->input('status');
+        if ($request->has('status')) {
+            $item->status = (int)$request->input('status');
         }
 
         // Set phone
-        if( $request->has('phone') ) {
-            $item->phone = (int) preg_replace('/[^0-9]/', '', $request->input('phone'));
+        if ($request->has('phone')) {
+            $item->phone = (int)preg_replace('/[^0-9]/', '', $request->input('phone'));
         }
 
         // Set address
-        if( $request->has('address') ) {
+        if ($request->has('address')) {
             $item->address = $request->input('address');
         }
 
         // Set price
-        if( $request->has('price') ) {
+        if ($request->has('price')) {
             $item->price = $request->input('price');
         }
 
         // Set code
-        if( $request->has('code') ) {
+        if ($request->has('code')) {
             $item->code = $request->input('code');
         }
 
         // Set description
-        if( $request->has('description') ) {
+        if ($request->has('description')) {
             $item->description = $request->input('description');
         }
 
         // Set type_id
-        if( $request->has('type_id') && ((int) $request->input('type_id') >= 1) ) {
-            $item->type_id = (int) $request->input('type_id');
+        if ($request->has('type_id') && ((int)$request->input('type_id') >= 1)) {
+            $item->type_id = (int)$request->input('type_id');
         }
 
         // Set type_id
-        if( $request->has('city_id') && ((int) $request->input('city_id') >= 1) ) {
-            $item->city_id = (int) $request->input('city_id');
+        if ($request->has('city_id') && ((int)$request->input('city_id') >= 1)) {
+            $item->city_id = (int)$request->input('city_id');
         }
 
         // Set images
-        if( $request->has('images') ) {
-            $item->images = (array) $request->input('images');
+        if ($request->has('images')) {
+            $item->images = (array)$request->input('images');
         }
 
         // Set properties
         $properties = $request->input('properties');
 
-        if( is_array($properties) ) {
+        if (is_array($properties)) {
             $item->attachProperties($properties);
         }
 
-        if( $request->has('seo_title') ) {
-            $item->seo_title = (string) $request->input('seo_title');
+        if ($request->has('seo_title')) {
+            $item->seo_title = (string)$request->input('seo_title');
         }
 
-        if( $request->has('seo_description') ) {
-            $item->seo_description = (string) $request->input('seo_description');
+        if ($request->has('seo_description')) {
+            $item->seo_description = (string)$request->input('seo_description');
         }
 
         // Save item
@@ -744,16 +747,16 @@ class ItemsController extends Controller
     {
         $item = Item::select(['id', 'remarks'])->find($id);
 
-        if( $item?->id !== $id ) {
+        if ($item?->id !== $id) {
             return response([
                 'status' => false,
                 'error' => "Item with ID: {$id} not found"
             ], 404);
         }
 
-        $remarks = (string) $request->input('remarks');
+        $remarks = (string)$request->input('remarks');
 
-        if( $item->remarks !== $remarks ) {
+        if ($item->remarks !== $remarks) {
 
             $item->remarks = $remarks;
             $item->status = 1; // Set is not moderated status
@@ -787,14 +790,14 @@ class ItemsController extends Controller
      */
     public function connector(string $type, string $action, int $itemId, int $attachId, string $value = ''): Response
     {
-        if( $itemId <= 0 || $attachId <= 0 ) {
+        if ($itemId <= 0 || $attachId <= 0) {
             return response([
                 'status' => false,
                 'error' => 'Empty required fields: itemID or attachmentID.'
             ]);
         }
 
-        if( !MainHelper::isAdminOrModer() ) {
+        if (!MainHelper::isAdminOrModer()) {
             return response([
                 'status' => false,
                 'error' => 'Permission denied'
@@ -803,7 +806,7 @@ class ItemsController extends Controller
 
         $item = Item::with('tags')->with('categories')->with('properties')->find($itemId);
 
-        if( !$item || !$item?->id ) {
+        if (!$item || !$item?->id) {
             return response([
                 'status' => false,
                 'error' => "Item with id:{$itemId} not found in db"
