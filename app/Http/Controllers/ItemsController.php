@@ -403,7 +403,7 @@ class ItemsController extends Controller
         }
 
         // Getting filter data
-        $itemsID = $itemsDBClone->select(['id', 'price', 'city_id', 'type_id'])->get();
+        $itemsID = $itemsDBClone->select(['id', 'city_id', 'type_id'])->get();
 
         // Getting data with paginate object
         $items = $itemsDB->paginate();
@@ -454,15 +454,11 @@ class ItemsController extends Controller
         $ids = [];
         $cityIds = [];
         $types = ItemType::where('is_active', '=', 1)->get();
-        $minPrice = 0;
-        $maxPrice = null;
         foreach ($items as $item) {
-            if (is_null($maxPrice) || $maxPrice < $item->price) {
-                $maxPrice = $item->price;
-            }
             $ids[] = $item->id;
             $cityIds[] = $item->city_id;
         }
+        $maxPrice = Item::whereIn('id', $ids)->max('price');
 
         // Clear arrays from repeat and not normal indexes
         $cities = City::all();
