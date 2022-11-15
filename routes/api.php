@@ -5,6 +5,7 @@ use App\Http\Controllers\AdditionalController;
 use App\Http\Controllers\AuthorizationController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\FavoritesController;
+use App\Http\Controllers\FilterController;
 use App\Http\Controllers\GuideController;
 use App\Http\Controllers\ItemCategoryController;
 use App\Http\Controllers\ItemsController;
@@ -59,6 +60,13 @@ Route::prefix('items')->middleware('api.static.auth')->group(function() {
     Route::get('tags', [ItemTagController::class, 'index'])->name('items.tags');
     Route::get('properties', [PropertiesController::class, 'index'])->name('items.properties');
     Route::delete('{id}', [ItemsController::class, 'delete'])->name('items.delete');
+
+    /**
+     * Prepared filters
+     */
+    Route::prefix('prepare')->group(function() {
+        Route::post('filter', [FilterController::class, 'store'])->name('items.prepare.filter');
+    });
 
     /**
      * Items routes
