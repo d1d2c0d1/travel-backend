@@ -54,6 +54,8 @@ class PropertiesController extends Controller
             'type_id' => (int) $request->input('type_id'),
             'user_id' => MainHelper::getUserId(),
             'default' => (string) $request->input('default'),
+            'values' => (string) $request->input('values'),
+            'is_select' => (boolean) $request->input('is_select'),
         ];
 
         if( !MainHelper::isAdminOrModer() ) {
