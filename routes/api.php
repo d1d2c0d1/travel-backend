@@ -299,10 +299,3 @@ Route::prefix('payment')->middleware('api.payment.auth')->group(function() {
 Route::prefix('seo')->middleware('api.static.auth')->group(function() {
     Route::post('filter', [SEOController::class, 'filterData'])->name('seo.filter');
 });
-
-/**
- * Testing routes
- */
-Route::prefix('test')->group(function () {
-    Route::post('task', [TestTasksController::class, 'createTask'])->name('test.task.create');
-});
