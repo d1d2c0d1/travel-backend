@@ -19,7 +19,7 @@ class ItemTagController extends Controller
      */
     public function index(Request $request): Response
     {
-        $search = (string)$request->input('япsearch');
+        $search = (string)$request->input('search');
 
         $res = CardTag::where([
             ['title', 'like', "%{$search}%"]
