@@ -129,7 +129,7 @@ class CardCategory extends Model
 
         $errors = [];
 
-        // AUTHOR ID
+        // AUTHOR ID //
         if( !isset($arFields['author_id']) ) {
             $errors[] = MainHelper::getErrorItem(412, 'author_id not found in field list');
         } else {
@@ -193,4 +193,17 @@ class CardCategory extends Model
     {
         return $this->hasOne( ItemType::class, 'id', 'type_id');
     }
+
+    const CREATING_RULES = [
+        'type_id' => 'required|min:1',
+        'name' => 'required'
+    ];
+
+    const UPDATING_RULES = [
+        'code' => 'string',
+        'name' => 'string',
+        'description' => 'string',
+        'seo_title' => 'string',
+        'seo_description' => 'string'
+    ];
 }

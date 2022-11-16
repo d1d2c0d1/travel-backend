@@ -27,7 +27,10 @@ class ItemsController extends Controller
      */
     public function create(Request $request): Response
     {
-
+        $validate = MainHelper::validate($request, Item::CREATING_RULES);
+        if ($validate->getStatus() === false) {
+            return response($validate->toArray(), 412);
+        }
         $arFields = [
             'created_user_id' => MainHelper::getUserId(),
             'owner_user_id' => MainHelper::getUserId(),
@@ -55,43 +58,19 @@ class ItemsController extends Controller
         // Getting city from database
         $city = City::find($arFields['city_id']);
 
-        if( !$city || !$city?->id ) {
-            return response([
-                'status' => false,
-                'error' => 'Field city_id is incorrect and not found in database'
-            ], 449);
-        }
-
         $arFields['country_id'] = $city->country_id;
         $arFields['region_id'] = $city->region_id;
         $arFields['code'] = MainHelper::cyr2lat($city->name . '-' . $arFields['name']);
 
         // Getting images
-        $images = (array) $request->input('images');
 
-        if( empty($images) ) {
-            return response([
-                'status' => false,
-                'error' => 'Feild images is empty'
-            ], 449);
-        }
-
-        $arFields['images'] = $images;
+        $arFields['images'] = (array) $request->input('images');
 
         // Formatting phone and convert to integer
         $arFields['phone'] = (int) preg_replace('/[^0-9]/', '', $arFields['phone']);
 
         // Create Item
         $item = new Item($arFields);
-        $validator = $item->validate();
-
-        if( $validator['status'] === false ) {
-            return response([
-                'status' => false,
-                'error' => 'Bad credentials',
-                'validator' => $validator
-            ], 449);
-        }
 
         try {
             $item->save();
@@ -626,13 +605,6 @@ class ItemsController extends Controller
             ], 405);
         }
 
-        if( !MainHelper::isGuide() ) {
-            return response([
-                'status' => false,
-                'error' => 'Permission denied'
-            ], 401);
-        }
-
         $item = Item::where('id', '=', $id)->with('properties')->first();
 
         if( !$item || !$item?->id ) {
@@ -651,70 +623,38 @@ class ItemsController extends Controller
                 ], 401);
             }
         }
-
-        // Set name
-        if( $request->has('name') ) {
-            $item->name = $request->input('name');
+        $validate = MainHelper::validate($request, Item::UPDATING_RULES);
+        if ($validate->getStatus() === false) {
+            return response($validate->toArray(), 412);
         }
 
-        // Set status
-        if( $request->has('status') ) {
-            $item->status = (int) $request->input('status');
+        foreach ($validate->getData() as $key=>$value) {
+               switch ($key) {
+                   case 'phone':
+                       $item->phone = (int) preg_replace('/[^0-9]/', '', $request->input('phone'));
+                    break;
+                   case 'type_id':
+                    if(((int) $request->input('type_id') >= 1) ) {
+                           $item->type_id = (int) $request->input('type_id');
+                       }
+                    break;
+                   case 'city_id':
+                       if(((int) $request->input('city_id') >= 1) ) {
+                           $item->city_id = (int) $request->input('city_id');
+                       }
+                       break;
+                   default:
+                       $item->$key = $value;
+                       break;
+               }
         }
 
-        // Set phone
-        if( $request->has('phone') ) {
-            $item->phone = (int) preg_replace('/[^0-9]/', '', $request->input('phone'));
-        }
-
-        // Set address
-        if( $request->has('address') ) {
-            $item->address = $request->input('address');
-        }
-
-        // Set price
-        if( $request->has('price') ) {
-            $item->price = $request->input('price');
-        }
-
-        // Set code
-        if( $request->has('code') ) {
-            $item->code = $request->input('code');
-        }
-
-        // Set description
-        if( $request->has('description') ) {
-            $item->description = $request->input('description');
-        }
-
-        // Set type_id
-        if( $request->has('type_id') && ((int) $request->input('type_id') >= 1) ) {
-            $item->type_id = (int) $request->input('type_id');
-        }
-
-        // Set type_id
-        if( $request->has('city_id') && ((int) $request->input('city_id') >= 1) ) {
-            $item->city_id = (int) $request->input('city_id');
-        }
-
-        // Set images
-        if( $request->has('images') ) {
-            $item->images = (array) $request->input('images');
-        }
 
         // Set properties
         $properties = $request->input('properties');
 
         if( is_array($properties) ) {
             $item->attachProperties($properties);
-        }
-
-        if( $request->has('seo_title') ) {
-            $item->seo_title = (string) $request->input('seo_title');
-        }
-
-        if( $request->has('seo_description') ) {
-            $item->seo_description = (string) $request->input('seo_description');
         }
 
         // Save item

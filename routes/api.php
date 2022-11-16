@@ -67,11 +67,11 @@ Route::prefix('items')->middleware('api.static.auth')->group(function() {
     Route::middleware('api.user.auth')->group(function() {
         Route::get('favorites', [FavoritesController::class, 'index'])->name('items.favorites.list');
         Route::post('favorite/{id}', [FavoritesController::class, 'toggle'])->name('items.favorites.toggle');
-        Route::patch('{id}', [ItemsController::class, 'update'])->name('items.update');
         Route::patch('waited/{id}', [ItemsController::class, 'waited'])->name('items.waited');
-        Route::post('tags', [ItemTagController::class, 'create'])->name('items.tags.create');
 
         Route::middleware('api.is.guide')->group(function () {
+            Route::patch('{id}', [ItemsController::class, 'update'])->name('items.update');
+            Route::post('tags', [ItemTagController::class, 'create'])->name('items.tags.create');
             Route::post('', [ItemsController::class, 'create'])->name('items.create');
         });
 
