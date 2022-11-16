@@ -56,19 +56,25 @@ class SEOController extends Controller
             'city_image' => $city->image,
             'region_name' => $city->region->name,
             'country_name' => $city->country->name,
+            'first_category_name' => '',
+            'category_name' => '',
+            'category_description' => ''
         ];
-
-        // Replacing
-        $result['title'] = MainHelper::replaceTemplate($result['title'], $cityVariables);
-        $result['description'] = MainHelper::replaceTemplate($result['description'], $cityVariables);
 
         // Getting info by selected categories
         if( !empty($categorieIds) ) {
             $categories = CardCategory::whereIn('id', $categorieIds)->with('type')->get();
-            $categoryDescriptions = '';
-
             foreach ($categories as $category) {
 
+                // Save first category name
+                if( empty($cityVariables['first_category_name']) ) {
+                    $cityVariables['first_category_name'] = $category->name;
+                }
+
+                // Concatenating category names
+                $cityVariables['category_name'] .= empty($cityVariables['category_name']) ? $category->name : ', ' . $category->name;
+
+                // Create fields for category replacements
                 $categoryVariables = [
                     'category_name' => $category->name,
                     'category_description' => $category->description,
@@ -77,22 +83,18 @@ class SEOController extends Controller
                     'category_type_code' => $category->type->code
                 ];
 
-                // Concatenate seo description
+                // Replacing category description
                 $categoryDescription = MainHelper::replaceTemplate((string) $category->seo_description, $categoryVariables);
                 $categoryDescription = MainHelper::replaceTemplate($categoryDescription, $cityVariables);
-                $categoryDescriptions .= ' ' . $categoryDescription;
+
+                // Concatinate seo descriptions from categories
+                $cityVariables['category_description'] .= ' ' . $categoryDescription;
             }
-
-            // Create title for filter
-            $result['title'] = MainHelper::replaceTemplate($result['title'], [
-                'category_description' => $categoryDescriptions
-            ]);
-
-            // Create description for filter
-            $result['description'] = MainHelper::replaceTemplate($result['description'], [
-                'category_description' => $categoryDescriptions
-            ]);
         }
+
+        // Replacing city title and description
+        $result['title'] = MainHelper::replaceTemplate($result['title'], $cityVariables);
+        $result['description'] = MainHelper::replaceTemplate($result['description'], $cityVariables);
 
         // Clear template
         $result['title'] = MainHelper::clearTemplate($result['title']);
