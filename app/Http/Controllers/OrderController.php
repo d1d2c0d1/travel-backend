@@ -132,6 +132,13 @@ class OrderController extends Controller
             }
         }
 
+        if ($request->has('type_id')) {
+            $typeId = (integer) $request->input('type_id');
+            $ordersDB->whereHas('item', function ($query) use ($typeId) {
+                $query->where('type_id', '=', $typeId);
+            });
+        }
+
         // Getting data from db and paginate that
         $orders = $ordersDB->paginate();
 
