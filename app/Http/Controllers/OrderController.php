@@ -24,7 +24,7 @@ class OrderController extends Controller
     {
 
         $validator = Validator::make($request->all(), [
-            'client_name' => 'required|string|min:3',
+            'client_name' => 'required|string|min:2',
             'phone' => 'required|string|min:10|max:32',
             'date_from' => 'required|date',
             'tickets' => 'required|min:1',
