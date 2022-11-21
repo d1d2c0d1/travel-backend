@@ -633,7 +633,7 @@ class ItemsController extends Controller
             ], 401);
         }
 
-        $item = Item::where('id', '=', $id)->with('properties')->first();
+        $item = Item::where('id', '=', $id)->with('tags')->with('categories')->with('properties')->first();
 
         if (!$item || !$item?->id) {
             return response([
@@ -709,6 +709,20 @@ class ItemsController extends Controller
             $item->attachProperties($properties);
         }
 
+        // Set categories
+        $categories = $request->input('categories');
+
+        if (is_array($categories)) {
+            $item->attachCategories($categories);
+        }
+
+        // Set tags
+        $tags = $request->input('tags');
+
+        if (is_array($tags)) {
+            $item->attachTags($tags);
+        }
+
         if ($request->has('seo_title')) {
             $item->seo_title = (string)$request->input('seo_title');
         }
@@ -726,6 +740,9 @@ class ItemsController extends Controller
                 'error' => $e->getMessage()
             ], 500);
         }
+
+        // Reload data from database
+        $item = $item->fresh(['categories', 'tags', 'properties']);
 
         return response([
             'status' => true,

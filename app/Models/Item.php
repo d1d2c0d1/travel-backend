@@ -351,6 +351,64 @@ class Item extends Model
         return $favorite?->id >= 1;
     }
 
+    /**
+     * Attaching tags to item
+     *
+     * @param array $tags
+     * @return array
+     */
+    public function attachTags(array $tags): array
+    {
+        $itemTags = [];
+        $syncTags = [];
+
+        foreach ($tags as $tagId) {
+            $syncTags[$tagId] = [
+                'user_id' => MainHelper::getUserId()
+            ];
+        }
+
+        try {
+            $this->tags()->sync($syncTags);
+        } catch (Exception $e) {
+            $itemTags['error'] = $e->getMessage();
+        }
+
+        return $itemTags;
+    }
+
+    /**
+     * Attaching categories to item
+     *
+     * @param array $categories
+     * @return array
+     */
+    public function attachCategories(array $categories): array
+    {
+        $itemCategories = [];
+        $syncCategories = [];
+
+        foreach ($categories as $category) {
+            $syncCategories[$category] = [
+                'user_id' => MainHelper::getUserId()
+            ];
+        }
+
+        try {
+            $this->categories()->sync($syncCategories);
+        } catch (Exception $e) {
+            $itemCategories['error'] = $e->getMessage();
+        }
+
+        return $itemCategories;
+    }
+
+    /**
+     * Attaching properties with values
+     *
+     * @param array $properties
+     * @return array
+     */
     public function attachProperties(array $properties): array
     {
         $itemProperties = [];
