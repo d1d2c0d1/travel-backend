@@ -58,8 +58,6 @@ class ItemsController extends Controller
         // Getting city from database
         $city = City::find($arFields['city_id']);
 
-<<<<<<< HEAD
-=======
         if (!$city || !$city?->id) {
             return response([
                 'status' => false,
@@ -67,16 +65,13 @@ class ItemsController extends Controller
             ], 449);
         }
 
->>>>>>> eb3a48c402ddc5556df5a731246ce8f1feb0ec33
         $arFields['country_id'] = $city->country_id;
         $arFields['region_id'] = $city->region_id;
         $arFields['code'] = MainHelper::cyr2lat($city->name . '-' . $arFields['name']);
 
         // Getting images
-<<<<<<< HEAD
 
         $arFields['images'] = (array) $request->input('images');
-=======
         $images = (array)$request->input('images');
 
         if (empty($images)) {
@@ -87,15 +82,12 @@ class ItemsController extends Controller
         }
 
         $arFields['images'] = $images;
->>>>>>> eb3a48c402ddc5556df5a731246ce8f1feb0ec33
 
         // Formatting phone and convert to integer
         $arFields['phone'] = (int)preg_replace('/[^0-9]/', '', $arFields['phone']);
 
         // Create Item
         $item = new Item($arFields);
-<<<<<<< HEAD
-=======
         $validator = $item->validate();
 
         if ($validator['status'] === false) {
@@ -105,7 +97,6 @@ class ItemsController extends Controller
                 'validator' => $validator
             ], 449);
         }
->>>>>>> eb3a48c402ddc5556df5a731246ce8f1feb0ec33
 
         try {
             $item->save();
@@ -640,9 +631,7 @@ class ItemsController extends Controller
             ], 405);
         }
 
-<<<<<<< HEAD
         $item = Item::where('id', '=', $id)->with('properties')->first();
-=======
         if (!MainHelper::isGuide()) {
             return response([
                 'status' => false,
@@ -651,7 +640,6 @@ class ItemsController extends Controller
         }
 
         $item = Item::where('id', '=', $id)->with('tags')->with('categories')->with('properties')->first();
->>>>>>> eb3a48c402ddc5556df5a731246ce8f1feb0ec33
 
         if (!$item || !$item?->id) {
             return response([
@@ -669,7 +657,6 @@ class ItemsController extends Controller
                 ], 401);
             }
         }
-<<<<<<< HEAD
         $validate = MainHelper::validate($request, Item::UPDATING_RULES);
         if ($validate->getStatus() === false) {
             return response($validate->toArray(), 412);
@@ -695,8 +682,6 @@ class ItemsController extends Controller
                        break;
                }
         }
-
-=======
 
         // Set name
         if ($request->has('name')) {
@@ -747,7 +732,6 @@ class ItemsController extends Controller
         if ($request->has('images')) {
             $item->images = (array)$request->input('images');
         }
->>>>>>> eb3a48c402ddc5556df5a731246ce8f1feb0ec33
 
         // Set properties
         $properties = $request->input('properties');
@@ -756,8 +740,6 @@ class ItemsController extends Controller
             $item->attachProperties($properties);
         }
 
-<<<<<<< HEAD
-=======
         // Set categories
         $categories = $request->input('categories');
 
@@ -780,7 +762,6 @@ class ItemsController extends Controller
             $item->seo_description = (string)$request->input('seo_description');
         }
 
->>>>>>> eb3a48c402ddc5556df5a731246ce8f1feb0ec33
         // Save item
         try {
             $item->save();
