@@ -96,7 +96,9 @@ class OrderController extends Controller
 
         $ordersDB = Order::where([
             ['user_id', '=', MainHelper::getUserId()]
-        ])->with('item')->with('user');
+        ])->with(['item' => function ($query) {
+            $query->with('city:id,code')->with('type:id,code');
+        }])->with('user');
 
         /**
          * Create model by request
