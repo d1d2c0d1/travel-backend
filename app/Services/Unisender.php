@@ -11,13 +11,25 @@ class Unisender
     const API_BASE_URL = 'https://api.unisender.com/';
     const API_LANG = 'ru';
 
-
-
     public function sendEmail(array $arFields = []): array
     {
-        $response = Http::post(self::API_BASE_URL . self::API_LANG . '/' . 'sendEmail', [
+        $url = self::API_BASE_URL . self::API_LANG . '/api/' . 'sendEmail';
+        $response = Http::post($url, [
             'api_key' => self::API_KEY,
-            'email' => $arFields
+            'format' => 'json',
+            'sender_name' => 'U-Gid',
+            'sender_email' => 'info@u-gid.com',
+            'lang' => 'ru',
+            'list_id' => 353,
+            'email' => $arFields['email'],
+            'subject' => $arFields['subject'],
+            'body' => $arFields['body']
         ]);
+
+        return [
+            'status' => true,
+            'url' => $url,
+            'response' => $response
+        ];
     }
 }

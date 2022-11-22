@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Facades\Unisender;
 use App\Http\Helpers\MainHelper;
 use App\Models\City;
 use App\Models\Company;
@@ -315,6 +316,54 @@ class UserController extends Controller
 
         return response([
             'status' => true
+        ]);
+    }
+
+    /**
+     * Send email for user recovery password
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function passwordRecovery(Request $request): Response
+    {
+
+        $user = null;
+
+        if( $request->has('email') ) {
+            $user = User::where('email', $request->input('email'))->first();
+        }
+
+        if( !$user ) {
+            return response([
+                'status' => false,
+                'error' => 'User not found!'
+            ], 404);
+        }
+
+        $response = Unisender::sendEmail([
+            'email' => $user->email,
+            'subject' => 'Восстановление пароля',
+            'body' => "
+                Добрый день, уважаемый {{Name}}!
+
+                Вы запросили восстановление пароля, чтобы продолжить пройдите по ссылке ниже:
+
+
+                Если вы не запрашивали восстановление, пожалуйста обратитесь в службу поддержки U-Gid, написав сообщение на следующую почту: support@u-gid.com
+
+                С уважинием автоматическая система восстановления паролей U-Gid!
+                Спасибо за внимание!
+            "
+        ]);
+
+        return response([
+            'status' => true,
+            'data' => [
+                'email' => $user->email,
+                'username' => $user->name
+            ],
+            'response' => $response
         ]);
     }
 
