@@ -25,6 +25,7 @@ class BlogController extends Controller
         $errors = [];
 
         $title = $request->input('title');
+        $headTitle = $request->input('head_title');
         $content = $request->input('content');
         $countryId = (int) $request->input('country_id') ?? 1;
         $regionId = (int) $request->input('region_id');
@@ -49,6 +50,10 @@ class BlogController extends Controller
 
         if( empty($title) || mb_strlen($title) <= 5 ) {
             $errors[] = MainHelper::getErrorItem(419, 'title is empty');
+        }
+
+        if( empty($headTitle) || mb_strlen($headTitle) <= 5 ) {
+            $errors[] = MainHelper::getErrorItem(419, 'head_title is empty');
         }
 
         if( empty($content) || mb_strlen($content) <= 64 ) {
@@ -77,6 +82,7 @@ class BlogController extends Controller
 
         $postData = [
             'title' => $title,
+            'head_title' => $headTitle,
             'code' => $code,
             'content' => $content,
             'user_id' => MainHelper::getUserId(),
@@ -137,6 +143,10 @@ class BlogController extends Controller
 
         if( $request->has('title') ) {
             $post->title = (string) $request->input('title');
+        }
+
+        if( $request->has('head_title') ) {
+            $post->head_title = (string) $request->input('head_title');
         }
 
         if( $request->has('content') ) {

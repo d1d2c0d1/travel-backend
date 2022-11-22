@@ -203,37 +203,37 @@ class Item extends Model
         $errors = [];
 
         // COUNTRY ID
-        if( $this->country_id <= 0 ) {
+        if ($this->country_id <= 0) {
             $errors[] = MainHelper::getErrorItem(412, 'Field country_id is empty');
         }
 
         // REGION ID
-        if( $this->region_id <= 0 ) {
+        if ($this->region_id <= 0) {
             $errors[] = MainHelper::getErrorItem(412, 'Field region_id is empty');
         }
 
         // CITY ID
-        if( $this->city_id <= 0 ) {
+        if ($this->city_id <= 0) {
             $errors[] = MainHelper::getErrorItem(412, 'Field city_id is empty');
         }
 
         // TYPE ID
-        if( $this->type_id <= 0 ) {
+        if ($this->type_id <= 0) {
             $errors[] = MainHelper::getErrorItem(412, 'Field type_id is empty');
         }
 
         // NAME
-        if( mb_strlen($this->name) <= 2 ) {
+        if (mb_strlen($this->name) <= 2) {
             $errors[] = MainHelper::getErrorItem(412, 'Field name is empty or too short. Min: 8 symbols');
         }
 
         // DESCRIPTION
-        if( mb_strlen($this->description) <= 16 ) {
+        if (mb_strlen($this->description) <= 16) {
             $errors[] = MainHelper::getErrorItem(412, 'Field description is empty or too short. Min: 16 symbols');
         }
 
         // Without errors
-        if( empty($errors) ) {
+        if (empty($errors)) {
             return ['status' => true];
         }
 
@@ -342,7 +342,7 @@ class Item extends Model
     public function getIsFavoriteAttribute(): bool
     {
 
-        if( MainHelper::getUserId() <= 0 ) {
+        if (MainHelper::getUserId() <= 0) {
             return false;
         }
 
@@ -351,6 +351,64 @@ class Item extends Model
         return $favorite?->id >= 1;
     }
 
+    /**
+     * Attaching tags to item
+     *
+     * @param array $tags
+     * @return array
+     */
+    public function attachTags(array $tags): array
+    {
+        $itemTags = [];
+        $syncTags = [];
+
+        foreach ($tags as $tagId) {
+            $syncTags[$tagId] = [
+                'user_id' => MainHelper::getUserId()
+            ];
+        }
+
+        try {
+            $this->tags()->sync($syncTags);
+        } catch (Exception $e) {
+            $itemTags['error'] = $e->getMessage();
+        }
+
+        return $itemTags;
+    }
+
+    /**
+     * Attaching categories to item
+     *
+     * @param array $categories
+     * @return array
+     */
+    public function attachCategories(array $categories): array
+    {
+        $itemCategories = [];
+        $syncCategories = [];
+
+        foreach ($categories as $category) {
+            $syncCategories[$category] = [
+                'user_id' => MainHelper::getUserId()
+            ];
+        }
+
+        try {
+            $this->categories()->sync($syncCategories);
+        } catch (Exception $e) {
+            $itemCategories['error'] = $e->getMessage();
+        }
+
+        return $itemCategories;
+    }
+
+    /**
+     * Attaching properties with values
+     *
+     * @param array $properties
+     * @return array
+     */
     public function attachProperties(array $properties): array
     {
         $itemProperties = [];
@@ -379,4 +437,32 @@ class Item extends Model
 
         return $itemProperties;
     }
+
+    const UPDATING_RULES = [
+        'name' => 'string',
+        'status' => 'integer',
+        'phone' => 'string',
+        'address' => 'string',
+        'price' => 'integer',
+        'code' => 'integer',
+        'description' => 'string',
+        'type_id' => 'integer',
+        'city_id' => 'integer',
+        'images' => 'array',
+        'seo_title' => 'string',
+        'seo_description' => 'string',
+    ];
+
+    const CREATING_RULES = [
+        'name' => 'required|string',
+        'description' => 'required|string',
+        'images' => 'required|array',
+        'city_id' => 'integer|exists:cities,id',
+        'type_id' => 'integer',
+        'price' => 'integer',
+        'phone' => 'string',
+        'address' => 'string',
+        'seo_title' => 'string',
+        'seo_description' => 'string',
+    ];
 }

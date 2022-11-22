@@ -29,9 +29,9 @@ class UserController extends Controller
     {
 
         $token = $request->header('Client-Token');
-        $userId = (int) Redis::get("user:auth:{$token}");
+        $userId = (int)Redis::get("user:auth:{$token}");
 
-        if( $userId >= 1 ) {
+        if ($userId >= 1) {
 
             $user = User::find($userId);
 
@@ -63,7 +63,7 @@ class UserController extends Controller
     public function filter(Request $request): Response
     {
 
-        if( !MainHelper::isAdminOrModer() ) {
+        if (!MainHelper::isAdminOrModer()) {
             return response([
                 'status' => false,
                 'error' => 'Permission denied'
@@ -95,7 +95,7 @@ class UserController extends Controller
 
         $user = User::where('id', '=', $id)->with('company')->with('type')->first();
 
-        if( !$user ) {
+        if (!$user) {
             return response([
                 'status' => false,
                 'error' => 'User with id: ' . $id . ' not found',
@@ -117,7 +117,7 @@ class UserController extends Controller
      */
     public function update(int $id, Request $request): Response
     {
-        if( !MainHelper::isAdminOrModer() && $id !== MainHelper::getUserId() ) {
+        if (!MainHelper::isAdminOrModer() && $id !== MainHelper::getUserId()) {
             return response([
                 'status' => false,
                 'error' => 'Permission denied'
@@ -126,7 +126,7 @@ class UserController extends Controller
 
         $user = User::find($id);
 
-        if( !$user && !$user?->id ) {
+        if (!$user && !$user?->id) {
             return response([
                 'status' => false,
                 'error' => 'User with id:' . $id . ' not found'
@@ -137,80 +137,86 @@ class UserController extends Controller
          * Editing data
          */
 
-        if( $request->has('name') && !empty($request->input('name')) ) {
-            $user->name = (string) $request->input('name');
+        if ($request->has('name') && !empty($request->input('name'))) {
+            $user->name = (string)$request->input('name');
         }
 
         /**
          * 1 - male
          * 2 - female
          */
-        if( $request->has('sex') && !empty($request->input('sex')) ) {
-            $user->sex = (int) $request->input('sex');
+        if ($request->has('sex') && !empty($request->input('sex'))) {
+            $user->sex = (int)$request->input('sex');
         }
 
-        if( $request->has('photo') && !empty($request->input('photo')) ) {
-            $user->photo = (string) $request->input('photo');
+        if ($request->has('photo') && !empty($request->input('photo'))) {
+            $user->photo = (string)$request->input('photo');
         }
 
-        if( $request->has('email') && !empty($request->input('email')) ) {
-            $user->email = (string) $request->input('email');
+        if ($request->has('email') && !empty($request->input('email'))) {
+            $user->email = (string)$request->input('email');
         }
 
-        $phone = (string) $request->input('phone');
-        if( mb_strlen($phone) >= 2 ) {
-            $user->phone = (int) preg_replace( '/\D/', '', $phone);
+        $phone = (string)$request->input('phone');
+        if (mb_strlen($phone) >= 2) {
+            $user->phone = (int)preg_replace('/\D/', '', $phone);
         }
 
-        if( $request->has('password') && !empty($request->input('password')) ) {
+        if ($request->has('password') && !empty($request->input('password'))) {
             $user->password = Hash::make($request->input('email'));
         }
 
         // Change roles
-        if( $request->has('role_id') && (int) $request->input('role_id') >= 1 ) {
+        if ($request->has('role_id') && (int)$request->input('role_id') >= 1) {
 
             // Only admins can edit user role
-            if( !MainHelper::isAdminOrModer() ) {
+            if (!MainHelper::isAdminOrModer()) {
                 return response([
                     'status' => false,
                     'error' => 'Permission denied. Only administrators can update user role'
                 ], 401);
             }
 
-            $user->role_id = (int) $request->input('role_id');
+            $user->role_id = (int)$request->input('role_id');
         }
 
         // Set user type
-        if( $request->has('type_id') ) {
-            $typeId = (int) $request->input('type_id');
+        if ($request->has('type_id')) {
+            $typeId = (int)$request->input('type_id');
 
-            if( $typeId >= 1 ) {
+            if ($typeId >= 1) {
                 $type = UserType::find($typeId);
 
                 // if find User Type
-                if( $type && $type?->id === $typeId ) {
+                if ($type && $type?->id === $typeId) {
                     $user->type_id = $type->id;
                 }
             }
         }
 
         // Set user company
-        if( $request->has('company_id') ) {
-            $companyId = (int) $request->input('company_id');
+        if ($request->has('company_id')) {
+            $companyId = (int)$request->input('company_id');
 
-            if( $companyId >= 1 ) {
+            if ($companyId >= 1) {
                 $company = Company::find($companyId);
 
                 // if find User Type
-                if( $company && $company?->id === $companyId ) {
+                if ($company && $company?->id === $companyId) {
                     $user->company_id = $company->id;
                 }
             }
         }
 
-        if( $request->has('additional_properties') ) {
-            $additionalProperties = (array) $request->input('additional_properties');
+        if ($request->has('additional_properties')) {
+            $additionalProperties = (array)$request->input('additional_properties');
             $user->additional_properties = $additionalProperties;
+        }
+
+        if ($user->created_at == $user->updated_at) {
+            $is_first_changed = 1;
+        } else {
+            $is_first_changed = 0;
         }
 
         // Try to save it
@@ -223,10 +229,10 @@ class UserController extends Controller
                 'dbError' => (MainHelper::isAdmin() ? $e->getMessage() : '...')
             ], 500);
         }
-
         return response([
             'status' => true,
-            'user' => $user
+            'user' => $user,
+            'is_first_changed' => $is_first_changed
         ]);
     }
 
@@ -239,12 +245,12 @@ class UserController extends Controller
     public function guides(Request $request): Response
     {
         // Getting from request count rows per page
-        $perPage = (int) $request->input('per_page');
-        $cityId = (int) $request->input('city_id');
-        $cityCode = (string) $request->input('city_code');
+        $perPage = (int)$request->input('per_page');
+        $cityId = (int)$request->input('city_id');
+        $cityCode = (string)$request->input('city_code');
 
         // Set default value for count rows of per page
-        if( $perPage <= 0 ) {
+        if ($perPage <= 0) {
             $perPage = 15;
         }
 
@@ -255,7 +261,7 @@ class UserController extends Controller
             ['is_moder', '=', 0]
         ])->first();
 
-        if( !$guideRole || !$guideRole?->id ) {
+        if (!$guideRole || !$guideRole?->id) {
             return response([
                 'status' => false,
                 'error' => 'Guides role not found'
@@ -265,14 +271,14 @@ class UserController extends Controller
         // Getting guides from users table
         $guidesDB = User::where('role_id', $guideRole->id);
 
-        if( $cityId >= 1 ) {
+        if ($cityId >= 1) {
             $guidesDB->where('city_id', '=', $cityId);
         }
 
         // Filtering by cities
-        if( mb_strlen($cityCode) >= 1 ) {
+        if (mb_strlen($cityCode) >= 1) {
             $city = City::where('code', '=', $cityCode)->first();
-            if( $city && $city?->id ) {
+            if ($city && $city?->id) {
                 $guidesDB->where('city_id', '=', $city->id);
             }
         }
@@ -295,7 +301,7 @@ class UserController extends Controller
     {
         $user = MainHelper::getUser();
 
-        if( !$user || !$user?->id ) {
+        if (!$user || !$user?->id) {
             return response([
                 'status' => false,
                 'error' => 'User not found'

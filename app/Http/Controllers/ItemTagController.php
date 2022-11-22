@@ -19,7 +19,7 @@ class ItemTagController extends Controller
      */
     public function index(Request $request): Response
     {
-        $search = (string) $request->input('search');
+        $search = (string)$request->input('search');
 
         $res = CardTag::where([
             ['title', 'like', "%{$search}%"]
@@ -41,34 +41,22 @@ class ItemTagController extends Controller
      */
     public function create(Request $request): Response
     {
+        $validate = MainHelper::validate($request, CardTag::CREATING_RULES);
+        if ($validate->getStatus() === false) {
+            return response($validate->toArray(), 412);
+        }
         $arFields = [
-            'title' => $request->input('title'),
+            'title' => $request->input( 'title'),
             'user_id' => MainHelper::getUserId()
         ];
 
-        if( !MainHelper::isGuide() ) {
-            return response([
-                'status' => false,
-                'error' => 'Permission denied'
-            ], 401);
-        }
-
         $tag = new CardTag($arFields);
-        $validator = $tag->validate($arFields);
-
-        if( $validator['status'] === false ) {
-            return response([
-                'status' => false,
-                'error' => 'Validation. Credintails is wrong',
-                'validation_error' => $validator['error']
-            ], 412);
-        }
 
         try {
             $tag->save();
         } catch (Exception $e) {
 
-            if( (int) $e->getCode() === 23000 ) {
+            if ((int)$e->getCode() === 23000) {
 
                 return response([
                     'status' => false,
@@ -80,7 +68,7 @@ class ItemTagController extends Controller
                     'status' => false,
                     'error' => 'Error in database',
                     'dbError' => $e->getMessage(),
-                    'dbErrorCode' => (int) $e->getCode()
+                    'dbErrorCode' => (int)$e->getCode()
                 ], 500);
             }
         }

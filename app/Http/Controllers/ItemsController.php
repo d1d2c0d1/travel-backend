@@ -26,7 +26,10 @@ class ItemsController extends Controller
      */
     public function create(Request $request): Response
     {
-
+        $validate = MainHelper::validate($request, Item::CREATING_RULES);
+        if ($validate->getStatus() === false) {
+            return response($validate->toArray(), 412);
+        }
         $arFields = [
             'created_user_id' => MainHelper::getUserId(),
             'owner_user_id' => MainHelper::getUserId(),
@@ -66,6 +69,8 @@ class ItemsController extends Controller
         $arFields['code'] = MainHelper::cyr2lat($city->name . '-' . $arFields['name']);
 
         // Getting images
+
+        $arFields['images'] = (array) $request->input('images');
         $images = (array)$request->input('images');
 
         if (empty($images)) {
@@ -625,6 +630,7 @@ class ItemsController extends Controller
             ], 405);
         }
 
+        $item = Item::where('id', '=', $id)->with('properties')->first();
         if (!MainHelper::isGuide()) {
             return response([
                 'status' => false,
@@ -632,7 +638,7 @@ class ItemsController extends Controller
             ], 401);
         }
 
-        $item = Item::where('id', '=', $id)->with('properties')->first();
+        $item = Item::where('id', '=', $id)->with('tags')->with('categories')->with('properties')->first();
 
         if (!$item || !$item?->id) {
             return response([
@@ -649,6 +655,31 @@ class ItemsController extends Controller
                     'error' => 'Requested user not owner for item'
                 ], 401);
             }
+        }
+        $validate = MainHelper::validate($request, Item::UPDATING_RULES);
+        if ($validate->getStatus() === false) {
+            return response($validate->toArray(), 412);
+        }
+
+        foreach ($validate->getData() as $key=>$value) {
+               switch ($key) {
+                   case 'phone':
+                       $item->phone = (int) preg_replace('/[^0-9]/', '', $request->input('phone'));
+                    break;
+                   case 'type_id':
+                    if(((int) $request->input('type_id') >= 1) ) {
+                           $item->type_id = (int) $request->input('type_id');
+                       }
+                    break;
+                   case 'city_id':
+                       if(((int) $request->input('city_id') >= 1) ) {
+                           $item->city_id = (int) $request->input('city_id');
+                       }
+                       break;
+                   default:
+                       $item->$key = $value;
+                       break;
+               }
         }
 
         // Set name
@@ -708,6 +739,20 @@ class ItemsController extends Controller
             $item->attachProperties($properties);
         }
 
+        // Set categories
+        $categories = $request->input('categories');
+
+        if (is_array($categories)) {
+            $item->attachCategories($categories);
+        }
+
+        // Set tags
+        $tags = $request->input('tags');
+
+        if (is_array($tags)) {
+            $item->attachTags($tags);
+        }
+
         if ($request->has('seo_title')) {
             $item->seo_title = (string)$request->input('seo_title');
         }
@@ -725,6 +770,9 @@ class ItemsController extends Controller
                 'error' => $e->getMessage()
             ], 500);
         }
+
+        // Reload data from database
+        $item = $item->fresh(['categories', 'tags', 'properties']);
 
         return response([
             'status' => true,

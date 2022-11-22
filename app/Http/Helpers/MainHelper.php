@@ -4,10 +4,13 @@ namespace App\Http\Helpers;
 
 use App\Models\Role;
 use App\Models\User;
+use App\Types\ValidateResult;
 use Exception;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Redis;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class MainHelper
 {
@@ -26,15 +29,15 @@ class MainHelper
             'status' => $status
         ];
 
-        if( $additionalData && is_array($additionalData) && !empty($additionalData) ) {
+        if ($additionalData && is_array($additionalData) && !empty($additionalData)) {
             $response['data'] = $additionalData;
         }
 
-        if( !empty($errors) && is_array($errors) ) {
+        if (!empty($errors) && is_array($errors)) {
             $response['errors'] = $errors;
         }
 
-        if( empty($errors) && $status === false ) {
+        if (empty($errors) && $status === false) {
             $response['errors'] = [
                 [
                     'message' => 'Undefined error',
@@ -72,7 +75,7 @@ class MainHelper
             'code' => $errorCode,
         ];
 
-        if( !empty($data) ) {
+        if (!empty($data)) {
             $result['data'] = $data;
         }
 
@@ -91,17 +94,17 @@ class MainHelper
         $clearText = preg_replace('/[^a-zA-Zа-яА-Я0-9-_]/ui', '', $clearText);
 
         $cyr = [
-            'а','б','в','г','д','е','ё','ж','з','и','й','к','л','м','н','о','п',
-            'р','с','т','у','ф','х','ц','ч','ш','щ','ъ','ы','ь','э','ю','я',
-            'А','Б','В','Г','Д','Е','Ё','Ж','З','И','Й','К','Л','М','Н','О','П',
-            'Р','С','Т','У','Ф','Х','Ц','Ч','Ш','Щ','Ъ','Ы','Ь','Э','Ю','Я'
+            'а', 'б', 'в', 'г', 'д', 'е', 'ё', 'ж', 'з', 'и', 'й', 'к', 'л', 'м', 'н', 'о', 'п',
+            'р', 'с', 'т', 'у', 'ф', 'х', 'ц', 'ч', 'ш', 'щ', 'ъ', 'ы', 'ь', 'э', 'ю', 'я',
+            'А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ё', 'Ж', 'З', 'И', 'Й', 'К', 'Л', 'М', 'Н', 'О', 'П',
+            'Р', 'С', 'Т', 'У', 'Ф', 'Х', 'Ц', 'Ч', 'Ш', 'Щ', 'Ъ', 'Ы', 'Ь', 'Э', 'Ю', 'Я'
         ];
 
         $lat = [
-            'a','b','v','g','d','e','io','zh','z','i','y','k','l','m','n','o','p',
-            'r','s','t','u','f','h','ts','ch','sh','sht','a','i','y','e','yu','ya',
-            'A','B','V','G','D','E','Io','Zh','Z','I','Y','K','L','M','N','O','P',
-            'R','S','T','U','F','H','Ts','Ch','Sh','Sht','A','I','Y','e','Yu','Ya'
+            'a', 'b', 'v', 'g', 'd', 'e', 'io', 'zh', 'z', 'i', 'y', 'k', 'l', 'm', 'n', 'o', 'p',
+            'r', 's', 't', 'u', 'f', 'h', 'ts', 'ch', 'sh', 'sht', 'a', 'i', 'y', 'e', 'yu', 'ya',
+            'A', 'B', 'V', 'G', 'D', 'E', 'Io', 'Zh', 'Z', 'I', 'Y', 'K', 'L', 'M', 'N', 'O', 'P',
+            'R', 'S', 'T', 'U', 'F', 'H', 'Ts', 'Ch', 'Sh', 'Sht', 'A', 'I', 'Y', 'e', 'Yu', 'Ya'
         ];
 
         return strtolower(str_replace($cyr, $lat, $clearText));
@@ -143,26 +146,31 @@ class MainHelper
      *
      * @return User|false
      */
-    public static function getUser(): User | false {
+    public static function getUser(): User|false
+    {
 
-        $token = (string) app('request')->header('Client-Token', '');
+        $token = (string)app('request')->header('Client-Token', '');
 
-        if( strlen($token) <= 32 ) {
+        if (strlen($token) <= 32) {
             return false;
         }
         global $userData;
 
-        if( $userData instanceof User ) {
+        if ($userData instanceof User) {
             return $userData;
         }
 
-        $userId = (int) Redis::get("user:auth:{$token}");
+        $userId = (int)Redis::get("user:auth:{$token}");
 
+
+        if ($userId >= 1) {
+            $user = User::find($userId);
+        }
         if( $userId >= 1 ) {
             $user = User::where('id', '=', $userId)->with('type')->with('role')->first();
         }
 
-        if( !$user || ($user && !$user?->id) ) {
+        if (!$user || ($user && !$user?->id)) {
             return false;
         }
 
@@ -175,7 +183,8 @@ class MainHelper
      *
      * @return int
      */
-    public static function getUserId(): int {
+    public static function getUserId(): int
+    {
         try {
             return (int)self::getUser()?->id;
         } catch (Exception $e) {
@@ -188,9 +197,10 @@ class MainHelper
      *
      * @return int
      */
-    public static function getUserRoleId(): int {
+    public static function getUserRoleId(): int
+    {
         try {
-            return (int) self::getUser()?->role_id;
+            return (int)self::getUser()?->role_id;
         } catch (Exception $e) {
             return 0;
         }
@@ -201,7 +211,8 @@ class MainHelper
      *
      * @return Role|null
      */
-    public static function getUserRole(): Role | null {
+    public static function getUserRole(): Role|null
+    {
         try {
             return self::getUser()?->role;
         } catch (Exception $e) {
@@ -214,8 +225,9 @@ class MainHelper
      *
      * @return bool
      */
-    public static function isModer(): bool {
-        return (bool) self::getUserRole()?->is_moder;
+    public static function isModer(): bool
+    {
+        return (bool)self::getUserRole()?->is_moder;
     }
 
     /**
@@ -223,8 +235,9 @@ class MainHelper
      *
      * @return bool
      */
-    public static function isAdmin(): bool {
-        return (bool) self::getUserRole()?->is_admin;
+    public static function isAdmin(): bool
+    {
+        return (bool)self::getUserRole()?->is_admin;
     }
 
     /**
@@ -232,7 +245,8 @@ class MainHelper
      *
      * @return bool
      */
-    public static function isAdminOrModer(): bool {
+    public static function isAdminOrModer(): bool
+    {
         return self::isModer() || self::isAdmin();
     }
 
@@ -241,7 +255,8 @@ class MainHelper
      *
      * @return bool
      */
-    public static function isGuide(): bool {
+    public static function isGuide(): bool
+    {
         return self::getUserRole()?->is_guide || self::isAdminOrModer();
     }
 
@@ -308,5 +323,26 @@ class MainHelper
     {
         $result = preg_replace("/\{(.*)\}/i", '', $template);
         return preg_replace("/\s+/i", ' ', $result);
+    }
+
+    /**
+     * Validate fields
+     *
+     * @param array $rules
+     * @return array
+     */
+    public static function validate(Request $request, array $rules): ValidateResult
+    {
+        $validate = Validator::make($request->all(), $rules);
+        if ($validate->fails()) {
+            return ValidateResult::create(
+                false,
+                [],
+                'Validation. Credintails is wrong',
+                $validate->getMessageBag()->toArray()
+            );
+        } else {
+            return ValidateResult::create(true, $validate->validate());
+        }
     }
 }
