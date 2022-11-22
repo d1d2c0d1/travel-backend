@@ -162,8 +162,12 @@ class MainHelper
 
         $userId = (int)Redis::get("user:auth:{$token}");
 
+
         if ($userId >= 1) {
             $user = User::find($userId);
+        }
+        if( $userId >= 1 ) {
+            $user = User::where('id', '=', $userId)->with('type')->with('role')->first();
         }
 
         if (!$user || ($user && !$user?->id)) {

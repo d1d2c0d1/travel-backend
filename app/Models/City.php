@@ -21,6 +21,7 @@ use Illuminate\Support\Carbon;
  * @property Carbon $updated_at
  * @property string $title
  * @property string $description
+ * @property string $album
  * @property string $seo_title
  * @property string $seo_description
  * @property string $image
@@ -91,7 +92,8 @@ class City extends Model
         'region_id',
         'name',
         'seo_title',
-        'seo_description'
+        'seo_description',
+        'album',
 
     ];
 
@@ -120,6 +122,7 @@ class City extends Model
         'seo_description' => 'string',
         'created_at' => 'datetime:Y-m-d H:i:s',
         'updated_at' => 'datetime:Y-m-d H:i:s',
+        'album' => 'json'
 
     ];
 

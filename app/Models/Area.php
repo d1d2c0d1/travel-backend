@@ -76,15 +76,10 @@ class Area extends Model
      * @var array
      */
     protected $fillable = [
-
         'country_id',
-
         'region_id',
-
         'city_id',
-
         'name',
-
     ];
 
     /**
@@ -102,33 +97,20 @@ class Area extends Model
      * @var array
      */
     protected $casts = [
-
         'id' => 'integer',
-
         'country_id' => 'integer',
-
         'region_id' => 'integer',
-
         'city_id' => 'integer',
-
         'name' => 'string',
-
         'created_at' => 'datetime:Y-m-d H:i:s',
-
         'updated_at' => 'datetime:Y-m-d H:i:s',
-
     ];
 
     const RuleList = [
-
         'country_id' => ['required', 'numeric'],
-
         'region_id' => ['required', 'numeric'],
-
         'city_id' => ['required', 'numeric'],
-
         'name' => ['required', 'string'],
-
     ];
 
 

@@ -12,6 +12,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cache;
+use function Webmozart\Assert\Tests\StaticAnalysis\string;
 
 class LocationController extends Controller
 {
@@ -145,18 +146,18 @@ class LocationController extends Controller
      * @param Request $request
      * @return Response|array
      */
-    public function searchRegions(Request $request): Response | array
+    public function searchRegions(Request $request): Response|array
     {
         $search = $request->get('search');
         $countryId = $request->get('country_id', 0);
 
-        if( mb_strlen($search) <= 3 ) {
+        if (mb_strlen($search) <= 3) {
             return response(MainHelper::getErrorResponse([
                 MainHelper::getErrorItem(412, 'Region name is empty or very short!')
             ]), 412);
         }
 
-        if( mb_strlen($search) >= 255 ) {
+        if (mb_strlen($search) >= 255) {
             return response(MainHelper::getErrorResponse([
                 MainHelper::getErrorItem(412, 'Region name is too long!')
             ]), 412);
@@ -168,7 +169,7 @@ class LocationController extends Controller
                 ['name', 'like', "%{$search}%"]
             ]);
 
-            if ( $countryId >= 1 ) {
+            if ($countryId >= 1) {
                 $regionQuery->where('country_id', $countryId);
             }
 
@@ -209,60 +210,68 @@ class LocationController extends Controller
      * @param int $id
      * @return Response|array
      */
-    public function validateCity(Request $request, int $id = 0): Response | array
+    public function validateCity(Request $request, int $id = 0): Response|array
     {
 
-        $countryId = (int) $request->input('country_id', 0);
-        $regionId = (int) $request->input('region_id', 0);
-        $name = (string) $request->input('name', '');
-        $title = (string) $request->input('title', '');
-        $description = (string) $request->input('description', '');
-        $image = (string) $request->input('image', '');
-        $faq = (string) $request->input('faq', '[]');
+        $countryId = (int)$request->input('country_id', 0);
+        $regionId = (int)$request->input('region_id', 0);
+        $name = (string)$request->input('name', '');
+        $title = (string)$request->input('title', '');
+        $description = (string)$request->input('description', '');
+        $image = (string)$request->input('image', '');
+        $faq = (string)$request->input('faq', '[]');
+        $album = (array)$request->input('album', '[]');
 
-        if( $countryId <= 0 ) {
+        if ($countryId <= 0) {
             return response(MainHelper::getErrorResponse([
                 MainHelper::getErrorItem(412, 'Country ID is empty!')
             ]), 412);
         }
 
-        if( $regionId <= 0 ) {
+        if ($regionId <= 0) {
             return response(MainHelper::getErrorResponse([
                 MainHelper::getErrorItem(412, 'Region ID is empty!')
             ]), 412);
         }
 
-        if( mb_strlen($name) <= 3 ) {
+        if (mb_strlen($name) <= 3) {
             return response(MainHelper::getErrorResponse([
                 MainHelper::getErrorItem(412, 'City name is empty or very short!')
             ]), 412);
         }
 
-        if( mb_strlen($title) <= 3 ) {
+        if (mb_strlen($title) <= 3) {
             return response(MainHelper::getErrorResponse([
                 MainHelper::getErrorItem(412, 'City title for filter is empty or very short!')
             ]), 412);
         }
 
-        if( mb_strlen($description) <= 12 ) {
+        if (mb_strlen($description) <= 12) {
             return response(MainHelper::getErrorResponse([
                 MainHelper::getErrorItem(412, 'City description for filter is empty or very short!')
             ]), 412);
         }
 
-        if( mb_strlen($image) <= 3 ) {
+        if (mb_strlen($image) <= 3) {
             return response(MainHelper::getErrorResponse([
                 MainHelper::getErrorItem(412, 'City image is empty or not corrected!')
             ]), 412);
         }
 
-        if( mb_strlen($faq) <= 12 ) {
+
+        if (mb_strlen($faq) <= 12) {
             return response(MainHelper::getErrorResponse([
                 MainHelper::getErrorItem(412, 'FAQ for city is empty!')
             ]), 412);
         }
 
-        if( !MainHelper::isAdminOrModer() ) {
+        if (count($album) <= 0 || gettype($album) != 'array') {
+            return response(MainHelper::getErrorResponse([
+                MainHelper::getErrorItem(412, 'City image is empty or not corrected!')
+            ]), 412);
+        }
+
+        if (!MainHelper::isAdminOrModer()) {
             return response(MainHelper::getErrorResponse([
                 MainHelper::getErrorItem(412, 'Permission denied!')
             ]), 401);
@@ -274,15 +283,15 @@ class LocationController extends Controller
             ['country_id', '=', $countryId]
         ])->get();
 
-        if( !$repeatCities->isEmpty() && $id <= 0 ) {
+        if (!$repeatCities->isEmpty() && $id <= 0) {
             return response(MainHelper::getErrorResponse([
                 MainHelper::getErrorItem(409, 'Repeat city in country and region!')
             ]), 401);
         }
 
-        if( !$repeatCities->isEmpty() && $id >= 1 ) {
+        if (!$repeatCities->isEmpty() && $id >= 1) {
             foreach ($repeatCities as $city) {
-                if( $city->id != $id && $city->name === $name ) {
+                if ($city->id != $id && $city->name === $name) {
                     return response(MainHelper::getErrorResponse([
                         MainHelper::getErrorItem(409, 'Repeat city in country and region!')
                     ]), 401);
@@ -298,8 +307,9 @@ class LocationController extends Controller
             'description' => $description,
             'image' => $image,
             'faq' => $faq,
-            'seo_title' => (string) $request->input('seo_title'),
-            'seo_description' => (string) $request->input('seo_description')
+            'seo_title' => (string)$request->input('seo_title'),
+            'seo_description' => (string)$request->input('seo_description'),
+            'album' => $album
         ];
     }
 
@@ -313,7 +323,7 @@ class LocationController extends Controller
     {
         $validator = $this->validateCity($request);
 
-        if( !is_array($validator) || $validator['country_id'] <= 0 ) {
+        if (!is_array($validator) || $validator['country_id'] <= 0) {
             return $validator;
         }
 
@@ -329,6 +339,7 @@ class LocationController extends Controller
         $city->code = MainHelper::cyr2lat($validator['name']);
         $city->seo_title = $validator['seo_title'];
         $city->seo_description = $validator['seo_description'];
+        $city->album = $validator['album'];
 
 
         try {
@@ -354,48 +365,52 @@ class LocationController extends Controller
     {
         $validator = $this->validateCity($request, $id);
 
-        if( !is_array($validator) || $validator['country_id'] <= 0 ) {
+        if (!is_array($validator) || $validator['country_id'] <= 0) {
             return $validator;
         }
 
         $city = City::find($id);
 
-        if( !$city || !$city?->id ) {
+        if (!$city || !$city?->id) {
             return response(MainHelper::getErrorResponse([
                 MainHelper::getErrorItem(412, 'City ID is empty!')
             ]), 412);
         }
 
-        if( $city->country_id != $validator['country_id'] ) {
+        if ($city->country_id != $validator['country_id']) {
             $city->country_id = $validator['country_id'];
         }
 
-        if( $city->region_id != $validator['region_id'] ) {
+        if ($city->region_id != $validator['region_id']) {
             $city->region_id = $validator['region_id'];
         }
 
-        if( $city->name != $validator['name'] ) {
+        if ($city->name != $validator['name']) {
             $city->name = $validator['name'];
         }
 
-        if( $city->title != $validator['title'] ) {
+        if ($city->title != $validator['title']) {
             $city->title = $validator['title'];
         }
 
-        if( $city->description != $validator['description'] ) {
+        if ($city->description != $validator['description']) {
             $city->description = $validator['description'];
         }
 
-        if( $city->seo_title != $validator['seo_title'] ) {
+        if ($city->seo_title != $validator['seo_title']) {
             $city->seo_title = $validator['seo_title'];
         }
 
-        if( $city->seo_description != $validator['seo_description'] ) {
+        if ($city->seo_description != $validator['seo_description']) {
             $city->seo_description = $validator['seo_description'];
         }
 
-        if( $city->image != $validator['image'] ) {
+        if ($city->image != $validator['image']) {
             $city->image = $validator['image'];
+        }
+
+        if ($city->album != $validator['album']) {
+            $city->album = $validator['album'];
         }
 
         $city->faq = $validator['faq'];

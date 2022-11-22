@@ -24,7 +24,7 @@ class OrderController extends Controller
     {
 
         $validator = Validator::make($request->all(), [
-            'client_name' => 'required|string|min:13',
+            'client_name' => 'required|string|min:2',
             'phone' => 'required|string|min:10|max:32',
             'date_from' => 'required|date',
             'tickets' => 'required|min:1',
@@ -96,7 +96,9 @@ class OrderController extends Controller
 
         $ordersDB = Order::where([
             ['user_id', '=', MainHelper::getUserId()]
-        ])->with('item')->with('user');
+        ])->with(['item' => function ($query) {
+            $query->with('city:id,code')->with('type:id,code');
+        }])->with('user');
 
         /**
          * Create model by request
@@ -130,6 +132,13 @@ class OrderController extends Controller
             } else {
                 $ordersDB->where('is_payment', 0);
             }
+        }
+
+        if ($request->has('type_id')) {
+            $typeId = (integer) $request->input('type_id');
+            $ordersDB->whereHas('item', function ($query) use ($typeId) {
+                $query->where('type_id', '=', $typeId);
+            });
         }
 
         // Getting data from db and paginate that
