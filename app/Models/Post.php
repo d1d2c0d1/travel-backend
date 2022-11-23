@@ -17,6 +17,7 @@ use Illuminate\Support\Carbon;
  * @property bool $is_main
  * @property bool $is_week
  * @property string $title
+ * @property string $head_title
  * @property string $code
  * @property string $content
  * @property integer $user_id
@@ -133,7 +134,8 @@ class Post extends Model
         'image',
         'seo_description',
         'tags',
-        'published_at'
+        'published_at',
+        'head_title',
     ];
 
     /**
@@ -155,6 +157,7 @@ class Post extends Model
         'is_main' => 'boolean',
         'is_week' => 'boolean',
         'title' => 'string',
+        'head_title' => 'string',
         'code' => 'string',
         'content' => 'string',
         'user_id' => 'integer',

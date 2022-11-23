@@ -14,5 +14,5 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return response('adasd', 404);
+//    return response('adasd', 404);
 });

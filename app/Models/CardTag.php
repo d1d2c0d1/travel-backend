@@ -82,14 +82,14 @@ class CardTag extends Model
      */
     public function validate(array $arFields): array
     {
-        if( empty($arFields) ) {
+        if (empty($arFields)) {
             return [
                 'status' => false,
                 'error' => 'All fields is empty or not found'
             ];
         }
 
-        if( !isset($arFields['title']) ) {
+        if (!isset($arFields['title'])) {
             return [
                 'status' => false,
                 'error' => 'Tag title is empty'
@@ -131,4 +131,7 @@ class CardTag extends Model
     {
         return $this->belongsToMany(User::class, 'item_tag', 'tag_id', 'user_id')->as('items');
     }
+
+    const CREATING_RULES = ['title' => 'required'];
+    const UPDATING_RULES = ['title' => 'string'];
 }

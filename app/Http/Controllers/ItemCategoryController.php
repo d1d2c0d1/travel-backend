@@ -55,6 +55,10 @@ class ItemCategoryController extends Controller
      */
     public function create(Request $request): Response
     {
+        $validate = MainHelper::validate($request, CardCategory::CREATING_RULES);
+        if ($validate->getStatus() === false) {
+            return response($validate->toArray(), 412);
+        }
         $arFields = [
             'author_id' => MainHelper::getUserId(),
             'type_id' => (int) $request->input('type_id'),
@@ -66,15 +70,6 @@ class ItemCategoryController extends Controller
         ];
 
         $category = new CardCategory($arFields);
-        $validator = $category->validate($arFields);
-
-        if( $validator['status'] === false ) {
-            return response([
-                'status' => false,
-                'error' => 'Not valid credintails',
-                'errors' => $validator['errors']
-            ], 412);
-        }
 
         if( !MainHelper::isAdminOrModer() ) {
             return response([
@@ -138,24 +133,13 @@ class ItemCategoryController extends Controller
             ], 404);
         }
 
-        if( $request->has('code') ) {
-            $category->code = (string) $request->input('code');
+        $validate = MainHelper::validate($request, CardCategory::UPDATING_RULES);
+        if ($validate->getStatus() === false) {
+            return response($validate->toArray(), 412);
         }
 
-        if( $request->has('name') ) {
-            $category->name = (string) $request->input('name');
-        }
-
-        if( $request->has('description') ) {
-            $category->description = (string) $request->input('description');
-        }
-
-        if( $request->has('seo_title') ) {
-            $category->seo_title = (string) $request->input('seo_title');
-        }
-
-        if( $request->has('seo_description') ) {
-            $category->seo_description = (string) $request->input('seo_description');
+        foreach ($validate->getData() as $key=>$value) {
+            $category->$key = $value;
         }
 
         try {
