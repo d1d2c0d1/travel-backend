@@ -306,4 +306,8 @@ Route::prefix('seo')->middleware('api.static.auth')->group(function() {
 
 Route::prefix('feedback')->middleware('api.static.auth')->group(function() {
     Route::post('', [FeedbacksController::class, 'store'])->name('feedback.store');
+
+    Route::middleware('api.is.moder')->group(function() {
+        Route::get('', [FeedbacksController::class, 'index'])->name('feedback.list');
+    });
 });

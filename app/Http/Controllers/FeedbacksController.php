@@ -61,7 +61,7 @@ class FeedbacksController extends Controller
 
         $response = Unisender::sendEmail([
             'email' => 'ctaciv@yandex.ru',
-            'subject' => "#000{$feedback->id} запрос от клиента сайта",
+            'subject' => "Тикет #000{$feedback->id} от пользователя U-Gid",
             'body' => view('email.feedback', [
                 'user' => MainHelper::getUser(),
                 'feedback' => $feedback
@@ -71,6 +71,50 @@ class FeedbacksController extends Controller
         return response([
             'status' => true,
             'data' => $validated
+        ]);
+    }
+
+    /**
+     * Getting all feedbacks
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function index(Request $request): Response
+    {
+        $feedbacksDb = Feedback::with('user');
+
+        if( $request->has('search') ) {
+            $feedbacksDb->where('question', 'like', "%{$request->input('search')}%");
+        }
+
+        if( $request->has('is_resolved') ) {
+            $feedbacksDb->where('is_resolved', '=', (boolean) $request->input('is_resolved'));
+        }
+
+        if( $request->has('phone') ) {
+            $feedbacksDb->where('phone', '=', (int) $request->input('phone'));
+        }
+
+        if( $request->has('email') ) {
+            $feedbacksDb->where('email', '=', (string) $request->input('email'));
+        }
+
+        if( $request->has('date_from') ) {
+            $feedbacksDb->where('created_at', '>=', $request->input('date_from'));
+        }
+
+        if( $request->has('date_to') ) {
+            $feedbacksDb->where('created_at', '<=', $request->input('date_to'));
+        }
+
+        if( $request->has('user_id') ) {
+            $feedbacksDb->where('user_id', '=', (int) $request->input('user_id'));
+        }
+
+        return response([
+            'status' => true,
+            'data' => $feedbacksDb->paginate()
         ]);
     }
 }
