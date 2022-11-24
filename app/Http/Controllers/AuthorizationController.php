@@ -62,6 +62,10 @@ class AuthorizationController extends Controller
 
         $user->remember_token = $user->generateToken();
 
+        if( empty($user->token) ) {
+            $user->token = $user->generateToken();
+        }
+
         try {
             $user->save();
         } catch (Exception $e) {

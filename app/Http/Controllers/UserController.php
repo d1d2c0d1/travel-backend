@@ -440,6 +440,10 @@ class UserController extends Controller
         $user->last_recovery_at = date('Y-m-d H:i:s');
         $recovery->is_active = 0;
 
+        if( empty($user->token) ) {
+            $user->token = $user->generateToken();
+        }
+
         try {
             $user->save();
             $recovery->save();
