@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Facades\Unisender;
 use App\Http\Helpers\MainHelper;
 use App\Models\City;
 use App\Models\Company;
+use App\Models\Recovery;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\UserType;
@@ -293,7 +295,6 @@ class UserController extends Controller
     /**
      * Confirmed rules for user
      *
-     * @param int $id
      * @return Response
      */
     public function confirmedRules(): Response
@@ -321,6 +322,142 @@ class UserController extends Controller
 
         return response([
             'status' => true
+        ]);
+    }
+
+    /**
+     * Send email for user recovery password
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function passwordRecovery(Request $request): Response
+    {
+
+        $user = null;
+
+        if( $request->has('login') ) {
+
+            $login = (string) $request->input('login');
+
+            if( str_contains($login, '@') ) {
+                $user = User::where('email', $login)->first();
+            }
+        }
+
+        if( !$user ) {
+            return response([
+                'status' => false,
+                'error' => 'User not found!'
+            ], 404);
+        }
+
+        $recovery = new Recovery([
+            'is_active' => 1,
+            'user_id' => $user->id,
+            'token' => mb_strtolower(MainHelper::randomString(10) . md5($user->id . MainHelper::randomString(32) . date('Y-m-d H:i:s')) . MainHelper::randomString(10)),
+            'ip' => $request->ip(),
+            'user_agent' => $request->userAgent()
+        ]);
+
+        try {
+            $recovery->save();
+        } catch (Exception $e) {
+            return response([
+                'status' => false,
+                'error' => 'Can\'t create row in recoveries'
+            ], 500);
+        }
+
+        $response = Unisender::sendEmail([
+            'email' => $user->email,
+            'subject' => 'Восстановление пароля',
+            'body' => view('email.recovery', [
+                'user' => $user,
+                'recovery' => $recovery
+            ])->render()
+        ]);
+
+        if( $response['status'] ) {
+            return response([
+                'status' => true,
+                'data' => [
+                    'email' => $user->email
+                ]
+            ]);
+        } else {
+            return response([
+                'status' => false,
+                'error' => 'Can\'t sended email! Service is unavailable!',
+                'data' => [
+                    'email' => $user->email
+                ]
+            ], 403);
+        }
+    }
+
+    /**
+     * Change User password by recovery token
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function passwordChange(Request $request): Response
+    {
+
+        $token = (string) $request->input('token');
+        $password = (string) $request->input('password');
+
+        if( mb_strlen($password) <= 6 ) {
+            return response([
+                'status' => false,
+                'error' => 'Password length is very small. Minimum 6 symbols!'
+            ], 409);
+        }
+
+        if( mb_strlen($token) <= 35 ) {
+            return response([
+                'status' => false,
+                'error' => 'Recovery token is broken!'
+            ], 409);
+        }
+
+        $recovery = Recovery::where([
+            ['token', '=', $token],
+            ['is_active', '=', 1]
+        ])->with('user')->first();
+
+        if( !$recovery || ($recovery && !$recovery?->id) ) {
+            return response([
+                'status' => false,
+                'error' => 'Recovery with token `' . $token . '` not found!'
+            ], 404);
+        }
+
+        /** @var User $user */
+        $user = $recovery->user;
+        $user->password = Hash::make($password);
+        $user->last_recovery_at = date('Y-m-d H:i:s');
+        $recovery->is_active = 0;
+
+        try {
+            $user->save();
+            $recovery->save();
+        } catch (Exception $e) {
+            return response([
+                'status' => false,
+                'error' => 'In database can\'t save data with new password. Please try later!'
+            ], 500);
+        }
+
+        return response([
+            'status' => true,
+            'authorization' => [
+                'static_token' => $user->token,
+                'token' => $user->remember_token,
+                'role_id' => $user->role_id
+            ],
+            'user' => $user
         ]);
     }
 

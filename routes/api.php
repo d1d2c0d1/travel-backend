@@ -148,6 +148,8 @@ Route::prefix('user')->middleware('api.static.auth')->group(function() {
     Route::post('auth', [AuthorizationController::class, 'auth']);
     Route::post('registration', [AuthorizationController::class, 'registration']);
     Route::get('guides', [UserController::class, 'guides'])->name('user.guides');
+    Route::post('recovery', [UserController::class, 'passwordRecovery'])->name('user.recovery');
+    Route::patch('recovery', [UserController::class, 'passwordChange'])->name('user.change.password');
 
     /**
      * @private
