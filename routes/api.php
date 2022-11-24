@@ -5,6 +5,7 @@ use App\Http\Controllers\AdditionalController;
 use App\Http\Controllers\AuthorizationController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\FavoritesController;
+use App\Http\Controllers\FeedbacksController;
 use App\Http\Controllers\GuideController;
 use App\Http\Controllers\ItemCategoryController;
 use App\Http\Controllers\ItemsController;
@@ -300,4 +301,9 @@ Route::prefix('payment')->middleware('api.payment.auth')->group(function() {
  */
 Route::prefix('seo')->middleware('api.static.auth')->group(function() {
     Route::post('filter', [SEOController::class, 'filterData'])->name('seo.filter');
+});
+
+
+Route::prefix('feedback')->middleware('api.static.auth')->group(function() {
+    Route::post('', [FeedbacksController::class, 'store'])->name('feedback.store');
 });
