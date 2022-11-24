@@ -14,7 +14,7 @@ class Unisender
     public function sendEmail(array $arFields = []): array
     {
         $url = self::API_BASE_URL . self::API_LANG . '/api/' . 'sendEmail';
-        $response = Http::post($url, [
+        $data = [
             'api_key' => self::API_KEY,
             'format' => 'json',
             'sender_name' => 'U-Gid',
@@ -24,12 +24,24 @@ class Unisender
             'email' => $arFields['email'],
             'subject' => $arFields['subject'],
             'body' => $arFields['body']
-        ]);
-
-        return [
-            'status' => true,
-            'url' => $url,
-            'response' => $response
         ];
+
+        $response = Http::asForm()->post($url, $data);
+
+        if( $response->successful() ) {
+            return [
+                'status' => true,
+                'url' => $url,
+                'data' => $data,
+                'response' => $response->throw()->json()
+            ];
+        } else {
+            return [
+                'status' => false,
+                'url' => $url,
+                'data' => $data,
+                'error' => $response->serverError()
+            ];
+        }
     }
 }
