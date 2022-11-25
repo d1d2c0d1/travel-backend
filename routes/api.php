@@ -160,6 +160,7 @@ Route::prefix('user')->middleware('api.static.auth')->group(function() {
         Route::post('filter', [UserController::class, 'filter']);
         Route::post('update/{id}', [UserController::class, 'update']);
         Route::patch('confirm', [UserController::class, 'confirmedRules'])->name('user.confirmed');
+        Route::get('recoveries', [UserController::class, 'recoveries'])->name('user.recovery.list');
     });
 
     Route::get('{id}', [UserController::class, 'single']);

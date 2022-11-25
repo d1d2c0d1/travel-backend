@@ -465,4 +465,21 @@ class UserController extends Controller
         ]);
     }
 
+    /**
+     * Getting all recoveries
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function recoveries(Request $request): Response
+    {
+
+        $userId = MainHelper::getUserId();
+
+        return response([
+            'status' => true,
+            'data' => Recovery::where('user_id', $userId)->get()
+        ]);
+    }
+
 }
