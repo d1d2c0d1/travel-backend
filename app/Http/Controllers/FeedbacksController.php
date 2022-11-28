@@ -31,7 +31,7 @@ class FeedbacksController extends Controller
             return response([
                 'status' => false,
                 'error' => 'Request data is not valid',
-                'validator' => $validated->messages()->toArray()
+                'validator' => $validator->messages()->toArray()
             ], 400);
         }
 
