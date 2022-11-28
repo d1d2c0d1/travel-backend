@@ -4,6 +4,7 @@ use App\Http\Controllers\AdditionalController;
 use App\Http\Controllers\AuthorizationController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\FavoritesController;
+use App\Http\Controllers\FeedbacksController;
 use App\Http\Controllers\GuideController;
 use App\Http\Controllers\ItemCategoryController;
 use App\Http\Controllers\ItemsController;
@@ -146,6 +147,8 @@ Route::prefix('user')->middleware('api.static.auth')->group(function () {
     Route::post('auth', [AuthorizationController::class, 'auth']);
     Route::post('registration', [AuthorizationController::class, 'registration']);
     Route::get('guides', [UserController::class, 'guides'])->name('user.guides');
+    Route::post('recovery', [UserController::class, 'passwordRecovery'])->name('user.recovery');
+    Route::patch('recovery', [UserController::class, 'passwordChange'])->name('user.change.password');
 
     /**
      * @private
@@ -155,6 +158,7 @@ Route::prefix('user')->middleware('api.static.auth')->group(function () {
         Route::post('filter', [UserController::class, 'filter']);
         Route::post('update/{id}', [UserController::class, 'update']);
         Route::patch('confirm', [UserController::class, 'confirmedRules'])->name('user.confirmed');
+        Route::get('recoveries', [UserController::class, 'recoveries'])->name('user.recovery.list');
     });
 
     Route::get('{id}', [UserController::class, 'single']);
@@ -309,5 +313,12 @@ Route::middleware('api.is.admin')->group(function () {
     Route::prefix('option')->group(function () {
         Route::patch('{id}', [SiteOptionController::class, 'update']);
         Route::delete('{id}', [SiteOptionController::class, 'delete']);
+    });
+});
+Route::prefix('feedback')->middleware('api.static.auth')->group(function () {
+    Route::post('', [FeedbacksController::class, 'store'])->name('feedback.store');
+
+    Route::middleware('api.is.moder')->group(function () {
+        Route::get('', [FeedbacksController::class, 'index'])->name('feedback.list');
     });
 });
