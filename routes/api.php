@@ -298,13 +298,15 @@ Route::prefix('seo')->middleware('api.static.auth')->group(function () {
     Route::post('filter', [SEOController::class, 'filterData'])->name('seo.filter');
 });
 
+
+Route::prefix('option')->group(function () {
+    Route::get('', [SiteOptionController::class, 'index']);
+    Route::get('{id}', [SiteOptionController::class, 'singleId'])->where('id', '[0-9]+');
+    Route::get('{code}', [SiteOptionController::class, 'singleCode'])->where('code', '[A-Za-z]+');
+});
 Route::middleware('api.is.admin')->group(function () {
     Route::post('site/options', [SiteOptionController::class, 'create']);
-
     Route::prefix('option')->group(function () {
-        Route::get('', [SiteOptionController::class, 'index']);
-        Route::get('{id}', [SiteOptionController::class, 'singleId'])->where('id', '[0-9]+');
-        Route::get('{code}', [SiteOptionController::class, 'singleCode'])->where('code', '[A-Za-z]+');
         Route::patch('{id}', [SiteOptionController::class, 'update']);
         Route::delete('{id}', [SiteOptionController::class, 'delete']);
     });

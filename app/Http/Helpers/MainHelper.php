@@ -166,7 +166,7 @@ class MainHelper
         if ($userId >= 1) {
             $user = User::find($userId);
         }
-        if( $userId >= 1 ) {
+        if ($userId >= 1) {
             $user = User::where('id', '=', $userId)->with('type')->with('role')->first();
         }
 
@@ -344,5 +344,94 @@ class MainHelper
         } else {
             return ValidateResult::create(true, $validate->validate());
         }
+    }
+
+    public static function validateRules(array $rules, mixed $date, string $type): array
+    {
+        $errors = [];
+        $validatorFunc = function ($date, $validateRules) {
+            $validator = Validator::make(['value' => $date], $validateRules);
+            return $validator->fails();
+        };
+
+        $validator = Validator::make(['value' => $date], ['value' => $type]);
+        if ($validator->fails()) {
+            $errors['type'] = "Field value must be type " . $type;
+        }
+        foreach ($rules as $key => $value) {
+            if (gettype($date) != 'array' && gettype($date) != 'object') {
+                switch ($key) {
+                    case "trim":
+                        $date = trim($date);
+                        break;
+                    case 'min':
+                        if (gettype($date) == 'integer') {
+                            if ($date < $value) {
+                                $errors['min'] = "Field less than {$value}";
+                            }
+                        } else {
+                            if (strlen($date) < $value) {
+                                $errors['min'] = "Field does not have {$value} characters";
+                            }
+                        }
+                        break;
+                    case 'max':
+                        if (gettype($date) == 'integer') {
+                            if ($date > $value) {
+                                $errors['max'] = "Field greater than {$value}";
+                            }
+                        } else {
+                            if (strlen($date) > $value) {
+                                $errors['max'] = "Field has more than {$value} characters";
+                            }
+                        }
+                        break;
+                    case 'password':
+                        if (strlen($date) <= 4) {
+                            $errors['password'] = "Field does not meet the standards";
+                        }
+                        break;
+                    case 'boolean':
+                        if ($validatorFunc($date, ['value' => 'boolean'])) {
+                            $errors['boolean'] = 'Field has the opposite meaning';
+                        }
+                        break;
+                    case 'date':
+                        if ($validatorFunc($date, ['value' => 'date_format:yyyy-mm-dd HH:mm:ss'])) {
+                            $errors['date'] = "Field is not date";
+                        }
+                        break;
+                    case 'url':
+                        if ($validatorFunc($date, ['value' => 'url'])) {
+                            $errors['url'] = 'Field does not url';
+                        }
+                        break;
+                    case 'dateBetween':
+                        if ($validatorFunc($date, ['value' => "digits_between:{$value}"])) {
+                            $errors['dateBetween'] = "Field does not match the period";
+                        }
+                        break;
+                    case 'lat':
+                        if ($validatorFunc($date, ['value' => 'alpha'])) {
+                            $errors['lat'] = 'Field does not have latin characters';
+                        }
+                        break;
+                    case 'email':
+                        if ($validatorFunc($date, ['value' => 'email'])) {
+                            $errors['email'] = "Field value must be type " . $type;
+                        }
+                        break;
+                }
+            }
+        }
+        if (count($errors) > 0) {
+            return [
+                'status' => false,
+                'error' => 'Validation. Credintails is wrong',
+                'fields_errors' => $errors
+            ];
+        }
+
+        return ['status' => true];
     }
 }

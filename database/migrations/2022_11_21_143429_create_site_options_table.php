@@ -15,18 +15,19 @@ class CreateSiteOptionsTable extends Migration
     {
         Schema::create('site_options', function (Blueprint $table) {
             $table->id();
-            $table->string('code', 255)->nullable(false);
-            $table->string('name', 255)->nullable(false);
-            $table->text('value')->nullable(false);
-            $table->string('type', 64)->nullable(false);
-            $table->string('validate', 1024)->nullable(false);
-            $table->foreignId('user_created_at')
-                ->constrained('users')
-                ->onUpdate('SET NULL')
-                ->onDelete('SET NULL');
-            $table->foreignId('user_updated_at')->constrained('users')
-                ->onUpdate('SET NULL')
-                ->onDelete('SET NULL');
+            $table->string('code', 255);
+            $table->string('name', 255);
+            $table->text('value')->nullable();
+            $table->string('type', 64);
+            $table->string('validate', 1024);
+            $table->unsignedBigInteger('user_id_created_at');
+            $table->unsignedBigInteger('user_id_updated_at')->nullable();
+            $table->foreign('user_id_created_at')
+                ->references('id')->on('users')
+                ->cascadeOnUpdate();
+            $table->foreign('user_id_updated_at')
+                ->references('id')->on('users')
+                ->cascadeOnUpdate();
             $table->timestamps();
         });
     }

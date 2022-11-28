@@ -18,8 +18,8 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property string $value
  * @property string $type
  * @property string $validate
- * @property int $user_created_at
- * @property int $user_updated_at
+ * @property int $user_id_created_at
+ * @property int $user_id_updated_at
  * @property datetime $created_at
  * @property datetime $updated_at
  */
@@ -81,8 +81,8 @@ class SiteOption extends Model
         'value',
         'type',
         'validate',
-        'user_created_at',
-        'user_updated_at',
+        'user_id_created_at',
+        'user_id_updated_at',
     ];
 
     /**
@@ -97,8 +97,8 @@ class SiteOption extends Model
         'value' => 'string',
         'type' => 'string',
         'validate' => 'string',
-        'user_created_at' => 'integer',
-        'user_updated_at' => 'integer',
+        'user_id_created_at' => 'integer',
+        'user_id_updated_at' => 'integer',
         'created_at' => 'datetime:Y-m-d H:i:s',
         'updated_at' => 'datetime:Y-m-d H:i:s',
     ];
@@ -133,12 +133,12 @@ class SiteOption extends Model
         }
 
         // user_created_at
-        if ($this->user_created_at <= 0) {
+        if ($this->user_id_created_at <= 0) {
             $errors[] = MainHelper::getErrorItem(412, 'Field user_created_at is empty');
         }
 
         // user_updated_at
-        if ($this->user_updated_at <= 0) {
+        if ($this->user_id_updated_at <= 0) {
             $errors[] = MainHelper::getErrorItem(412, 'Field user_updated_at is empty');
         }
 
@@ -162,31 +162,28 @@ class SiteOption extends Model
 
     public function CreatedUser(): HasOne
     {
-        return $this->hasOne(User::class, 'id', 'user_created_at');
+        return $this->hasOne(User::class, 'id', 'user_id_created_at');
     }
 
     public function UpdatedUser(): HasOne
     {
-        return $this->hasOne(User::class, 'id', 'user_updated_at');
+        return $this->hasOne(User::class, 'id', 'user_id_updated_at');
     }
 
     const CREATING_RULES = [
         'code' => 'required|string',
         'name' => 'required|string',
-        'value' => 'required|string',
+        'value' => 'nullable',
         'type' => 'required|string|max:64',
         'validate' => 'required|string|max:1024',
-        'user_created_at' => 'required|exist:users,id',
-        'user_updated_at' => 'required|exists:users,id',
     ];
 
     const UPDATING_RULES = [
         'code' => 'string',
         'name' => 'string',
-        'value' => 'string',
+        'value' => 'nullable',
         'type' => 'string|max:64',
         'validate' => 'string:max:1024',
-        'user_updated_at' => 'exists:users,id'
     ];
 
     const TIME_CACHE = 86400 * 30;
